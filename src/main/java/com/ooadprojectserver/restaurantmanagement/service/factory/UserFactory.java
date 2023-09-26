@@ -8,5 +8,5 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Optional;
 
 public interface UserFactory {
-    User createUser(UserRegisterRequest userRegister) throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException;
+    User createUser(UserRegisterRequest userRegister);
 }

@@ -26,7 +26,7 @@ public class UserController {
     private final UserFactory userFactory;
     private final AuthUserFactory authUserFactory;
     @PostMapping
-    public ResponseEntity<User> userRegister(@RequestBody UserRegisterRequest request) throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
+    public ResponseEntity<User> userRegister(@RequestBody UserRegisterRequest request) {
         User user = userFactory.createUser(request);
         AuthUser authUser = authUserFactory.createAuthUser(user);
         logger.info("user la {}", user.getRole());
