@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.lang.reflect.InvocationTargetException;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/user")
@@ -24,7 +26,7 @@ public class UserController {
     private final UserFactory userFactory;
     private final AuthUserFactory authUserFactory;
     @PostMapping
-    public ResponseEntity<User> userRegister(@RequestBody UserRegisterRequest request){
+    public ResponseEntity<User> userRegister(@RequestBody UserRegisterRequest request) {
         User user = userFactory.createUser(request);
         AuthUser authUser = authUserFactory.createAuthUser(user);
         logger.info("user la {}", user.getRole());
