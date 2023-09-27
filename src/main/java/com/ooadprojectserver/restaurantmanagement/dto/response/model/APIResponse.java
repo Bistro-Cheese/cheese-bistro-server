@@ -2,18 +2,15 @@ package com.ooadprojectserver.restaurantmanagement.dto.response.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.ooadprojectserver.restaurantmanagement.dto.response.util.APIStatus;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
+//@JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
 @Builder
-@AllArgsConstructor
 @RequiredArgsConstructor
+@AllArgsConstructor
 public class APIResponse<T> implements Serializable {
     private int status;
     private String message;

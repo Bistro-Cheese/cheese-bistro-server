@@ -1,6 +1,7 @@
 package com.ooadprojectserver.restaurantmanagement.repository.user;
 
-import com.ooadprojectserver.restaurantmanagement.model.user.Owner;
+import jakarta.transaction.Transactional;
 
-public interface OwnerRepository extends BaseUserRepository<Owner>{
+@Transactional
+public interface OwnerRepository extends UserRepository {
 }
