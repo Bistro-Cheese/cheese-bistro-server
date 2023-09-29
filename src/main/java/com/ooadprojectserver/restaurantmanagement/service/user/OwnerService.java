@@ -1,10 +1,10 @@
-package com.ooadprojectserver.restaurantmanagement.service;
+package com.ooadprojectserver.restaurantmanagement.service.user;
 
 import com.ooadprojectserver.restaurantmanagement.constant.DateTimeConstant;
 import com.ooadprojectserver.restaurantmanagement.dto.request.UserRegisterRequest;
-import com.ooadprojectserver.restaurantmanagement.model.user.Manager;
+import com.ooadprojectserver.restaurantmanagement.model.user.Owner;
 import com.ooadprojectserver.restaurantmanagement.model.user.User;
-import com.ooadprojectserver.restaurantmanagement.repository.user.ManagerRepository;
+import com.ooadprojectserver.restaurantmanagement.repository.user.OwnerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,11 +15,11 @@ import java.util.Date;
 
 @Service
 @RequiredArgsConstructor
-public class ManagerService {
+public class OwnerService {
     private final PasswordEncoder passwordEncoder;
-    private final ManagerRepository managerRepository;
+    private final OwnerRepository ownerRepository;
 
-    public User createUser(UserRegisterRequest request)  {
+    public User createUser(UserRegisterRequest request) {
         String sDob = request.getDateOfBirth();
         Date dob = null;
         try {
@@ -27,7 +27,7 @@ public class ManagerService {
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
-        return managerRepository.save(Manager.managerBuilder()
+        return ownerRepository.save(Owner.ownerBuilder()
                 .username(request.getUsername())
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
@@ -36,11 +36,10 @@ public class ManagerService {
                 .phoneNumber(request.getPhoneNumber())
                 .role(request.getRole().getValue())
                 .status(request.getStatus())
+                .licenseBusiness(request.getLicenseBusiness())
+                .branch(request.getBranch())
                 .createdDate(new Date())
                 .lastModifiedDate(new Date())
-                .foreignLanguage(request.getForeignLanguage())
-                .experiencedYear(request.getExperiencedYear())
-                .certificationManagement(request.getCertificationManagement())
                 .build());
     }
 }

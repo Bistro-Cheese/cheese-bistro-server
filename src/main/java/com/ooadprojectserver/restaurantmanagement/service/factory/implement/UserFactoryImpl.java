@@ -2,9 +2,9 @@ package com.ooadprojectserver.restaurantmanagement.service.factory.implement;
 
 import com.ooadprojectserver.restaurantmanagement.dto.request.UserRegisterRequest;
 import com.ooadprojectserver.restaurantmanagement.model.user.User;
-import com.ooadprojectserver.restaurantmanagement.service.ManagerService;
-import com.ooadprojectserver.restaurantmanagement.service.OwnerService;
-import com.ooadprojectserver.restaurantmanagement.service.StaffService;
+import com.ooadprojectserver.restaurantmanagement.service.user.ManagerService;
+import com.ooadprojectserver.restaurantmanagement.service.user.OwnerService;
+import com.ooadprojectserver.restaurantmanagement.service.user.StaffService;
 import com.ooadprojectserver.restaurantmanagement.service.factory.UserFactory;
 
 import lombok.RequiredArgsConstructor;

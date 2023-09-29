@@ -1,10 +1,10 @@
-package com.ooadprojectserver.restaurantmanagement.service;
+package com.ooadprojectserver.restaurantmanagement.service.user;
 
 import com.ooadprojectserver.restaurantmanagement.constant.DateTimeConstant;
 import com.ooadprojectserver.restaurantmanagement.dto.request.UserRegisterRequest;
-import com.ooadprojectserver.restaurantmanagement.model.user.Staff;
+import com.ooadprojectserver.restaurantmanagement.model.user.Manager;
 import com.ooadprojectserver.restaurantmanagement.model.user.User;
-import com.ooadprojectserver.restaurantmanagement.repository.user.StaffRepository;
+import com.ooadprojectserver.restaurantmanagement.repository.user.ManagerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,9 +15,9 @@ import java.util.Date;
 
 @Service
 @RequiredArgsConstructor
-public class StaffService {
+public class ManagerService {
     private final PasswordEncoder passwordEncoder;
-    private final StaffRepository staffRepository;
+    private final ManagerRepository managerRepository;
 
     public User createUser(UserRegisterRequest request)  {
         String sDob = request.getDateOfBirth();
@@ -27,7 +27,7 @@ public class StaffService {
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
-        return staffRepository.save(Staff.staffBuilder()
+        return managerRepository.save(Manager.managerBuilder()
                 .username(request.getUsername())
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
@@ -36,10 +36,11 @@ public class StaffService {
                 .phoneNumber(request.getPhoneNumber())
                 .role(request.getRole().getValue())
                 .status(request.getStatus())
-                .academicLevel(request.getAcademicLevel())
-                .foreignLanguage(request.getForeignLanguage())
                 .createdDate(new Date())
                 .lastModifiedDate(new Date())
+                .foreignLanguage(request.getForeignLanguage())
+                .experiencedYear(request.getExperiencedYear())
+                .certificationManagement(request.getCertificationManagement())
                 .build());
     }
 }

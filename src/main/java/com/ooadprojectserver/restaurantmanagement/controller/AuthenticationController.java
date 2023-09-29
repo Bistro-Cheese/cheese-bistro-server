@@ -6,7 +6,7 @@ import com.ooadprojectserver.restaurantmanagement.dto.request.UserLoginRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.request.UserRegisterRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.response.model.APIResponse;
 import com.ooadprojectserver.restaurantmanagement.dto.response.model.AuthenticationResponse;
-import com.ooadprojectserver.restaurantmanagement.service.AuthenticationService;
+import com.ooadprojectserver.restaurantmanagement.service.authentication.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
