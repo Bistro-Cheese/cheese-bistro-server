@@ -1,6 +1,6 @@
 package com.ooadprojectserver.restaurantmanagement.auth.model;
 
-import com.ooadprojectserver.restaurantmanagement.util.Constant;
+import com.ooadprojectserver.restaurantmanagement.constant.RoleConstant;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,7 +20,7 @@ public class AuthUser implements UserDetails {
     private String firstName;
     private String lastName;
     private final boolean enabled;
-    private Constant.ROLE role;
+    private RoleConstant.ROLE role;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

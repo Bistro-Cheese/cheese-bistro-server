@@ -1,7 +1,6 @@
 package com.ooadprojectserver.restaurantmanagement.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ooadprojectserver.restaurantmanagement.dto.response.model.APIResponse;
 import com.ooadprojectserver.restaurantmanagement.dto.response.model.StatusResponse;
 import com.ooadprojectserver.restaurantmanagement.dto.response.util.APIStatus;
 import jakarta.servlet.ServletException;
@@ -13,11 +12,13 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.io.Serial;
 import java.io.Serializable;
 
 @Component
 @RequiredArgsConstructor
 public class AuthEntryPointException implements AuthenticationEntryPoint, Serializable {
+    @Serial
     private static final long serialVersionUID = -8970718410437077606L;
     private ObjectMapper objectMapper;
     @Override

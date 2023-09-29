@@ -1,24 +1,20 @@
 package com.ooadprojectserver.restaurantmanagement.model.user;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.ooadprojectserver.restaurantmanagement.dto.response.util.APIStatus;
-import com.ooadprojectserver.restaurantmanagement.exception.ApplicationException;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.ooadprojectserver.restaurantmanagement.constant.DateTimeConstant;
 import com.ooadprojectserver.restaurantmanagement.model.Address;
-import com.ooadprojectserver.restaurantmanagement.util.Constant;
 import jakarta.persistence.*;
+import jakarta.persistence.Table;
 import lombok.*;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.*;
 import org.hibernate.type.SqlTypes;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.util.Collection;
+import java.util.Date;
 import java.util.UUID;
 
 @Getter
@@ -54,6 +50,11 @@ public class User implements Serializable {
     @JdbcTypeCode(SqlTypes.NVARCHAR)
     private String lastName;
 
+    @Column(name = "date_of_birth", nullable = false)
+    @JsonFormat(pattern = DateTimeConstant.FORMAT_DATE, timezone = DateTimeConstant.TIMEZONE)
+    @JdbcTypeCode(SqlTypes.DATE)
+    private Date dateOfBirth;
+
     @Column(name = "hash_password", nullable = false)
     @JdbcTypeCode(SqlTypes.NVARCHAR)
     private String hashPassword;
@@ -70,23 +71,45 @@ public class User implements Serializable {
     @JdbcTypeCode(SqlTypes.INTEGER)
     private Integer status;
 
-    @Column(name = "create_at")
+    @CreatedDate
+    @Column(name = "created_date")
+    @JsonFormat(pattern = DateTimeConstant.FORMAT_DATE_TIME, timezone = DateTimeConstant.TIMEZONE)
     @JdbcTypeCode(SqlTypes.TIMESTAMP)
-    LocalDateTime createAt;
+    private Date createdDate;
+
+    @LastModifiedDate
+    @Column(name = "last_modified_date")
+    @JsonFormat(pattern = DateTimeConstant.FORMAT_DATE_TIME, timezone = DateTimeConstant.TIMEZONE)
+    @JdbcTypeCode(SqlTypes.TIMESTAMP)
+    private Date lastModifiedDate;
 
     @ManyToOne
     @JoinColumn(name = "address_id")
     private Address address;
 
-    public User(String username, String firstName, String lastName, String hashPassword, String phoneNumber, Integer role, Address address, Integer status, LocalDateTime createAt) {
+    public User(
+            String username,
+            String firstName,
+            String lastName,
+            Date dateOfBirth,
+            String hashPassword,
+            String phoneNumber,
+            Integer role,
+            Address address,
+            Integer status,
+            Date createdDate,
+            Date lastModifiedDate
+    ) {
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.dateOfBirth = dateOfBirth;
         this.hashPassword = hashPassword;
         this.phoneNumber = phoneNumber;
         this.role = role;
         this.status = status;
-        this.createAt = createAt;
+        this.createdDate = createdDate;
+        this.lastModifiedDate = lastModifiedDate;
         this.address = address;
     }
 }

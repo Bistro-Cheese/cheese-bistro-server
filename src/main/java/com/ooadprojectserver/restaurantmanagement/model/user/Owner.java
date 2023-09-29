@@ -11,6 +11,7 @@ import org.hibernate.type.SqlTypes;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -29,9 +30,10 @@ public class Owner extends User {
     private String licenseBusiness;
 
     @Builder(builderMethodName = "ownerBuilder")
-    public Owner(String username, String firstName, String lastName, String hashPassword, String phoneNumber, Integer role, Integer status, Address address,
-                 LocalDateTime createAt, String branch, String licenseBusiness){
-        super(username, firstName, lastName, hashPassword, phoneNumber, role, address, status, createAt);
+    public Owner(String username, String firstName, String lastName,
+                 Date dateOfBirth, String hashPassword, String phoneNumber, Integer role, Integer status, Address address,
+                 Date createdDate, Date lastModifiedDate, String branch, String licenseBusiness){
+        super(username, firstName, lastName, dateOfBirth, hashPassword, phoneNumber, role, address, status, createdDate, lastModifiedDate);
         this.branch = branch;
         this.licenseBusiness = licenseBusiness;
     }
