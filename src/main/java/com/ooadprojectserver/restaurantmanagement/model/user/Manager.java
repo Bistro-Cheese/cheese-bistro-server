@@ -1,7 +1,6 @@
 package com.ooadprojectserver.restaurantmanagement.model.user;
 
 import com.ooadprojectserver.restaurantmanagement.model.Address;
-import com.ooadprojectserver.restaurantmanagement.util.Constant;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -9,6 +8,7 @@ import org.hibernate.type.SqlTypes;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -31,9 +31,22 @@ public class Manager extends User {
     private String experiencedYear;
 
     @Builder(builderMethodName = "managerBuilder")
-    public Manager(String username, String firstName, String lastName, String hashPassword, String phoneNumber, Integer role, Address address,
-                   Integer status, LocalDateTime createAt, String certificationManagement, String foreignLanguage, String experiencedYear){
-        super(username, firstName, lastName, hashPassword, phoneNumber, role, address, status, createAt);
+    public Manager(
+            String username,
+            String firstName,
+            String lastName,
+            Date dateOfBirth,
+            String hashPassword,
+            String phoneNumber,
+            Integer role,
+            Address address,
+            Integer status,
+            Date createdDate,
+            Date lastModifiedDate,
+            String certificationManagement,
+            String foreignLanguage,
+            String experiencedYear) {
+        super(username, firstName, lastName, dateOfBirth, hashPassword, phoneNumber, role, address, status, createdDate, lastModifiedDate);
         this.certificationManagement = certificationManagement;
         this.foreignLanguage = foreignLanguage;
         this.experiencedYear = experiencedYear;

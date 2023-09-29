@@ -1,7 +1,6 @@
 package com.ooadprojectserver.restaurantmanagement.model.user;
 
 import com.ooadprojectserver.restaurantmanagement.model.Address;
-import com.ooadprojectserver.restaurantmanagement.util.Constant;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -14,6 +13,7 @@ import org.hibernate.type.SqlTypes;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -33,9 +33,10 @@ public class Staff extends User {
     private String academicLevel;
 
     @Builder(builderMethodName = "staffBuilder")
-    public Staff(String username, String firstName, String lastName, String hashPassword, String phoneNumber, Integer role, Integer status, Address address,
-                 LocalDateTime createAt, String foreignLanguage, String academicLevel){
-        super(username, firstName, lastName, hashPassword, phoneNumber, role, address, status, createAt);
+    public Staff(String username, String firstName, String lastName,
+                 Date dateOfBirth, String hashPassword, String phoneNumber, Integer role, Integer status, Address address,
+                 Date createdDate, Date lastModifiedDate, String foreignLanguage, String academicLevel){
+        super(username, firstName, lastName, dateOfBirth, hashPassword, phoneNumber, role, address, status, createdDate, lastModifiedDate);
         this.academicLevel = academicLevel;
         this.foreignLanguage = foreignLanguage;
     }

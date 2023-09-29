@@ -1,10 +1,11 @@
 package com.ooadprojectserver.restaurantmanagement.auth.factory;
 
 import com.ooadprojectserver.restaurantmanagement.auth.model.AuthUser;
+import com.ooadprojectserver.restaurantmanagement.constant.AccountStatus;
 import com.ooadprojectserver.restaurantmanagement.model.Role;
 import com.ooadprojectserver.restaurantmanagement.model.user.User;
 import com.ooadprojectserver.restaurantmanagement.repository.RoleRepository;
-import com.ooadprojectserver.restaurantmanagement.util.Constant;
+import com.ooadprojectserver.restaurantmanagement.constant.RoleConstant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -24,16 +25,16 @@ public class AuthUserFactoryImpl implements AuthUserFactory{
                 .lastName(user.getLastName())
                 .password(user.getHashPassword())
                 .role(getUserRoleString(user.getRole()))
-                .enabled(Objects.equals(user.getStatus(), Constant.STATUS.ACTIVE_STATUS.getValue()))
+                .enabled(Objects.equals(user.getStatus(), AccountStatus.ACTIVE_STATUS.getValue()))
                 .build();
     }
-    private Constant.ROLE getUserRoleString (Integer roleId){
+    private RoleConstant.ROLE getUserRoleString (Integer roleId){
         Optional<Role> role = roleRepository.findById(roleId);
         if(role.isPresent()){
             return switch(role.get().getName()){
-                case "MANAGER" -> Constant.ROLE.MANAGER;
-                case "STAFF" -> Constant.ROLE.STAFF;
-                case "OWNER" -> Constant.ROLE.OWNER;
+                case "MANAGER" -> RoleConstant.ROLE.MANAGER;
+                case "STAFF" -> RoleConstant.ROLE.STAFF;
+                case "OWNER" -> RoleConstant.ROLE.OWNER;
                 default -> throw new RuntimeException("NOT FOUND ROLE");
             };
         }else {

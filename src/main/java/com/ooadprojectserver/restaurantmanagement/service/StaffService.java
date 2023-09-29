@@ -2,9 +2,9 @@ package com.ooadprojectserver.restaurantmanagement.service;
 
 import com.ooadprojectserver.restaurantmanagement.constant.DateTimeConstant;
 import com.ooadprojectserver.restaurantmanagement.dto.request.UserRegisterRequest;
-import com.ooadprojectserver.restaurantmanagement.model.user.Owner;
+import com.ooadprojectserver.restaurantmanagement.model.user.Staff;
 import com.ooadprojectserver.restaurantmanagement.model.user.User;
-import com.ooadprojectserver.restaurantmanagement.repository.user.OwnerRepository;
+import com.ooadprojectserver.restaurantmanagement.repository.user.StaffRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,11 +15,11 @@ import java.util.Date;
 
 @Service
 @RequiredArgsConstructor
-public class OwnerService {
+public class StaffService {
     private final PasswordEncoder passwordEncoder;
-    private final OwnerRepository ownerRepository;
+    private final StaffRepository staffRepository;
 
-    public User createUser(UserRegisterRequest request) {
+    public User createUser(UserRegisterRequest request)  {
         String sDob = request.getDateOfBirth();
         Date dob = null;
         try {
@@ -27,7 +27,7 @@ public class OwnerService {
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
-        return ownerRepository.save(Owner.ownerBuilder()
+        return staffRepository.save(Staff.staffBuilder()
                 .username(request.getUsername())
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
@@ -36,8 +36,8 @@ public class OwnerService {
                 .phoneNumber(request.getPhoneNumber())
                 .role(request.getRole().getValue())
                 .status(request.getStatus())
-                .licenseBusiness(request.getLicenseBusiness())
-                .branch(request.getBranch())
+                .academicLevel(request.getAcademicLevel())
+                .foreignLanguage(request.getForeignLanguage())
                 .createdDate(new Date())
                 .lastModifiedDate(new Date())
                 .build());
