@@ -1,4 +1,4 @@
-package com.ooadprojectserver.restaurantmanagement.service;
+package com.ooadprojectserver.restaurantmanagement.service.authentication;
 
 import com.ooadprojectserver.restaurantmanagement.auth.factory.AuthUserFactory;
 import com.ooadprojectserver.restaurantmanagement.auth.model.AuthUser;
@@ -8,8 +8,6 @@ import com.ooadprojectserver.restaurantmanagement.dto.response.model.Authenticat
 import com.ooadprojectserver.restaurantmanagement.model.user.User;
 import com.ooadprojectserver.restaurantmanagement.repository.user.UserRepository;
 import com.ooadprojectserver.restaurantmanagement.service.factory.UserFactory;
-import lombok.Builder;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
