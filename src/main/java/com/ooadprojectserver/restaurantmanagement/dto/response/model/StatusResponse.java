@@ -2,7 +2,9 @@ package com.ooadprojectserver.restaurantmanagement.dto.response.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.ooadprojectserver.restaurantmanagement.dto.response.util.APIStatus;
+import lombok.Getter;
 
+@Getter
 @JsonInclude(value = JsonInclude.Include.NON_NULL)
 public class StatusResponse<T> {
     private T result;
@@ -51,10 +53,6 @@ public class StatusResponse<T> {
         this.statusCode = status;
     }
 
-    public int getStatusCode() {
-        return statusCode;
-    }
-
     public void setResult(T result) {
         this.result = result;
     }
@@ -63,24 +61,8 @@ public class StatusResponse<T> {
         this.description = description;
     }
 
-    public T getResult() {
-        return result;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public Long getTotalRecords() {
-        return totalRecords;
-    }
-
     public void setTotalRecords(Long totalRecords) {
         this.totalRecords = totalRecords;
-    }
-
-    public Long getServerTime() {
-        return serverTime;
     }
 
     public void setServerTime(Long serverTime) {
