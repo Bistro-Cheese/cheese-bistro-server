@@ -1,12 +1,13 @@
 package com.ooadprojectserver.restaurantmanagement;
-import com.ooadprojectserver.restaurantmanagement.model.user.Staff;
-import com.ooadprojectserver.restaurantmanagement.service.factory.UserFactory;
+
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
+@Slf4j
 public class RestaurantmanagementApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(RestaurantmanagementApplication.class, args);
 	}

@@ -1,33 +1,43 @@
-package com.ooadprojectserver.restaurantmanagement.service.implement;
+package com.ooadprojectserver.restaurantmanagement.service.user;
 
+import com.ooadprojectserver.restaurantmanagement.constant.DateTimeConstant;
 import com.ooadprojectserver.restaurantmanagement.dto.request.UserRegisterRequest;
 import com.ooadprojectserver.restaurantmanagement.model.user.Manager;
 import com.ooadprojectserver.restaurantmanagement.model.user.User;
 import com.ooadprojectserver.restaurantmanagement.repository.user.ManagerRepository;
-import com.ooadprojectserver.restaurantmanagement.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Service
 @RequiredArgsConstructor
-public class ManagerServiceImpl implements UserService {
+public class ManagerService {
     private final PasswordEncoder passwordEncoder;
     private final ManagerRepository managerRepository;
 
-    @Override
-    public User createUser(UserRegisterRequest request) {
+    public User createUser(UserRegisterRequest request)  {
+        String sDob = request.getDateOfBirth();
+        Date dob = null;
+        try {
+            dob = new SimpleDateFormat(DateTimeConstant.FORMAT_DATE).parse(sDob);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
         return managerRepository.save(Manager.managerBuilder()
                 .username(request.getUsername())
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
+                .dateOfBirth(dob)
                 .hashPassword(passwordEncoder.encode(request.getPassword()))
                 .phoneNumber(request.getPhoneNumber())
                 .role(request.getRole().getValue())
                 .status(request.getStatus())
-                .createAt(LocalDateTime.now())
+                .createdDate(new Date())
+                .lastModifiedDate(new Date())
                 .foreignLanguage(request.getForeignLanguage())
                 .experiencedYear(request.getExperiencedYear())
                 .certificationManagement(request.getCertificationManagement())

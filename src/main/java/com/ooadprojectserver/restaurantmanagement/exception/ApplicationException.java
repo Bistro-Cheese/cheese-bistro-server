@@ -1,7 +1,7 @@
 package com.ooadprojectserver.restaurantmanagement.exception;
 
+import com.ooadprojectserver.restaurantmanagement.constant.ParamsError;
 import com.ooadprojectserver.restaurantmanagement.dto.response.util.APIStatus;
-import com.ooadprojectserver.restaurantmanagement.util.Constant;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -12,7 +12,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ApplicationException extends RuntimeException {
     private APIStatus apiStatus;
-    private List<Constant.ParamError> data;
+    private List<ParamsError> data;
 
     /*
     * This constructor is built only for handling BAD REQUEST exception
