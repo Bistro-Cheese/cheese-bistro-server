@@ -12,18 +12,16 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 @DynamicInsert
 @DynamicUpdate
 @Entity
 @Table(name = "staff")
+@NoArgsConstructor
 public class Staff extends User {
     @Column(name = "foreign_language", nullable = false)
     @JdbcTypeCode(SqlTypes.NVARCHAR)
@@ -34,9 +32,9 @@ public class Staff extends User {
 
     @Builder(builderMethodName = "staffBuilder")
     public Staff(String username, String firstName, String lastName,
-                 Date dateOfBirth, String hashPassword, String phoneNumber, Integer role, Integer status, Address address,
-                 Date createdDate, Date lastModifiedDate, String foreignLanguage, String academicLevel){
-        super(username, firstName, lastName, dateOfBirth, hashPassword, phoneNumber, role, address, status, createdDate, lastModifiedDate);
+                 Date dateOfBirth, String password, String phoneNumber, Integer role, Integer status, Address address,
+                 Date createdDate, Date lastModifiedDate, boolean enabled, String foreignLanguage, String academicLevel){
+        super( username, firstName, lastName, dateOfBirth, password, phoneNumber, role, address, status, createdDate, lastModifiedDate, enabled);
         this.academicLevel = academicLevel;
         this.foreignLanguage = foreignLanguage;
     }

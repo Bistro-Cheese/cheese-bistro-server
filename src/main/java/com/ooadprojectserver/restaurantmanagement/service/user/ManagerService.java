@@ -1,5 +1,6 @@
 package com.ooadprojectserver.restaurantmanagement.service.user;
 
+import com.ooadprojectserver.restaurantmanagement.constant.AccountStatus;
 import com.ooadprojectserver.restaurantmanagement.constant.DateTimeConstant;
 import com.ooadprojectserver.restaurantmanagement.dto.request.UserRegisterRequest;
 import com.ooadprojectserver.restaurantmanagement.model.user.Manager;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -38,6 +40,7 @@ public class ManagerService {
                 .status(request.getStatus())
                 .createdDate(new Date())
                 .lastModifiedDate(new Date())
+                .enabled(Objects.equals(request.getStatus(), AccountStatus.ACTIVE_STATUS.getValue()))
                 .foreignLanguage(request.getForeignLanguage())
                 .experiencedYear(request.getExperiencedYear())
                 .certificationManagement(request.getCertificationManagement())
