@@ -1,5 +1,6 @@
 package com.ooadprojectserver.restaurantmanagement.service.user;
 
+import com.ooadprojectserver.restaurantmanagement.constant.AccountStatus;
 import com.ooadprojectserver.restaurantmanagement.constant.DateTimeConstant;
 import com.ooadprojectserver.restaurantmanagement.dto.request.UserRegisterRequest;
 import com.ooadprojectserver.restaurantmanagement.model.user.Staff;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -19,7 +21,7 @@ public class StaffService {
     private final PasswordEncoder passwordEncoder;
     private final StaffRepository staffRepository;
 
-    public User createUser(UserRegisterRequest request)  {
+    public User createUser(UserRegisterRequest request) {
         String sDob = request.getDateOfBirth();
         Date dob = null;
         try {
@@ -32,7 +34,7 @@ public class StaffService {
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
                 .dateOfBirth(dob)
-                .hashPassword(passwordEncoder.encode(request.getPassword()))
+                .password(passwordEncoder.encode(request.getPassword()))
                 .phoneNumber(request.getPhoneNumber())
                 .role(request.getRole().getValue())
                 .status(request.getStatus())
@@ -40,6 +42,7 @@ public class StaffService {
                 .foreignLanguage(request.getForeignLanguage())
                 .createdDate(new Date())
                 .lastModifiedDate(new Date())
+                .enabled(Objects.equals(request.getStatus(), AccountStatus.ACTIVE_STATUS.getValue()))
                 .build());
     }
 }

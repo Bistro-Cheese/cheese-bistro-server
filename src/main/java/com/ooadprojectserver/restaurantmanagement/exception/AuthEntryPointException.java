@@ -1,4 +1,4 @@
-package com.ooadprojectserver.restaurantmanagement.auth;
+package com.ooadprojectserver.restaurantmanagement.exception;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ooadprojectserver.restaurantmanagement.dto.response.model.StatusResponse;
