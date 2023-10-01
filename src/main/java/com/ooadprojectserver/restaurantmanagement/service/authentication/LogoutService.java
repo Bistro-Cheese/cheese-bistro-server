@@ -1,6 +1,8 @@
 package com.ooadprojectserver.restaurantmanagement.service.authentication;
 
-import com.ooadprojectserver.restaurantmanagement.dto.response.util.APIStatus;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ooadprojectserver.restaurantmanagement.constant.MessageConstant;
+import com.ooadprojectserver.restaurantmanagement.dto.response.model.APIResponse;
 import com.ooadprojectserver.restaurantmanagement.model.token.Token;
 import com.ooadprojectserver.restaurantmanagement.repository.TokenRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.NoSuchElementException;
 
 @Service
@@ -29,6 +32,17 @@ public class LogoutService implements LogoutHandler {
             storedToken.setExpired(true);
             storedToken.setRevoked(true);
             tokenRepository.save(storedToken);
+            try {
+                response.setContentType("application/json");
+                new ObjectMapper().writeValue(
+                        response.getOutputStream(),
+                        APIResponse.builder()
+                                .message(MessageConstant.LOGOUT_SUCCESS)
+                                .build()
+                );
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         } else {
             throw new NoSuchElementException("Token Not Found");
         }
