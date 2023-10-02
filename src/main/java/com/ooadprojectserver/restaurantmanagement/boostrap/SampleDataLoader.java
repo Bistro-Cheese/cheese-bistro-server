@@ -57,7 +57,7 @@ public class SampleDataLoader implements CommandLineRunner {
                                 UUID.randomUUID(),
                                 faker.name().name(),
                                 randomCategory(),
-                                faker.lorem().paragraph(),
+                                faker.lorem().characters(100),
                                 faker.number().numberBetween(100,400),
                                 faker.name().name(),
                                 BigDecimal.valueOf(faker.number().numberBetween(50000, 1000000)),
@@ -68,4 +68,5 @@ public class SampleDataLoader implements CommandLineRunner {
 
         foodRepository.saveAll(listFoods);
     }
+
 }
