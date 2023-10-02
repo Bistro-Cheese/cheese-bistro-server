@@ -19,7 +19,7 @@ public class FoodSpecification implements Specification<Food> {
     private BigDecimal minPrice;
     private final BigDecimal maxPrice;
 //    private Integer bestSeller;
-    private final int sortCase;
+    private final Integer sortCase;
     private final boolean isAscSort;
 
     public FoodSpecification(String category, String searchKey, BigDecimal minPrice, BigDecimal maxPrice, int sortCase,
@@ -73,8 +73,7 @@ public class FoodSpecification implements Specification<Food> {
             case SortCase.SORT_BY_PRODUCT_PRICE -> root.get("price");
             case SortCase.SORT_BY_PRODUCT_QUANTITY -> root.get("quantity");
             case SortCase.SORT_BY_PRODUCT_CREATE_DATE -> root.get("createdDate");
-            default -> // sort by product name
-                    root.get("name");
+            default -> root.get("name");
         };
 
         if (isAscSort) {
