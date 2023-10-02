@@ -8,4 +8,15 @@ public class APIConstant {
     public static final String REGISTER = "/register";
     public static final String LOGIN = "/login";
 
+    // Product Routes
+
+    public static final String FOOD = VERSION + "/food";
+
+    public static final String ALL_FOOD = "/all";
+    public static final String FOOD_BY_ID = "/{food_id}";
+    public static final String CREATE_FOOD = "/create";
+    public static final String DELETE_FOOD = "/delete/{food_id}";
+    public static final String UPDATE_FOOD = "/update/{food_id}";
+    public static final String FOOD_FILTER_LIST = "/filter";
+
 }
