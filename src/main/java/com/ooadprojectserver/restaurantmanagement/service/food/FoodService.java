@@ -4,6 +4,7 @@ import com.ooadprojectserver.restaurantmanagement.dto.request.FoodRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.response.model.APIResponse;
 import com.ooadprojectserver.restaurantmanagement.exception.FoodException;
 import com.ooadprojectserver.restaurantmanagement.model.food.Food;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.data.domain.Page;
 
 import java.math.BigDecimal;
@@ -24,6 +25,6 @@ public interface FoodService {
     public Food findFoodById(UUID id) throws FoodException;
 
     public Page<Food> doFilterSearchSortPagingFood(String category, String searchKey, BigDecimal minPrice, BigDecimal maxPrice,
-                                                   Integer sortCase, Boolean isAscSort, int pageNumber,
-                                                   int pageSize);
+                                                   Integer sortCase, Boolean isAscSort, Integer pageNumber,
+                                                   Integer pageSize);
 }

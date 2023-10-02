@@ -88,8 +88,8 @@ public class FoodServiceImpl implements FoodService {
 
     @Override
     public Page<Food> doFilterSearchSortPagingFood(String category, String searchKey, BigDecimal minPrice,BigDecimal maxPrice,
-                                                   Integer sortCase, Boolean isAscSort, int pageNumber,
-                                                   int pageSize) {
+                                                   Integer sortCase, Boolean isAscSort, Integer pageNumber,
+                                                   Integer pageSize) {
         return foodRepository.findAll(new FoodSpecification(category, searchKey, minPrice, maxPrice, sortCase, isAscSort), PageRequest.of(pageNumber, pageSize));
     }
 
