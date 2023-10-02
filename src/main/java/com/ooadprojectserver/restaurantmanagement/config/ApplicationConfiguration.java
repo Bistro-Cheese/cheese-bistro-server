@@ -1,7 +1,6 @@
 package com.ooadprojectserver.restaurantmanagement.config;
 
 import com.github.javafaker.Faker;
-import com.ooadprojectserver.restaurantmanagement.auth.factory.AuthUserFactory;
 import com.ooadprojectserver.restaurantmanagement.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -20,11 +19,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class ApplicationConfiguration {
     private final UserRepository userRepository;
 
-    private final AuthUserFactory authUserFactory;
 
     @Bean
     public UserDetailsService userDetailsService() {
-        return username -> authUserFactory.createAuthUser(userRepository.findByUsername(username)
+        return username -> (userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found")));
     }
 

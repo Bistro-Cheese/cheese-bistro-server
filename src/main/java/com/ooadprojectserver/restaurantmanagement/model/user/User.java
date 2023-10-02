@@ -2,7 +2,9 @@ package com.ooadprojectserver.restaurantmanagement.model.user;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ooadprojectserver.restaurantmanagement.constant.DateTimeConstant;
+import com.ooadprojectserver.restaurantmanagement.constant.RoleConstant;
 import com.ooadprojectserver.restaurantmanagement.model.Address;
+import com.ooadprojectserver.restaurantmanagement.model.token.Token;
 import jakarta.persistence.*;
 import jakarta.persistence.Table;
 import lombok.*;
@@ -11,25 +13,26 @@ import org.hibernate.type.SqlTypes;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Getter
 @Setter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 @DynamicInsert
 @DynamicUpdate
 @Entity
 @Table(name = "user")
+@RequiredArgsConstructor
 @Inheritance(strategy = InheritanceType.JOINED)
-public class User implements Serializable {
-
+public class User implements UserDetails, Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -55,9 +58,9 @@ public class User implements Serializable {
     @JdbcTypeCode(SqlTypes.DATE)
     private Date dateOfBirth;
 
-    @Column(name = "hash_password", nullable = false)
+    @Column(name = "password", nullable = false)
     @JdbcTypeCode(SqlTypes.NVARCHAR)
-    private String hashPassword;
+    private String password;
 
     @Column(name = "phone_number", nullable = false, unique = true, length = 11)
     @JdbcTypeCode(SqlTypes.NVARCHAR)
@@ -83,33 +86,80 @@ public class User implements Serializable {
     @JdbcTypeCode(SqlTypes.TIMESTAMP)
     private Date lastModifiedDate;
 
+    @OneToMany(mappedBy = "user")
+    private List<Token> tokens;
+
     @ManyToOne
     @JoinColumn(name = "address_id")
     private Address address;
+
+    private boolean enabled;
 
     public User(
             String username,
             String firstName,
             String lastName,
             Date dateOfBirth,
-            String hashPassword,
+            String password,
             String phoneNumber,
             Integer role,
             Address address,
             Integer status,
             Date createdDate,
-            Date lastModifiedDate
+            Date lastModifiedDate,
+            boolean enabled
     ) {
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
         this.dateOfBirth = dateOfBirth;
-        this.hashPassword = hashPassword;
+        this.password = password;
         this.phoneNumber = phoneNumber;
         this.role = role;
         this.status = status;
         this.createdDate = createdDate;
         this.lastModifiedDate = lastModifiedDate;
         this.address = address;
+        this.enabled = enabled;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return switch (role) {
+            case 1 -> RoleConstant.ROLE.MANAGER.getAuthorities();
+            case 2 -> RoleConstant.ROLE.STAFF.getAuthorities();
+            case 3 -> RoleConstant.ROLE.OWNER.getAuthorities();
+            default -> throw new IllegalStateException("Unexpected value: " + role);
+        };
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
     }
 }

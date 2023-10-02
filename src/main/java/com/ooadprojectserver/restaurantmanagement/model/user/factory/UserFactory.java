@@ -1,5 +1,6 @@
-package com.ooadprojectserver.restaurantmanagement.service.factory;
+package com.ooadprojectserver.restaurantmanagement.model.user.factory;
 
+import com.ooadprojectserver.restaurantmanagement.constant.RoleConstant;
 import com.ooadprojectserver.restaurantmanagement.dto.request.UserRegisterRequest;
 import com.ooadprojectserver.restaurantmanagement.model.user.User;
 

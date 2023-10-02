@@ -7,7 +7,6 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
@@ -43,10 +42,12 @@ public class Manager extends User {
             Integer status,
             Date createdDate,
             Date lastModifiedDate,
+            boolean enabled,
             String certificationManagement,
             String foreignLanguage,
-            String experiencedYear) {
-        super(username, firstName, lastName, dateOfBirth, hashPassword, phoneNumber, role, address, status, createdDate, lastModifiedDate);
+            String experiencedYear
+    ) {
+        super( username, firstName, lastName, dateOfBirth, hashPassword, phoneNumber, role, address, status, createdDate, lastModifiedDate, enabled);
         this.certificationManagement = certificationManagement;
         this.foreignLanguage = foreignLanguage;
         this.experiencedYear = experiencedYear;
