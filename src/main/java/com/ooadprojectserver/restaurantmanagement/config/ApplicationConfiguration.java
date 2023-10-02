@@ -1,7 +1,7 @@
 package com.ooadprojectserver.restaurantmanagement.config;
 
+import com.github.javafaker.Faker;
 import com.ooadprojectserver.restaurantmanagement.auth.factory.AuthUserFactory;
-import com.ooadprojectserver.restaurantmanagement.auth.model.AuthUser;
 import com.ooadprojectserver.restaurantmanagement.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -45,5 +45,10 @@ public class ApplicationConfiguration {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    Faker faker(){
+        return new Faker();
     }
 }

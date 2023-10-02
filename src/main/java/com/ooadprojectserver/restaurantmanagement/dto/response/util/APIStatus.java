@@ -32,13 +32,13 @@ public enum APIStatus {
     ERR_GET_LIST_USERS(406, "Get list user error"),
     ERR_MISSING_PASSWORD(407, "Missing new password"),
     ERR_INCORRECT_PASSWORD(408, "Your old password is incorrect"),
-    //Product status
-//    CREATE_PRODUCT_ERROR(700, "Create product error"),
-//    DELETE_PRODUCT_ERROR(701, "Delete product error"),
-//    GET_PRODUCT_ERROR(702, "Can't get product detail"),
-//    UPDATE_PRODUCT_ERROR(703, "Update product error"),
-//    GET_LIST_PRODUCT_ERROR(704, "Get list product error"),
-    //    ERR_UPLOAD_FILE(900, "Upload file error."),
+    //Food status
+    CREATE_FOOD_ERROR(700, "Create product error"),
+    DELETE_FOOD_ERROR(701, "Delete product error"),
+    GET_FOOD_ERROR(702, "Can't get product detail"),
+    UPDATE_FOOD_ERROR(703, "Update product error"),
+    GET_LIST_PRODUCT_ERROR(704, "Get list product error"),
+
     // order
     ERR_GET_LIST_ORDERS(800, "Can not get list orders"),
     ERR_GET_DETAIL_ORDERS(801, "Can not get detail orders"),
