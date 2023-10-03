@@ -37,14 +37,16 @@ public class AuthenticationController {
     }
 
     @PostMapping(APIConstant.LOGIN)
-    public ResponseEntity<APIResponse<AuthenticationResponse>> loginController(@RequestBody UserLoginRequest request, HttpServletResponse response) {
+    public ResponseEntity<APIResponse<AuthenticationResponse>> loginController(@RequestBody UserLoginRequest request) {
        AuthenticationResponse authResponse = authenticationService.login(request);
-       response.setHeader(HttpHeaders.SET_COOKIE, authResponse.getRefreshTokenCookie().toString());
 
-        return ResponseEntity.status(OK).body(
+
+        return ResponseEntity.status(OK)
+                .header(HttpHeaders.SET_COOKIE, authResponse.getRefreshTokenCookie().toString())
+                .body(
                 new APIResponse<>(
                         MessageConstant.LOGIN_SUCCESS,
-                        authenticationService.login(request)
+                        authResponse
                 )
         );
     }
