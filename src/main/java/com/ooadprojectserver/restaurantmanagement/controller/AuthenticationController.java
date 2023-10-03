@@ -10,6 +10,7 @@ import com.ooadprojectserver.restaurantmanagement.service.authentication.Authent
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +20,7 @@ import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RequestMapping(APIConstant.AUTH)
 public class AuthenticationController {
     private final AuthenticationService authenticationService;
@@ -35,7 +37,10 @@ public class AuthenticationController {
     }
 
     @PostMapping(APIConstant.LOGIN)
-    public ResponseEntity<APIResponse<AuthenticationResponse>> loginController(@RequestBody UserLoginRequest request) {
+    public ResponseEntity<APIResponse<AuthenticationResponse>> loginController(@RequestBody UserLoginRequest request, HttpServletResponse response) {
+       AuthenticationResponse authResponse = authenticationService.login(request);
+       response.setHeader(HttpHeaders.SET_COOKIE, authResponse.getRefreshTokenCookie().toString());
+
         return ResponseEntity.status(OK).body(
                 new APIResponse<>(
                         MessageConstant.LOGIN_SUCCESS,
