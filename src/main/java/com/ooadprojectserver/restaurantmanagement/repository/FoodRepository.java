@@ -29,5 +29,4 @@ public interface FoodRepository extends JpaRepository<Food, UUID>, JpaSpecificat
                        BigDecimal price, Date lastModifiedDate,
                        Integer status, UUID id);
 
-
 }
