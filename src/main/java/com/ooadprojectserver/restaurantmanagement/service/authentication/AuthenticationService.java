@@ -12,16 +12,22 @@ import com.ooadprojectserver.restaurantmanagement.model.user.User;
 import com.ooadprojectserver.restaurantmanagement.repository.TokenRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.user.UserRepository;
 import com.ooadprojectserver.restaurantmanagement.model.user.factory.UserFactory;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +40,9 @@ public class AuthenticationService {
 
     private final UserRepository userRepository;
     private final TokenRepository tokenRepository;
+
+    @Value("${application.security.jwt.refreshCookieName}")
+    private String CookieName;
 
     public AuthenticationResponse register(UserRegisterRequest request) {
         User user = userFactory.createUser(request);
@@ -49,6 +58,7 @@ public class AuthenticationService {
         );
         User user = userRepository.findByUsername(request.getUsername())
                 .orElseThrow();
+
         return this.generateToken(user);
     }
 
@@ -59,10 +69,15 @@ public class AuthenticationService {
         final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         final String refreshToken;
         final String username;
-        if (authHeader == null || !authHeader.contains("Bearer ")) {
-            return;
-        }
-        refreshToken = authHeader.substring(7);
+//        if (authHeader == null || !authHeader.contains("Bearer ")) {
+//            return;
+//        }
+        Cookie[] cookies = request.getCookies();
+        Stream<Cookie> stream = Objects.nonNull(cookies) ? Arrays.stream(cookies) : Stream.empty();
+        refreshToken = stream.filter(cookie -> CookieName.equals(cookie.getName()))
+                .findFirst()
+                .orElse(new Cookie(CookieName, null))
+                .getValue();
         username = jwtService.extractUsername(refreshToken);
         if (username != null) {
             User user = this.userRepository.findByUsername(username).orElseThrow();
@@ -72,7 +87,6 @@ public class AuthenticationService {
                 saveUserToken(user, accessToken);
                 AuthenticationResponse authenticationResponse = AuthenticationResponse.builder()
                         .access_token(accessToken)
-                        .refresh_token(refreshToken)
                         .build();
 
                 response.setContentType("application/json");
@@ -94,12 +108,14 @@ public class AuthenticationService {
         String accessToken = jwtService.generateAccessToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
 
+        ResponseCookie cookie = jwtService.generateRefreshJwtCookie(refreshToken);
+
         revokeAllUserTokens(user);
         saveUserToken(user, accessToken);
 
         return AuthenticationResponse.builder()
                 .access_token(accessToken)
-                .refresh_token(refreshToken)
+                .refreshTokenCookie(cookie)
                 .build();
     }
 

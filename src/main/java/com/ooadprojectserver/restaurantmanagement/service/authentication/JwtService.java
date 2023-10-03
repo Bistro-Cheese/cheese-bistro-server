@@ -26,7 +26,7 @@ public class JwtService {
     private long accessExpiration;
 
     @Value("${application.security.jwt.refresh-token.expiration}")
-    private long refreshExpiration;
+    private int refreshExpiration;
 
     @Value("${application.security.jwt.refreshCookieName}")
     private String jwtRefreshCookie;
@@ -68,7 +68,7 @@ public class JwtService {
     }
 
     public ResponseCookie generateRefreshJwtCookie(String refreshToken) {
-        return generateCookie(jwtRefreshCookie, refreshToken, "/api/auth/refresh-token");
+        return generateCookie(jwtRefreshCookie, refreshToken);
     }
 
     private boolean isTokenExpired(String token) {
@@ -108,13 +108,13 @@ public class JwtService {
                 .compact();
     }
 
-    private ResponseCookie generateCookie(String name, String value, String path) {
+    private ResponseCookie generateCookie(String name, String value) {
         return ResponseCookie
                 .from(name, value)
-                .path(path)
+                .path("/")
                 .maxAge(7 * 24 * 60 * 60)
-                .httpOnly(true)
                 .secure(true)
+                .httpOnly(true)
                 .build();
     }
 }
