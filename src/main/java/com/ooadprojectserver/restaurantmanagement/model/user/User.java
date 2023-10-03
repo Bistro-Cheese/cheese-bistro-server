@@ -1,6 +1,7 @@
 package com.ooadprojectserver.restaurantmanagement.model.user;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ooadprojectserver.restaurantmanagement.constant.DateTimeConstant;
 import com.ooadprojectserver.restaurantmanagement.constant.RoleConstant;
 import com.ooadprojectserver.restaurantmanagement.model.Address;
@@ -59,6 +60,7 @@ public class User implements UserDetails, Serializable {
     private Date dateOfBirth;
 
     @Column(name = "password", nullable = false)
+    @JsonIgnore
     @JdbcTypeCode(SqlTypes.NVARCHAR)
     private String password;
 
@@ -87,9 +89,11 @@ public class User implements UserDetails, Serializable {
     private Date lastModifiedDate;
 
     @OneToMany(mappedBy = "user")
+    @JsonIgnore
     private List<Token> tokens;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "address_id")
     private Address address;
 
