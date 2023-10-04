@@ -24,7 +24,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -63,7 +62,7 @@ public class AuthenticationService {
             HttpServletRequest request,
             HttpServletResponse response
     ) {
-        final String refreshToken = getTokenFromHeader(request);
+        final String refreshToken;
         Cookie[] cookies = request.getCookies();
         Stream<Cookie> stream = Objects.nonNull(cookies) ? Arrays.stream(cookies) : Stream.empty();
         refreshToken = stream.filter(cookie -> CookieName.equals(cookie.getName()))
@@ -80,8 +79,7 @@ public class AuthenticationService {
             revokeAllUserTokens(user);
             saveUserToken(user, accessToken);
             return AuthenticationResponse.builder()
-                    .access_token(accessToken)
-                    .refresh_token(refreshToken)
+                    .accessToken(accessToken)
                     .build();
         }
         return null;
@@ -118,7 +116,7 @@ public class AuthenticationService {
         saveUserToken(user, accessToken);
 
         return AuthenticationResponse.builder()
-                .access_token(accessToken)
+                .accessToken(accessToken)
                 .refreshTokenCookie(cookie)
                 .build();
     }

@@ -21,7 +21,6 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -62,7 +61,6 @@ public class User implements UserDetails, Serializable {
 
     @JsonIgnore
     @Column(name = "password", nullable = false)
-    @JsonIgnore
     @JdbcTypeCode(SqlTypes.NVARCHAR)
     private String password;
 
@@ -90,17 +88,12 @@ public class User implements UserDetails, Serializable {
     @JdbcTypeCode(SqlTypes.TIMESTAMP)
     private Date lastModifiedDate;
 
-    @ManyToOne
-    @JsonIgnore
+    @OneToOne(cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JoinColumn(name = "address_id")
     private Address address;
 
     @JsonIgnore
     private boolean enabled;
-
-    @OneToOne(cascade = CascadeType.REMOVE, orphanRemoval = true)
-    @JoinColumn(name = "address_id")
-    private Address address;
 
     public User(
             String username,
