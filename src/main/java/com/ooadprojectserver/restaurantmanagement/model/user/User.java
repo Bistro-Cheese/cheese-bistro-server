@@ -62,6 +62,7 @@ public class User implements UserDetails, Serializable {
 
     @JsonIgnore
     @Column(name = "password", nullable = false)
+    @JsonIgnore
     @JdbcTypeCode(SqlTypes.NVARCHAR)
     private String password;
 
@@ -89,7 +90,10 @@ public class User implements UserDetails, Serializable {
     @JdbcTypeCode(SqlTypes.TIMESTAMP)
     private Date lastModifiedDate;
 
-
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "address_id")
+    private Address address;
 
     @JsonIgnore
     private boolean enabled;
