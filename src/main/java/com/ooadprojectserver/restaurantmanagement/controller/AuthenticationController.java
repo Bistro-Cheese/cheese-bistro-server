@@ -14,8 +14,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-
 import static org.springframework.http.HttpStatus.*;
 
 @RestController
@@ -52,10 +50,15 @@ public class AuthenticationController {
     }
 
     @PostMapping(APIConstant.REFRESH_TOKEN)
-    public void refreshToken(
+    public ResponseEntity<APIResponse<AuthenticationResponse>> refreshTokenController(
             HttpServletRequest request,
             HttpServletResponse response
-    ) throws IOException {
-        authenticationService.refreshToken(request, response);
+    ) {
+        return ResponseEntity.status(OK).body(
+                new APIResponse<>(
+                        MessageConstant.REFRESH_TOKEN_SUCCESS,
+                        authenticationService.refreshToken(request, response)
+                )
+        );
     }
 }
