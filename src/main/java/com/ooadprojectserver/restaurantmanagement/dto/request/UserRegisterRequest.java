@@ -2,10 +2,13 @@ package com.ooadprojectserver.restaurantmanagement.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ooadprojectserver.restaurantmanagement.constant.RoleConstant;
+import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 @Data
 @Builder
@@ -28,17 +31,30 @@ public class UserRegisterRequest {
     private RoleConstant.ROLE role;
     @JsonProperty("status")
     private Integer status;
-    @JsonProperty("foreign_language")
-    private String foreignLanguage;
-    @JsonProperty("academic_level")
-    private String academicLevel;
 
+    //    Address
+    @JsonProperty("address_line")
+    private String addressLine;
+    @JsonProperty("city")
+    private String city;
+    @JsonProperty("region")
+    private String region;
+
+    //    Owner
     @JsonProperty("branch")
     private String branch;
     @JsonProperty("license_business")
     private String licenseBusiness;
+
+    //    Manager
     @JsonProperty("experienced_year")
     private String experiencedYear;
     @JsonProperty("certification_management")
     private String certificationManagement;
+
+    //    Staff
+    @JsonProperty("foreign_language")
+    private String foreignLanguage;
+    @JsonProperty("academic_level")
+    private String academicLevel;
 }

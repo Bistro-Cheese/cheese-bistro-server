@@ -1,11 +1,12 @@
 package com.ooadprojectserver.restaurantmanagement.model.user;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ooadprojectserver.restaurantmanagement.constant.DateTimeConstant;
 import com.ooadprojectserver.restaurantmanagement.constant.RoleConstant;
 import com.ooadprojectserver.restaurantmanagement.model.Address;
-import com.ooadprojectserver.restaurantmanagement.model.token.Token;
 import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Table;
 import lombok.*;
 import org.hibernate.annotations.*;
@@ -37,6 +38,7 @@ public class User implements UserDetails, Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
+    @JsonIgnore
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false)
     private UUID id;
@@ -58,6 +60,7 @@ public class User implements UserDetails, Serializable {
     @JdbcTypeCode(SqlTypes.DATE)
     private Date dateOfBirth;
 
+    @JsonIgnore
     @Column(name = "password", nullable = false)
     @JdbcTypeCode(SqlTypes.NVARCHAR)
     private String password;
@@ -86,14 +89,14 @@ public class User implements UserDetails, Serializable {
     @JdbcTypeCode(SqlTypes.TIMESTAMP)
     private Date lastModifiedDate;
 
-    @OneToMany(mappedBy = "user")
-    private List<Token> tokens;
 
-    @ManyToOne
+
+    @JsonIgnore
+    private boolean enabled;
+
+    @OneToOne(cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JoinColumn(name = "address_id")
     private Address address;
-
-    private boolean enabled;
 
     public User(
             String username,
@@ -123,6 +126,7 @@ public class User implements UserDetails, Serializable {
         this.enabled = enabled;
     }
 
+    @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return switch (role) {
@@ -143,16 +147,19 @@ public class User implements UserDetails, Serializable {
         return username;
     }
 
+    @JsonIgnore
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isCredentialsNonExpired() {
         return true;

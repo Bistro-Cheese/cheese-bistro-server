@@ -1,5 +1,6 @@
 package com.ooadprojectserver.restaurantmanagement.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
@@ -28,6 +29,7 @@ public class Address implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
+    @JsonIgnore
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false)
     private UUID id;
@@ -43,5 +45,4 @@ public class Address implements Serializable {
     @Column(name = "region", nullable = false)
     @JdbcTypeCode(SqlTypes.NVARCHAR)
     private String region;
-
 }

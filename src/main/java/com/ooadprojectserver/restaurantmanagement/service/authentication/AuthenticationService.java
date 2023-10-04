@@ -1,10 +1,7 @@
 package com.ooadprojectserver.restaurantmanagement.service.authentication;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ooadprojectserver.restaurantmanagement.constant.MessageConstant;
 import com.ooadprojectserver.restaurantmanagement.dto.request.UserLoginRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.request.UserRegisterRequest;
-import com.ooadprojectserver.restaurantmanagement.dto.response.model.APIResponse;
 import com.ooadprojectserver.restaurantmanagement.dto.response.model.AuthenticationResponse;
 import com.ooadprojectserver.restaurantmanagement.model.token.Token;
 import com.ooadprojectserver.restaurantmanagement.model.token.TokenType;
@@ -20,18 +17,15 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
-
     private final UserFactory userFactory;
-
     private final JwtService jwtService;
-
     private final UserRepository userRepository;
     private final TokenRepository tokenRepository;
 
@@ -52,42 +46,47 @@ public class AuthenticationService {
         return this.generateToken(user);
     }
 
-    public void refreshToken(
+    public AuthenticationResponse refreshToken(
             HttpServletRequest request,
             HttpServletResponse response
-    ) throws IOException {
-        final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        final String refreshToken;
-        final String username;
-        if (authHeader == null || !authHeader.contains("Bearer ")) {
-            return;
+    ) {
+        final String refreshToken = getTokenFromHeader(request);
+        final String username = jwtService.extractUsername(refreshToken);
+        if (username == null) {
+            throw new NoSuchElementException();
         }
-        refreshToken = authHeader.substring(7);
-        username = jwtService.extractUsername(refreshToken);
-        if (username != null) {
-            User user = this.userRepository.findByUsername(username).orElseThrow();
-            if (jwtService.isTokenValid(refreshToken, user)) {
-                String accessToken = jwtService.generateAccessToken(user);
-                revokeAllUserTokens(user);
-                saveUserToken(user, accessToken);
-                AuthenticationResponse authenticationResponse = AuthenticationResponse.builder()
-                        .access_token(accessToken)
-                        .refresh_token(refreshToken)
-                        .build();
-
-                response.setContentType("application/json");
-                new ObjectMapper().writeValue(
-                        response.getOutputStream(),
-                        new APIResponse<>(
-                                MessageConstant.REFRESH_TOKEN_SUCCESS,
-                                authenticationResponse
-                        )
-                );
-            }
+        User user = this.userRepository.findByUsername(username).orElseThrow();
+        if (jwtService.isTokenValid(refreshToken, user)) {
+            String accessToken = jwtService.generateAccessToken(user);
+            revokeAllUserTokens(user);
+            saveUserToken(user, accessToken);
+            return AuthenticationResponse.builder()
+                    .access_token(accessToken)
+                    .refresh_token(refreshToken)
+                    .build();
         }
+        return null;
     }
 
+    public User getProfile(
+            HttpServletRequest request,
+            HttpServletResponse response
+    ) {
+        String accessToken = getTokenFromHeader(request);
+        String username = jwtService.extractUsername(accessToken);
+        if (username == null) {
+            throw new NoSuchElementException();
+        }
+        return this.userRepository.findByUsername(username).orElseThrow();
+    }
 
+    private String getTokenFromHeader(HttpServletRequest request) {
+        final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+        if (authHeader == null || !authHeader.contains("Bearer ")) {
+            throw new RuntimeException("No Authorization Header");
+        }
+        return authHeader.substring(7);
+    }
 
     private AuthenticationResponse generateToken(User user) {
         //Generate AT and RT
