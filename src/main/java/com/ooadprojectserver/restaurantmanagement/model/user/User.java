@@ -127,8 +127,8 @@ public class User implements UserDetails, Serializable {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return switch (role) {
-            case 1 -> RoleConstant.ROLE.MANAGER.getAuthorities();
-            case 2 -> RoleConstant.ROLE.STAFF.getAuthorities();
+            case 1 -> RoleConstant.ROLE.STAFF.getAuthorities();
+            case 2 -> RoleConstant.ROLE.MANAGER.getAuthorities();
             case 3 -> RoleConstant.ROLE.OWNER.getAuthorities();
             default -> throw new IllegalStateException("Unexpected value: " + role);
         };
