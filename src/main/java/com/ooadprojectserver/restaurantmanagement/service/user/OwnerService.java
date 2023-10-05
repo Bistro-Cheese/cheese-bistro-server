@@ -2,6 +2,7 @@ package com.ooadprojectserver.restaurantmanagement.service.user;
 
 import com.ooadprojectserver.restaurantmanagement.constant.AccountStatus;
 import com.ooadprojectserver.restaurantmanagement.constant.DateTimeConstant;
+import com.ooadprojectserver.restaurantmanagement.dto.request.UpdateProfileRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.request.UserRegisterRequest;
 import com.ooadprojectserver.restaurantmanagement.model.Address;
 import com.ooadprojectserver.restaurantmanagement.model.user.Owner;
@@ -18,12 +19,11 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
-public class OwnerService implements UserService {
+public class OwnerService {
     private final PasswordEncoder passwordEncoder;
     private final OwnerRepository ownerRepository;
     private final AddressRepository addressRepository;
 
-    @Override
     public User createUser(UserRegisterRequest request) {
         String sDob = request.getDateOfBirth();
         Date dob = null;
@@ -56,5 +56,14 @@ public class OwnerService implements UserService {
                 .lastModifiedDate(new Date())
                 .enabled(Objects.equals(request.getStatus(), AccountStatus.ACTIVE_STATUS.getValue()))
                 .build());
+    }
+
+    public void updateUser(UUID user_id, UpdateProfileRequest request) {
+        System.out.println(request.getBranch());
+        ownerRepository.updateOwner(
+                request.getBranch(),
+                request.getLicenseBusiness(),
+                user_id
+        );
     }
 }

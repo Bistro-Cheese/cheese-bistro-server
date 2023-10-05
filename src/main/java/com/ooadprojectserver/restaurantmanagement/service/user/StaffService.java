@@ -2,6 +2,7 @@ package com.ooadprojectserver.restaurantmanagement.service.user;
 
 import com.ooadprojectserver.restaurantmanagement.constant.AccountStatus;
 import com.ooadprojectserver.restaurantmanagement.constant.DateTimeConstant;
+import com.ooadprojectserver.restaurantmanagement.dto.request.UpdateProfileRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.request.UserRegisterRequest;
 import com.ooadprojectserver.restaurantmanagement.model.Address;
 import com.ooadprojectserver.restaurantmanagement.model.user.Staff;
@@ -15,16 +16,16 @@ import org.springframework.stereotype.Service;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class StaffService implements UserService{
+public class StaffService {
     private final PasswordEncoder passwordEncoder;
     private final StaffRepository staffRepository;
     private final AddressRepository addressRepository;
-    @Override
+
     public User createUser(UserRegisterRequest request) {
         String sDob = request.getDateOfBirth();
         Date dob = null;
@@ -57,5 +58,13 @@ public class StaffService implements UserService{
                 .lastModifiedDate(new Date())
                 .enabled(Objects.equals(request.getStatus(), AccountStatus.ACTIVE_STATUS.getValue()))
                 .build());
+    }
+
+    public void updateUser(UUID user_id, UpdateProfileRequest request) {
+        staffRepository.updateStaff(
+                request.getAcademicLevel(),
+                request.getForeignLanguage(),
+                user_id
+        );
     }
 }
