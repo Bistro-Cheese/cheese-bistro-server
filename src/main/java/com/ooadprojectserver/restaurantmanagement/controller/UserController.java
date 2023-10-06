@@ -7,10 +7,8 @@ import com.ooadprojectserver.restaurantmanagement.dto.request.UpdateProfileReque
 import com.ooadprojectserver.restaurantmanagement.dto.response.model.APIResponse;
 import com.ooadprojectserver.restaurantmanagement.dto.response.model.MessageResponse;
 import com.ooadprojectserver.restaurantmanagement.model.user.User;
-import com.ooadprojectserver.restaurantmanagement.model.user.factory.UserFactory;
 import com.ooadprojectserver.restaurantmanagement.service.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,8 +22,8 @@ import static org.springframework.http.HttpStatus.OK;
 @RequiredArgsConstructor
 @RequestMapping(APIConstant.USERS)
 public class UserController {
-    private final UserFactory userFactory;
     private final UserService userService;
+
 
     @GetMapping()
     public ResponseEntity<APIResponse<List<User>>> getUsersController() {
@@ -52,7 +50,7 @@ public class UserController {
         return ResponseEntity.status(OK).body(
                 new APIResponse<>(
                         MessageConstant.GET_PROFILE_SUCCESS,
-                        authenticationService.getProfile(request)
+                        userService.getProfile(request)
                 )
         );
     }
@@ -60,10 +58,9 @@ public class UserController {
     @PatchMapping(APIConstant.PROFILE)
     public ResponseEntity<MessageResponse> updateProfileController(
             @RequestBody UpdateProfileRequest updateRequestBody,
-            HttpServletRequest request,
-            HttpServletResponse response
+            HttpServletRequest request
     ) {
-        userService.updateProfile(updateRequestBody, request, response);
+        userService.updateProfile(updateRequestBody, request);
         return ResponseEntity.status(HttpStatus.OK).body(
                 new MessageResponse(MessageConstant.UPDATE_PROFILE_SUCCESS)
         );

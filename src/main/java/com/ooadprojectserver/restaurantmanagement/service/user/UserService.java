@@ -37,7 +37,7 @@ public class UserService {
         this.userRepository.deleteById(user_id);
     }
 
-    public User getProfile(HttpServletRequest request, HttpServletResponse response) {
+    public User getProfile(HttpServletRequest request) {
         String accessToken = authenticationService.getTokenFromHeader(request);
         String username = jwtService.extractUsername(accessToken);
         if (username == null) {
@@ -46,7 +46,7 @@ public class UserService {
         return this.userRepository.findByUsername(username).orElseThrow();
     }
 
-    public void updateProfile(UpdateProfileRequest updateRequestBody, HttpServletRequest request, HttpServletResponse response) {
+    public void updateProfile(UpdateProfileRequest updateRequestBody, HttpServletRequest request) {
         String accessToken = authenticationService.getTokenFromHeader(request);
         String username = jwtService.extractUsername(accessToken);
         if (username == null) {
