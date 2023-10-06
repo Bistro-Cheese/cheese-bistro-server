@@ -6,6 +6,7 @@ import com.ooadprojectserver.restaurantmanagement.dto.response.model.Authenticat
 import com.ooadprojectserver.restaurantmanagement.model.token.Token;
 import com.ooadprojectserver.restaurantmanagement.model.token.TokenType;
 import com.ooadprojectserver.restaurantmanagement.model.user.User;
+import com.ooadprojectserver.restaurantmanagement.repository.AddressRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.TokenRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.user.UserRepository;
 import com.ooadprojectserver.restaurantmanagement.model.user.factory.UserFactory;
@@ -20,13 +21,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
-
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Arrays;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Stream;
-
 
 @Service
 @RequiredArgsConstructor
@@ -39,36 +35,24 @@ public class AuthenticationService {
 
     @Value("${application.security.jwt.refreshCookieName}")
     private String CookieName;
+    private final AddressRepository addressRepository;
 
-    public AuthenticationResponse register(UserRegisterRequest request) {
+    public void register(UserRegisterRequest request) {
         User user = userFactory.createUser(request);
-        return this.generateToken(user);
     }
 
     public AuthenticationResponse login(UserLoginRequest request) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getUsername(),
-                        request.getPassword()
-                )
-        );
-        User user = userRepository.findByUsername(request.getUsername())
-                .orElseThrow();
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+        User user = userRepository.findByUsername(request.getUsername()).orElseThrow();
 
         return this.generateToken(user);
     }
 
-    public AuthenticationResponse refreshToken(
-            HttpServletRequest request,
-            HttpServletResponse response
-    ) {
+    public AuthenticationResponse refreshToken(HttpServletRequest request, HttpServletResponse response) {
         final String refreshToken;
         Cookie[] cookies = request.getCookies();
         Stream<Cookie> stream = Objects.nonNull(cookies) ? Arrays.stream(cookies) : Stream.empty();
-        refreshToken = stream.filter(cookie -> CookieName.equals(cookie.getName()))
-                .findFirst()
-                .orElse(new Cookie(CookieName, null))
-                .getValue();
+        refreshToken = stream.filter(cookie -> CookieName.equals(cookie.getName())).findFirst().orElse(new Cookie(CookieName, null)).getValue();
         final String username = jwtService.extractUsername(refreshToken);
         if (username == null) {
             throw new NoSuchElementException();
@@ -78,12 +62,11 @@ public class AuthenticationService {
             String accessToken = jwtService.generateAccessToken(user);
             revokeAllUserTokens(user);
             saveUserToken(user, accessToken);
-            return AuthenticationResponse.builder()
-                    .accessToken(accessToken)
-                    .build();
+            return AuthenticationResponse.builder().accessToken(accessToken).build();
         }
         return null;
     }
+
 
     public User getProfile(
             HttpServletRequest request
@@ -114,20 +97,11 @@ public class AuthenticationService {
         revokeAllUserTokens(user);
         saveUserToken(user, accessToken);
 
-        return AuthenticationResponse.builder()
-                .accessToken(accessToken)
-                .refreshTokenCookie(cookie)
-                .build();
+        return AuthenticationResponse.builder().accessToken(accessToken).refreshTokenCookie(cookie).build();
     }
 
     private void saveUserToken(User user, String accessToken) {
-        Token token = Token.builder()
-                .user(user)
-                .token(accessToken)
-                .tokenType(TokenType.BEARER)
-                .expired(false)
-                .revoked(false)
-                .build();
+        Token token = Token.builder().user(user).token(accessToken).tokenType(TokenType.BEARER).expired(false).revoked(false).build();
 
         tokenRepository.save(token);
     }
@@ -135,11 +109,11 @@ public class AuthenticationService {
     private void revokeAllUserTokens(User user) {
         List<Token> validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId());
         if (validUserTokens.isEmpty()) {
-            return;
-        }
-        validUserTokens.forEach(token -> {
-            token.setExpired(true);
-            token.setRevoked(true);
+                return;
+            }
+            validUserTokens.forEach(token -> {
+                token.setExpired(true);
+                token.setRevoked(true);
         });
         tokenRepository.saveAll(validUserTokens);
     }

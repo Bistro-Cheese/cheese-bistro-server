@@ -6,6 +6,7 @@ import com.ooadprojectserver.restaurantmanagement.dto.request.UserLoginRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.request.UserRegisterRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.response.model.APIResponse;
 import com.ooadprojectserver.restaurantmanagement.dto.response.model.AuthenticationResponse;
+import com.ooadprojectserver.restaurantmanagement.dto.response.model.MessageResponse;
 import com.ooadprojectserver.restaurantmanagement.service.authentication.AuthenticationService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -26,27 +27,27 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping(APIConstant.REGISTER)
-    public ResponseEntity<APIResponse<AuthenticationResponse>> registerController(@RequestBody UserRegisterRequest request) {
+    public ResponseEntity<MessageResponse> registerController(@RequestBody UserRegisterRequest request) {
+        authenticationService.register(request);
         return ResponseEntity.status(CREATED).body(
-                new APIResponse<>(
-                        MessageConstant.REGISTER_SUCCESS,
-                        authenticationService.register(request)
-                )
+                new MessageResponse(MessageConstant.REGISTER_SUCCESS)
         );
 
     }
 
     @PostMapping(APIConstant.LOGIN)
     public ResponseEntity<APIResponse<AuthenticationResponse>> loginController(@RequestBody UserLoginRequest request) {
-       AuthenticationResponse authResponse = authenticationService.login(request);
+       
+      AuthenticationResponse authResponse = authenticationService.login(request);
+
         return ResponseEntity.status(OK)
                 .header(HttpHeaders.SET_COOKIE, authResponse.getRefreshTokenCookie().toString())
                 .body(
-                new APIResponse<>(
-                        MessageConstant.LOGIN_SUCCESS,
-                        authResponse
-                )
-        );
+                        new APIResponse<>(
+                                MessageConstant.LOGIN_SUCCESS,
+                                authResponse
+                        )
+                );
     }
 
     @GetMapping(APIConstant.REFRESH_TOKEN)
