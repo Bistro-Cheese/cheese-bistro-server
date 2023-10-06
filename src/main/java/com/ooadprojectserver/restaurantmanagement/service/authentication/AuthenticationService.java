@@ -86,8 +86,7 @@ public class AuthenticationService {
     }
 
     public User getProfile(
-            HttpServletRequest request,
-            HttpServletResponse response
+            HttpServletRequest request
     ) {
         String accessToken = getTokenFromHeader(request);
         String username = jwtService.extractUsername(accessToken);

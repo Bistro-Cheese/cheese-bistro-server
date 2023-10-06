@@ -46,7 +46,7 @@ public class FoodServiceImpl implements FoodService {
                 .description(request.getDescription())
                 .price(request.getPrice())
                 .quantity(request.getQuantity())
-                .product_image(request.getProductImage())
+                .productImage(request.getProductImage())
                 .createdDate(new Date())
                 .lastModifiedDate(new Date())
                 .status(request.getStatus().getValue())

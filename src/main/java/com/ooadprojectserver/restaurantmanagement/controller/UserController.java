@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static org.springframework.http.HttpStatus.OK;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(APIConstant.USERS)
@@ -35,13 +36,12 @@ public class UserController {
 
     @GetMapping(APIConstant.PROFILE)
     public ResponseEntity<APIResponse<User>> getMeController(
-            HttpServletRequest request,
-            HttpServletResponse response
+            HttpServletRequest request
     ) {
-        return ResponseEntity.status(HttpStatus.OK).body(
+        return ResponseEntity.status(OK).body(
                 new APIResponse<>(
                         MessageConstant.GET_PROFILE_SUCCESS,
-                        authenticationService.getProfile(request, response)
+                        authenticationService.getProfile(request)
                 )
         );
     }
