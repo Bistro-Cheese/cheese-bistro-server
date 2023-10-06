@@ -11,6 +11,7 @@ public class APIConstant {
     public static final String REFRESH_TOKEN = "/refresh-token";
     //    Users Routes
     public static final String USERS = VERSION + "/users";
+    public static final String USER_ID = "/{user_id}";
     public static final String PROFILE = "/profile";
     //    Owner Routes
     public static final String OWNER = VERSION + "/owner";

@@ -64,7 +64,7 @@ public class User implements UserDetails, Serializable {
     @JdbcTypeCode(SqlTypes.NVARCHAR)
     private String password;
 
-    @Column(name = "phone_number", nullable = false, unique = true, length = 11)
+    @Column(name = "phone_number", nullable = false, unique = true, length = 30)
     @JdbcTypeCode(SqlTypes.NVARCHAR)
     private String phoneNumber;
 

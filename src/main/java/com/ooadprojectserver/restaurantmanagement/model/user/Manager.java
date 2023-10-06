@@ -35,7 +35,7 @@ public class Manager extends User {
             String firstName,
             String lastName,
             Date dateOfBirth,
-            String hashPassword,
+            String password,
             String phoneNumber,
             Integer role,
             Address address,
@@ -47,7 +47,7 @@ public class Manager extends User {
             String foreignLanguage,
             String experiencedYear
     ) {
-        super( username, firstName, lastName, dateOfBirth, hashPassword, phoneNumber, role, address, status, createdDate, lastModifiedDate, enabled);
+        super( username, firstName, lastName, dateOfBirth, password, phoneNumber, role, address, status, createdDate, lastModifiedDate, enabled);
         this.certificationManagement = certificationManagement;
         this.foreignLanguage = foreignLanguage;
         this.experiencedYear = experiencedYear;
