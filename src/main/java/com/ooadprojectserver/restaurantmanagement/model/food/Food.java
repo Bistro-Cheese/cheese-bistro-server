@@ -51,7 +51,7 @@ public class Food implements Serializable {
 
     @Column(name = "product_image", nullable = false)
     @JdbcTypeCode(SqlTypes.NVARCHAR)
-    private String product_image;
+    private String productImage;
 
     @Column(name = "price", nullable = false)
     @JdbcTypeCode(SqlTypes.NVARCHAR)
