@@ -1,6 +1,5 @@
 package com.ooadprojectserver.restaurantmanagement.config;
 
-//import com.ooadprojectserver.restaurantmanagement.config.filter.CORSFilter;
 import com.ooadprojectserver.restaurantmanagement.config.filter.JwtAuthenticationFilter;
 import com.ooadprojectserver.restaurantmanagement.constant.APIConstant;
 import lombok.RequiredArgsConstructor;
