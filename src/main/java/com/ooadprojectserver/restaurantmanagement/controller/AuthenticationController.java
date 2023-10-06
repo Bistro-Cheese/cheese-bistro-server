@@ -11,8 +11,6 @@ import com.ooadprojectserver.restaurantmanagement.service.authentication.Authent
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +21,6 @@ import static org.springframework.http.HttpStatus.*;
 @RequiredArgsConstructor
 @RequestMapping(APIConstant.AUTH)
 public class AuthenticationController {
-    Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
     private final AuthenticationService authenticationService;
 
     @PostMapping(APIConstant.REGISTER)
@@ -55,7 +52,6 @@ public class AuthenticationController {
             HttpServletRequest request,
             HttpServletResponse response
     ) {
-        logger.info("Get Refresh Token");
         return ResponseEntity.status(OK).body(
                 new APIResponse<>(
                         MessageConstant.REFRESH_TOKEN_SUCCESS,

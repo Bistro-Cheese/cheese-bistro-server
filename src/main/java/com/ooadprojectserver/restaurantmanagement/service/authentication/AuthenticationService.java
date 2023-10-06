@@ -67,18 +67,6 @@ public class AuthenticationService {
         return null;
     }
 
-
-    public User getProfile(
-            HttpServletRequest request
-    ) {
-        String accessToken = getTokenFromHeader(request);
-        String username = jwtService.extractUsername(accessToken);
-        if (username == null) {
-            throw new NoSuchElementException();
-        }
-        return this.userRepository.findByUsername(username).orElseThrow();
-    }
-
     public String getTokenFromHeader(HttpServletRequest request) {
         final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         if (authHeader == null || !authHeader.contains("Bearer ")) {

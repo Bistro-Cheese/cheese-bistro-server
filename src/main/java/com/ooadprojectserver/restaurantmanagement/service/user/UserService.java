@@ -9,7 +9,6 @@ import com.ooadprojectserver.restaurantmanagement.repository.user.UserRepository
 import com.ooadprojectserver.restaurantmanagement.service.authentication.AuthenticationService;
 import com.ooadprojectserver.restaurantmanagement.service.authentication.JwtService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

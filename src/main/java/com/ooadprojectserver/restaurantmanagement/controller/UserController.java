@@ -1,6 +1,5 @@
 package com.ooadprojectserver.restaurantmanagement.controller;
 
-
 import com.ooadprojectserver.restaurantmanagement.constant.APIConstant;
 import com.ooadprojectserver.restaurantmanagement.constant.MessageConstant;
 import com.ooadprojectserver.restaurantmanagement.dto.request.UpdateProfileRequest;
@@ -23,7 +22,6 @@ import static org.springframework.http.HttpStatus.OK;
 @RequestMapping(APIConstant.USERS)
 public class UserController {
     private final UserService userService;
-
 
     @GetMapping()
     public ResponseEntity<APIResponse<List<User>>> getUsersController() {
