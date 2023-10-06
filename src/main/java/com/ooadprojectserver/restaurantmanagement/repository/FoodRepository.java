@@ -16,17 +16,14 @@ import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
+@Transactional
 public interface FoodRepository extends JpaRepository<Food, UUID>, JpaSpecificationExecutor<Food> {
-
-
-    @Transactional
     @Modifying
     @Query("""
-            update Food f set f.name = ?1, f.category = ?2, f.description = ?3, f.quantity = ?4, f.product_image = ?5, f.price = ?6, f.lastModifiedDate = ?7, f.status = ?8
+            update Food f set f.name = ?1, f.category = ?2, f.description = ?3, f.quantity = ?4, f.productImage = ?5, f.price = ?6, f.lastModifiedDate = ?7, f.status = ?8
             where f.id = ?9""")
     void updateFoodById(String name, Category category, String description,
                        Integer quantity, String product_image,
                        BigDecimal price, Date lastModifiedDate,
                        Integer status, UUID id);
-
 }

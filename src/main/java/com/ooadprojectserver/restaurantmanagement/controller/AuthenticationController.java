@@ -10,19 +10,19 @@ import com.ooadprojectserver.restaurantmanagement.service.authentication.Authent
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.IOException;
 
 import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RequestMapping(APIConstant.AUTH)
 public class AuthenticationController {
+    Logger logger = LoggerFactory.getLogger(AuthenticationController.class);
     private final AuthenticationService authenticationService;
 
     @PostMapping(APIConstant.REGISTER)
@@ -39,8 +39,6 @@ public class AuthenticationController {
     @PostMapping(APIConstant.LOGIN)
     public ResponseEntity<APIResponse<AuthenticationResponse>> loginController(@RequestBody UserLoginRequest request) {
        AuthenticationResponse authResponse = authenticationService.login(request);
-
-
         return ResponseEntity.status(OK)
                 .header(HttpHeaders.SET_COOKIE, authResponse.getRefreshTokenCookie().toString())
                 .body(
@@ -51,11 +49,17 @@ public class AuthenticationController {
         );
     }
 
-    @PostMapping(APIConstant.REFRESH_TOKEN)
-    public void refreshToken(
+    @GetMapping(APIConstant.REFRESH_TOKEN)
+    public ResponseEntity<APIResponse<AuthenticationResponse>> refreshTokenController(
             HttpServletRequest request,
             HttpServletResponse response
-    ) throws IOException {
-        authenticationService.refreshToken(request, response);
+    ) {
+        logger.info("Get Refresh Token");
+        return ResponseEntity.status(OK).body(
+                new APIResponse<>(
+                        MessageConstant.REFRESH_TOKEN_SUCCESS,
+                        authenticationService.refreshToken(request, response)
+                )
+        );
     }
 }

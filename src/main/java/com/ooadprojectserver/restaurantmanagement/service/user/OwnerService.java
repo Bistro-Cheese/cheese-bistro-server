@@ -3,8 +3,10 @@ package com.ooadprojectserver.restaurantmanagement.service.user;
 import com.ooadprojectserver.restaurantmanagement.constant.AccountStatus;
 import com.ooadprojectserver.restaurantmanagement.constant.DateTimeConstant;
 import com.ooadprojectserver.restaurantmanagement.dto.request.UserRegisterRequest;
+import com.ooadprojectserver.restaurantmanagement.model.Address;
 import com.ooadprojectserver.restaurantmanagement.model.user.Owner;
 import com.ooadprojectserver.restaurantmanagement.model.user.User;
+import com.ooadprojectserver.restaurantmanagement.repository.AddressRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.user.OwnerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -12,15 +14,16 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
-public class OwnerService {
+public class OwnerService implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final OwnerRepository ownerRepository;
+    private final AddressRepository addressRepository;
 
+    @Override
     public User createUser(UserRegisterRequest request) {
         String sDob = request.getDateOfBirth();
         Date dob = null;
@@ -38,6 +41,15 @@ public class OwnerService {
                 .phoneNumber(request.getPhoneNumber())
                 .role(request.getRole().getValue())
                 .status(request.getStatus())
+                .address(
+                        addressRepository.save(
+                                Address.builder()
+                                        .addressLine(request.getAddressLine())
+                                        .city(request.getCity())
+                                        .region(request.getRegion())
+                                        .build()
+                        )
+                )
                 .licenseBusiness(request.getLicenseBusiness())
                 .branch(request.getBranch())
                 .createdDate(new Date())

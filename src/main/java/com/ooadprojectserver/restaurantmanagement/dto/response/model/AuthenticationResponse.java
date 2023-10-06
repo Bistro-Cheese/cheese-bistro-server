@@ -2,7 +2,6 @@ package com.ooadprojectserver.restaurantmanagement.dto.response.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ooadprojectserver.restaurantmanagement.model.user.User;
 import lombok.*;
 import org.springframework.http.ResponseCookie;
 
@@ -12,7 +11,7 @@ import org.springframework.http.ResponseCookie;
 @NoArgsConstructor
 public class AuthenticationResponse {
     @JsonProperty("access_token")
-    private String access_token;
+    private String accessToken;
 
     @JsonProperty("refresh_token_cookie")
     @JsonIgnore

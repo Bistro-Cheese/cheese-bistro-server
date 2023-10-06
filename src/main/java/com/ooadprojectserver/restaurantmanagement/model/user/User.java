@@ -5,8 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ooadprojectserver.restaurantmanagement.constant.DateTimeConstant;
 import com.ooadprojectserver.restaurantmanagement.constant.RoleConstant;
 import com.ooadprojectserver.restaurantmanagement.model.Address;
-import com.ooadprojectserver.restaurantmanagement.model.token.Token;
 import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Table;
 import lombok.*;
 import org.hibernate.annotations.*;
@@ -21,7 +21,6 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -38,6 +37,7 @@ public class User implements UserDetails, Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
+    @JsonIgnore
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false)
     private UUID id;
@@ -59,8 +59,8 @@ public class User implements UserDetails, Serializable {
     @JdbcTypeCode(SqlTypes.DATE)
     private Date dateOfBirth;
 
-    @Column(name = "password", nullable = false)
     @JsonIgnore
+    @Column(name = "password", nullable = false)
     @JdbcTypeCode(SqlTypes.NVARCHAR)
     private String password;
 
@@ -88,15 +88,11 @@ public class User implements UserDetails, Serializable {
     @JdbcTypeCode(SqlTypes.TIMESTAMP)
     private Date lastModifiedDate;
 
-    @OneToMany(mappedBy = "user")
-    @JsonIgnore
-    private List<Token> tokens;
-
-    @ManyToOne
-    @JsonIgnore
+    @OneToOne(cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JoinColumn(name = "address_id")
     private Address address;
 
+    @JsonIgnore
     private boolean enabled;
 
     public User(
@@ -127,6 +123,7 @@ public class User implements UserDetails, Serializable {
         this.enabled = enabled;
     }
 
+    @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return switch (role) {
@@ -147,16 +144,19 @@ public class User implements UserDetails, Serializable {
         return username;
     }
 
+    @JsonIgnore
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
