@@ -30,9 +30,9 @@ public class Owner extends User {
 
     @Builder(builderMethodName = "ownerBuilder")
     public Owner(String username, String firstName, String lastName,
-                 Date dateOfBirth, String hashPassword, String phoneNumber, Integer role, Integer status, Address address,
+                 Date dateOfBirth, String password, String phoneNumber, Integer role, Integer status, Address address,
                  Date createdDate, Date lastModifiedDate, boolean enabled, String branch, String licenseBusiness){
-        super(username, firstName, lastName, dateOfBirth, hashPassword, phoneNumber, role, address, status, createdDate, lastModifiedDate, enabled);
+        super(username, firstName, lastName, dateOfBirth, password, phoneNumber, role, address, status, createdDate, lastModifiedDate, enabled);
         this.branch = branch;
         this.licenseBusiness = licenseBusiness;
     }

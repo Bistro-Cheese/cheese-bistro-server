@@ -33,7 +33,7 @@ public class UserController {
         );
     }
 
-    @DeleteMapping("/{user_id}")
+    @DeleteMapping(APIConstant.USER_ID)
     public ResponseEntity<MessageResponse> deleteUserController(@PathVariable UUID user_id) {
         userService.deleteUser(user_id);
         return ResponseEntity.status(HttpStatus.OK).body(
