@@ -79,7 +79,7 @@ public class AuthenticationService {
         return this.userRepository.findByUsername(username).orElseThrow();
     }
 
-    private String getTokenFromHeader(HttpServletRequest request) {
+    public String getTokenFromHeader(HttpServletRequest request) {
         final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
         if (authHeader == null || !authHeader.contains("Bearer ")) {
             throw new RuntimeException("No Authorization Header");
