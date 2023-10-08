@@ -44,7 +44,6 @@ public class AuthenticationService {
     public AuthenticationResponse login(UserLoginRequest request) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
         User user = userRepository.findByUsername(request.getUsername()).orElseThrow();
-
         return this.generateToken(user);
     }
 
