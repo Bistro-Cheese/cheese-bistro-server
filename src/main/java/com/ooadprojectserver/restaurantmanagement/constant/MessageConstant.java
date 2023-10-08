@@ -9,8 +9,8 @@ public class MessageConstant {
     //    Users
     public static final String GET_USERS_SUCCESS = "Get Users Successfully";
     public static final String DELETE_USER_SUCCESS = "Delete User Successfully";
+    public static final String UPDATE_USER_SUCCESS = "Update User Successfully";
     public static final String GET_PROFILE_SUCCESS = "Get Profile Successfully";
-    public static final String UPDATE_PROFILE_SUCCESS = "Update Profile Successfully";
     // Food
     public static final String GET_ALL_FOODS_SUCCESS = "Get all foods Successfully";
     public static final String FIND_FOOD_SUCCESS = "Finding Food Successfully";

@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.HttpStatus.*;
@@ -24,6 +25,7 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping(APIConstant.REGISTER)
+    @PreAuthorize("hasRole('OWNER')")
     public ResponseEntity<MessageResponse> registerController(@RequestBody UserRegisterRequest request) {
         authenticationService.register(request);
         return ResponseEntity.status(CREATED).body(

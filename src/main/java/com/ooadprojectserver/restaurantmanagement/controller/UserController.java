@@ -5,12 +5,13 @@ import com.ooadprojectserver.restaurantmanagement.constant.MessageConstant;
 import com.ooadprojectserver.restaurantmanagement.dto.request.UpdateProfileRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.response.model.APIResponse;
 import com.ooadprojectserver.restaurantmanagement.dto.response.model.MessageResponse;
-import com.ooadprojectserver.restaurantmanagement.model.user.User;
+import com.ooadprojectserver.restaurantmanagement.dto.response.model.UserResponse;
 import com.ooadprojectserver.restaurantmanagement.service.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,7 +25,8 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping()
-    public ResponseEntity<APIResponse<List<User>>> getUsersController() {
+    @PreAuthorize("hasRole('OWNER')")
+    public ResponseEntity<APIResponse<List<UserResponse>>> getUsersController() {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new APIResponse<>(
                         MessageConstant.GET_USERS_SUCCESS,
@@ -33,7 +35,20 @@ public class UserController {
         );
     }
 
+    @PatchMapping(APIConstant.USER_ID)
+    @PreAuthorize("hasRole('OWNER')")
+    public ResponseEntity<MessageResponse> updateUserController(
+            @RequestBody UpdateProfileRequest updateRequestBody,
+            @PathVariable UUID user_id
+    ) {
+        userService.updateUser(updateRequestBody, user_id);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new MessageResponse(MessageConstant.UPDATE_USER_SUCCESS)
+        );
+    }
+
     @DeleteMapping(APIConstant.USER_ID)
+    @PreAuthorize("hasRole('OWNER')")
     public ResponseEntity<MessageResponse> deleteUserController(@PathVariable UUID user_id) {
         userService.deleteUser(user_id);
         return ResponseEntity.status(HttpStatus.OK).body(
@@ -42,7 +57,7 @@ public class UserController {
     }
 
     @GetMapping(APIConstant.PROFILE)
-    public ResponseEntity<APIResponse<User>> getMeController(
+    public ResponseEntity<APIResponse<UserResponse>> getProfileController(
             HttpServletRequest request
     ) {
         return ResponseEntity.status(OK).body(
@@ -50,17 +65,6 @@ public class UserController {
                         MessageConstant.GET_PROFILE_SUCCESS,
                         userService.getProfile(request)
                 )
-        );
-    }
-
-    @PatchMapping(APIConstant.PROFILE)
-    public ResponseEntity<MessageResponse> updateProfileController(
-            @RequestBody UpdateProfileRequest updateRequestBody,
-            HttpServletRequest request
-    ) {
-        userService.updateProfile(updateRequestBody, request);
-        return ResponseEntity.status(HttpStatus.OK).body(
-                new MessageResponse(MessageConstant.UPDATE_PROFILE_SUCCESS)
         );
     }
 }
