@@ -42,9 +42,10 @@ public class SecurityConfiguration {
                 .cors(withDefaults())
                 .csrf(cors -> cors.disable())
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/v1/auth/**").permitAll()
-                        .anyRequest().authenticated()
+//                        .requestMatchers("/api/v1/auth/**").permitAll()
+                        .anyRequest().permitAll()
                 )
+//                .oauth2Login(oauth -> oauth.defaultSuccessUrl("/user"))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
