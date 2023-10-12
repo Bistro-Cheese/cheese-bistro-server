@@ -4,15 +4,23 @@ import com.ooadprojectserver.restaurantmanagement.constant.AccountStatus;
 import com.ooadprojectserver.restaurantmanagement.constant.DateTimeConstant;
 import com.ooadprojectserver.restaurantmanagement.constant.RoleConstant.*;
 import com.ooadprojectserver.restaurantmanagement.dto.request.UpdateProfileRequest;
+import com.ooadprojectserver.restaurantmanagement.dto.response.model.PagingResponseModel;
 import com.ooadprojectserver.restaurantmanagement.dto.response.model.UserResponse;
+import com.ooadprojectserver.restaurantmanagement.dto.response.util.APIStatus;
+import com.ooadprojectserver.restaurantmanagement.exception.CustomException;
 import com.ooadprojectserver.restaurantmanagement.model.user.User;
 import com.ooadprojectserver.restaurantmanagement.model.user.factory.UserFactory;
 import com.ooadprojectserver.restaurantmanagement.repository.AddressRepository;
+import com.ooadprojectserver.restaurantmanagement.repository.specification.UserSpecification;
 import com.ooadprojectserver.restaurantmanagement.repository.user.UserRepository;
 import com.ooadprojectserver.restaurantmanagement.service.authentication.AuthenticationService;
 import com.ooadprojectserver.restaurantmanagement.service.authentication.JwtService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -86,6 +94,27 @@ public class UserService {
         return this.covertUserToUserResponse(user);
     }
 
+    public PagingResponseModel searchUser(String name, String role,String sort, int pageNumber, int pageSize) {
+        if (pageSize < 1 || pageNumber < 1) {
+            throw new CustomException(APIStatus.ERR_PAGINATION);
+        }
+        Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
+        Page<User> userPage = userRepository.findAll(new UserSpecification(name, role, sort), pageable);
+        List<UserResponse> userResponseList = new ArrayList<>();
+        if (!userPage.isEmpty()) {
+            for (User user: userPage) {
+                userResponseList.add(this.covertUserToUserResponse(user));
+            }
+        }
+        Page<UserResponse> userResponsePage= new PageImpl<UserResponse>(userResponseList);
+        return new PagingResponseModel(
+                userResponsePage.getContent(),
+                userPage.getTotalElements(),
+                userPage.getTotalPages(),
+                userPage.getNumber() + 1
+        );
+    }
+
     private UserResponse covertUserToUserResponse(User user) {
         String sRole = switch (user.getRole()) {
             case 1 -> ROLE.STAFF.name().toLowerCase();
@@ -103,14 +132,14 @@ public class UserService {
             default -> throw new IllegalStateException("Unexpected value: " + user.getStatus());
         };
         return UserResponse.builder()
-                .username(user.getUsername())
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
-                .phoneNumber(user.getPhoneNumber())
-                .dateOfBirth(user.getDateOfBirth())
-                .address(user.getAddress())
-                .status(sStatus)
-                .role(sRole)
-                .build();
+            .username(user.getUsername())
+            .firstName(user.getFirstName())
+            .lastName(user.getLastName())
+            .phoneNumber(user.getPhoneNumber())
+            .dateOfBirth(user.getDateOfBirth())
+            .address(user.getAddress())
+            .status(sStatus)
+            .role(sRole)
+            .build();
     }
 }
