@@ -44,8 +44,10 @@ public enum APIStatus {
     ERR_GET_DETAIL_ORDERS(801, "Can not get detail orders"),
     ERR_ORDER_ID_EMPTY(802, "Order can't empty"),
     ERR_DELETE_ORDER(803, "Delete order is fail"),
-    ERR_ORDER_ID_NOT_FOUND(804, "Order id not found");
+    ERR_ORDER_ID_NOT_FOUND(804, "Order id not found"),
 
+//    Pagination
+    ERR_PAGINATION(400, "Page size or page number must not be less than one");
     private final int status;
     private final String message;
 
