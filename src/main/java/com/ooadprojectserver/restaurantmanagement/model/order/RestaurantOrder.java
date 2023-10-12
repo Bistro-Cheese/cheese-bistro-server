@@ -1,7 +1,7 @@
-package com.ooadprojectserver.restaurantmanagement.model;
+package com.ooadprojectserver.restaurantmanagement.model.order;
 
 import com.ooadprojectserver.restaurantmanagement.model.payment.PaymentMethod;
-import com.ooadprojectserver.restaurantmanagement.model.user.User;
+import com.ooadprojectserver.restaurantmanagement.model.user.type.User;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;

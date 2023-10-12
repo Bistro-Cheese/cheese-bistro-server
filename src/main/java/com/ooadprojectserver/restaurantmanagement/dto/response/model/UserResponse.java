@@ -1,6 +1,6 @@
 package com.ooadprojectserver.restaurantmanagement.dto.response.model;
 
-import com.ooadprojectserver.restaurantmanagement.model.Address;
+import com.ooadprojectserver.restaurantmanagement.model.user.Address;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

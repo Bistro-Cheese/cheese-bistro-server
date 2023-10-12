@@ -1,6 +1,6 @@
-package com.ooadprojectserver.restaurantmanagement.repository;
+package com.ooadprojectserver.restaurantmanagement.repository.food;
 
-import com.ooadprojectserver.restaurantmanagement.model.Category;
+import com.ooadprojectserver.restaurantmanagement.model.food.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

@@ -2,7 +2,6 @@ package com.ooadprojectserver.restaurantmanagement.model.food;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ooadprojectserver.restaurantmanagement.constant.DateTimeConstant;
-import com.ooadprojectserver.restaurantmanagement.model.Category;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;

@@ -1,4 +1,4 @@
-package com.ooadprojectserver.restaurantmanagement.model;
+package com.ooadprojectserver.restaurantmanagement.model.order;
 
 import jakarta.persistence.*;
 import lombok.*;

@@ -8,9 +8,9 @@ import com.ooadprojectserver.restaurantmanagement.dto.response.model.PagingRespo
 import com.ooadprojectserver.restaurantmanagement.dto.response.model.UserResponse;
 import com.ooadprojectserver.restaurantmanagement.dto.response.util.APIStatus;
 import com.ooadprojectserver.restaurantmanagement.exception.CustomException;
-import com.ooadprojectserver.restaurantmanagement.model.user.User;
+import com.ooadprojectserver.restaurantmanagement.model.user.type.User;
 import com.ooadprojectserver.restaurantmanagement.model.user.factory.UserFactory;
-import com.ooadprojectserver.restaurantmanagement.repository.AddressRepository;
+import com.ooadprojectserver.restaurantmanagement.repository.user.AddressRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.specification.UserSpecification;
 import com.ooadprojectserver.restaurantmanagement.repository.user.UserRepository;
 import com.ooadprojectserver.restaurantmanagement.service.authentication.AuthenticationService;

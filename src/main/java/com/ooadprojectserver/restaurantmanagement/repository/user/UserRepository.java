@@ -1,6 +1,6 @@
 package com.ooadprojectserver.restaurantmanagement.repository.user;
 
-import com.ooadprojectserver.restaurantmanagement.model.user.User;
+import com.ooadprojectserver.restaurantmanagement.model.user.type.User;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;

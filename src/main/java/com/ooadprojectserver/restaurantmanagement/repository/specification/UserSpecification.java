@@ -1,6 +1,6 @@
 package com.ooadprojectserver.restaurantmanagement.repository.specification;
 
-import com.ooadprojectserver.restaurantmanagement.model.user.User;
+import com.ooadprojectserver.restaurantmanagement.model.user.type.User;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;

@@ -1,5 +1,6 @@
-package com.ooadprojectserver.restaurantmanagement.model;
+package com.ooadprojectserver.restaurantmanagement.model.order;
 
+import com.ooadprojectserver.restaurantmanagement.model.food.Food;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
@@ -10,6 +11,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -20,16 +22,27 @@ import java.io.Serializable;
 @EntityListeners(AuditingEntityListener.class)
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "role")
-public class Role implements Serializable {
+@Table(name = "new_entity")
+public class OrderLine implements Serializable {
+
     @Serial
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Integer id;
 
-    @Column(name = "name", nullable = false)
-    @JdbcTypeCode(SqlTypes.NVARCHAR)
-    private String name;
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id", nullable = false)
+    private UUID id;
+
+    @ManyToOne
+    @JoinColumn(name = "food_id")
+    private Food food;
+
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private RestaurantOrder restaurantOrder;
+
+    @Column(name = "quantity")
+    @JdbcTypeCode(SqlTypes.INTEGER)
+    private Integer quantity;
+
 }
