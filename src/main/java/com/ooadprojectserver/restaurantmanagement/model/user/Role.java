@@ -1,6 +1,5 @@
-package com.ooadprojectserver.restaurantmanagement.model;
+package com.ooadprojectserver.restaurantmanagement.model.user;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
@@ -11,38 +10,26 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.UUID;
 
 @Getter
 @Setter
+@Entity
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 @DynamicInsert
 @DynamicUpdate
-@Entity
-@Table(name = "address")
-public class Address implements Serializable {
-
+@Table(name = "role")
+public class Role implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
-
     @Id
-    @JsonIgnore
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private UUID id;
+    private Integer id;
 
-    @Column(name = "address_line", nullable = false)
+    @Column(name = "name", nullable = false)
     @JdbcTypeCode(SqlTypes.NVARCHAR)
-    private String addressLine;
-
-    @Column(name = "city", nullable = false)
-    @JdbcTypeCode(SqlTypes.NVARCHAR)
-    private String city;
-
-    @Column(name = "region", nullable = false)
-    @JdbcTypeCode(SqlTypes.NVARCHAR)
-    private String region;
+    private String name;
 }

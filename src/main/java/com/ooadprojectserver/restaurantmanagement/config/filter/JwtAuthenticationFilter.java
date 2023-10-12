@@ -1,6 +1,6 @@
 package com.ooadprojectserver.restaurantmanagement.config.filter;
 
-import com.ooadprojectserver.restaurantmanagement.repository.TokenRepository;
+import com.ooadprojectserver.restaurantmanagement.repository.user.TokenRepository;
 import com.ooadprojectserver.restaurantmanagement.service.authentication.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

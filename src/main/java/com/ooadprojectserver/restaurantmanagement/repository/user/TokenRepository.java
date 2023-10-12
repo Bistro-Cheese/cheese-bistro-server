@@ -1,6 +1,6 @@
-package com.ooadprojectserver.restaurantmanagement.repository;
+package com.ooadprojectserver.restaurantmanagement.repository.user;
 
-import com.ooadprojectserver.restaurantmanagement.model.token.Token;
+import com.ooadprojectserver.restaurantmanagement.model.user.token.Token;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

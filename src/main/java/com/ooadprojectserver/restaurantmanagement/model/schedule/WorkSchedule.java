@@ -1,5 +1,6 @@
-package com.ooadprojectserver.restaurantmanagement.model;
+package com.ooadprojectserver.restaurantmanagement.model.schedule;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
@@ -10,6 +11,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
@@ -21,22 +23,28 @@ import java.util.UUID;
 @EntityListeners(AuditingEntityListener.class)
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "variation_option")
-public class VariationOption implements Serializable {
+@Table(name = "work_schedule")
+public class WorkSchedule implements Serializable {
+
     @Serial
     private static final long serialVersionUID = 1L;
-
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false)
     private UUID id;
 
-    @ManyToOne
-    @JoinColumn(name = "variation_id")
-    private Variation variation;
+    @JsonIgnore
+    @Column(name = "start_time", nullable = false)
+    @JdbcTypeCode(SqlTypes.TIMESTAMP)
+    private LocalDateTime startTime;
 
-    @Column(name = "value")
+    @JsonIgnore
+    @Column(name = "end_time", nullable = false)
+    @JdbcTypeCode(SqlTypes.TIMESTAMP)
+    private LocalDateTime endTime;
+
+    @Column(name = "shift", nullable = false)
     @JdbcTypeCode(SqlTypes.NVARCHAR)
-    private String value;
+    private String shift;
 
 }

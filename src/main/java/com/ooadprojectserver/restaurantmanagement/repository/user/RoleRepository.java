@@ -1,11 +1,9 @@
-package com.ooadprojectserver.restaurantmanagement.repository;
+package com.ooadprojectserver.restaurantmanagement.repository.user;
 
-import com.ooadprojectserver.restaurantmanagement.model.Role;
+import com.ooadprojectserver.restaurantmanagement.model.user.Role;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
-import java.util.Optional;
 
 @Repository
 @Transactional

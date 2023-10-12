@@ -1,6 +1,6 @@
-package com.ooadprojectserver.restaurantmanagement.model.user;
+package com.ooadprojectserver.restaurantmanagement.model.user.type;
 
-import com.ooadprojectserver.restaurantmanagement.model.Address;
+import com.ooadprojectserver.restaurantmanagement.model.user.Address;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;

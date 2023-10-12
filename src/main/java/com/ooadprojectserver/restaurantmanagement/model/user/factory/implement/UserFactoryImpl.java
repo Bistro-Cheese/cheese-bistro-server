@@ -2,7 +2,7 @@ package com.ooadprojectserver.restaurantmanagement.model.user.factory.implement;
 
 import com.ooadprojectserver.restaurantmanagement.dto.request.UpdateProfileRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.request.UserRegisterRequest;
-import com.ooadprojectserver.restaurantmanagement.model.user.User;
+import com.ooadprojectserver.restaurantmanagement.model.user.type.User;
 import com.ooadprojectserver.restaurantmanagement.model.user.factory.UserFactory;
 import com.ooadprojectserver.restaurantmanagement.service.user.ManagerService;
 import com.ooadprojectserver.restaurantmanagement.service.user.OwnerService;

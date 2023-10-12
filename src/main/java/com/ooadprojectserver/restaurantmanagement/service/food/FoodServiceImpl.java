@@ -4,15 +4,14 @@ import com.ooadprojectserver.restaurantmanagement.dto.request.FoodRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.response.util.APIStatus;
 import com.ooadprojectserver.restaurantmanagement.exception.ApplicationException;
 import com.ooadprojectserver.restaurantmanagement.exception.FoodException;
-import com.ooadprojectserver.restaurantmanagement.model.Category;
+import com.ooadprojectserver.restaurantmanagement.model.food.Category;
 import com.ooadprojectserver.restaurantmanagement.model.food.Food;
-import com.ooadprojectserver.restaurantmanagement.repository.CategoryRepository;
-import com.ooadprojectserver.restaurantmanagement.repository.FoodRepository;
+import com.ooadprojectserver.restaurantmanagement.repository.food.CategoryRepository;
+import com.ooadprojectserver.restaurantmanagement.repository.food.FoodRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.specification.FoodSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
