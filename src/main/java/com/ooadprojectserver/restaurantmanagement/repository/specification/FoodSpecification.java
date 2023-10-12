@@ -1,10 +1,13 @@
 package com.ooadprojectserver.restaurantmanagement.repository.specification;
 
 import com.ooadprojectserver.restaurantmanagement.constant.SortCase;
+import com.ooadprojectserver.restaurantmanagement.controller.LoggerController;
 import com.ooadprojectserver.restaurantmanagement.model.Category;
 import com.ooadprojectserver.restaurantmanagement.model.food.Food;
 import jakarta.persistence.criteria.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.math.BigDecimal;
@@ -14,11 +17,12 @@ import java.util.List;
 
 public class FoodSpecification implements Specification<Food> {
 
+    Logger logger = LoggerFactory.getLogger(FoodSpecification.class);
+
     private final String category;
     private final String searchKey;
     private BigDecimal minPrice;
     private final BigDecimal maxPrice;
-//    private Integer bestSeller;
     private final Integer sortCase;
     private final boolean isAscSort;
 
@@ -35,19 +39,16 @@ public class FoodSpecification implements Specification<Food> {
 
     @Override
     public Predicate toPredicate(Root<Food> root, CriteriaQuery<?> cq, CriteriaBuilder cb) {
+
         List<Predicate> predicates = new LinkedList<>();
 
-
-        //filter by status
-//        predicates.add(cb.equal(root.get("status"), FoodStatus.AVAILABLE.getValue()));
-        // filter by product name [search key]
         if (searchKey != null && !searchKey.trim().isEmpty()) {
             predicates.add(cb.like(root.<String>get("name"), "%" + searchKey.trim() + "%"));
         }
 
         if (category != null) {
-            Root<Category> categoryRoot = cq.from(Category.class);
-            predicates.add(cb.equal(categoryRoot.get("name"), category));
+            Join<Category, Food> foodCategory = root.join("category");
+            predicates.add(cb.equal(foodCategory.get("name"), category));
         }
 
         // validate price range
