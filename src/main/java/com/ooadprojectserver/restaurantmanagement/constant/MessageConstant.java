@@ -12,6 +12,12 @@ public class MessageConstant {
     public static final String UPDATE_USER_SUCCESS = "Update User Successfully";
     public static final String GET_PROFILE_SUCCESS = "Get Profile Successfully";
     public static final String SEARCH_USER_SUCCESS = "Search User Successfully";
+    //    Manager
+    public static final String GET_ALL_SCHEDULE_SUCCESS = "Get All Schedule Successfully";
+    public static final String ASSIGN_SCHEDULE_SUCCESS = "Assign Work Schedule Successfully";
+    public static final String GET_SCHEDULE_SUCCESS = "Get Schedule Successfully";
+    public static final String DELETE_SCHEDULE_SUCCESS = "Delete Schedule Successfully";
+    public static final String TIMEKEEPING_SUCCESS = "Timekeeping Successfully";
     // Food
     public static final String GET_ALL_FOODS_SUCCESS = "Get all foods Successfully";
     public static final String FIND_FOOD_SUCCESS = "Finding Food Successfully";

@@ -3,6 +3,8 @@ package com.ooadprojectserver.restaurantmanagement.boostrap;
 import com.github.javafaker.Faker;
 import com.ooadprojectserver.restaurantmanagement.constant.AccountStatus;
 import com.ooadprojectserver.restaurantmanagement.constant.DateTimeConstant;
+import com.ooadprojectserver.restaurantmanagement.model.schedule.Schedule;
+import com.ooadprojectserver.restaurantmanagement.model.schedule.Shift;
 import com.ooadprojectserver.restaurantmanagement.model.user.Address;
 import com.ooadprojectserver.restaurantmanagement.model.food.Category;
 import com.ooadprojectserver.restaurantmanagement.model.user.Role;
@@ -10,6 +12,7 @@ import com.ooadprojectserver.restaurantmanagement.model.food.Food;
 import com.ooadprojectserver.restaurantmanagement.model.user.type.Manager;
 import com.ooadprojectserver.restaurantmanagement.model.user.type.Owner;
 import com.ooadprojectserver.restaurantmanagement.model.user.type.Staff;
+import com.ooadprojectserver.restaurantmanagement.repository.schedule.ScheduleRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.user.AddressRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.food.CategoryRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.food.FoodRepository;
@@ -30,6 +33,7 @@ import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -43,6 +47,7 @@ public class Dataseeder implements ApplicationListener<ContextRefreshedEvent>, C
 
 
     private final RoleRepository roleRepository;
+    private final ScheduleRepository scheduleRepository;
     private final FoodRepository foodRepository;
     private final OwnerRepository ownerRepository;
     private final ManagerRepository managerRepository;
@@ -61,24 +66,25 @@ public class Dataseeder implements ApplicationListener<ContextRefreshedEvent>, C
 
     @Override
     public void onApplicationEvent(@NonNull ContextRefreshedEvent event) {
-        logger.info("Loading Roles and Categories");
+        logger.info("Loading Roles, Schedules and Categories");
         this.loadRoles();
         this.LoadCategory();
+        this.loadSchedules();
     }
 
     @Override
     public void run(String... args) throws ParseException {
-        logger.info("Loading Food");
-        this.createListFakeFood();
+//        logger.info("Loading Food");
+//        this.createListFakeFood();
 
-        logger.info("Loading Owner");
-        this.createListOwner();
-
-        logger.info("Loading Manager");
-        this.createListManager();
-
-        logger.info("Loading Staff");
-        this.createListStaff();
+//        logger.info("Loading Owner");
+//        this.createListOwner();
+//
+//        logger.info("Loading Manager");
+//        this.createListManager();
+//
+//        logger.info("Loading Staff");
+//        this.createListStaff();
     }
 
     private void loadRoles() {
@@ -92,6 +98,38 @@ public class Dataseeder implements ApplicationListener<ContextRefreshedEvent>, C
         roles.forEach(role -> {
             Optional<Role> optionalRole = roleRepository.findById(role.getId());
             optionalRole.ifPresentOrElse(System.out::println, () -> roleRepository.save(role));
+        });
+    }
+
+    private void loadSchedules() {
+        List<Schedule> schedules = new ArrayList<>(
+                List.of(
+                        new Schedule(1, DayOfWeek.MONDAY, Shift.MORNING),
+                        new Schedule(2, DayOfWeek.MONDAY, Shift.AFTERNOON),
+                        new Schedule(3, DayOfWeek.MONDAY, Shift.NIGHT),
+                        new Schedule(4, DayOfWeek.TUESDAY, Shift.MORNING),
+                        new Schedule(5, DayOfWeek.TUESDAY, Shift.AFTERNOON),
+                        new Schedule(6, DayOfWeek.TUESDAY, Shift.NIGHT),
+                        new Schedule(7, DayOfWeek.WEDNESDAY, Shift.MORNING),
+                        new Schedule(8, DayOfWeek.WEDNESDAY, Shift.AFTERNOON),
+                        new Schedule(9, DayOfWeek.WEDNESDAY, Shift.NIGHT),
+                        new Schedule(10, DayOfWeek.THURSDAY, Shift.MORNING),
+                        new Schedule(11, DayOfWeek.THURSDAY, Shift.AFTERNOON),
+                        new Schedule(12, DayOfWeek.THURSDAY, Shift.NIGHT),
+                        new Schedule(13, DayOfWeek.FRIDAY, Shift.MORNING),
+                        new Schedule(14, DayOfWeek.FRIDAY, Shift.AFTERNOON),
+                        new Schedule(15, DayOfWeek.FRIDAY, Shift.NIGHT),
+                        new Schedule(16, DayOfWeek.SATURDAY, Shift.MORNING),
+                        new Schedule(17, DayOfWeek.SATURDAY, Shift.AFTERNOON),
+                        new Schedule(18, DayOfWeek.SATURDAY, Shift.NIGHT),
+                        new Schedule(19, DayOfWeek.SUNDAY, Shift.MORNING),
+                        new Schedule(20, DayOfWeek.SUNDAY, Shift.AFTERNOON),
+                        new Schedule(21, DayOfWeek.SUNDAY, Shift.NIGHT)
+                )
+        );
+        schedules.forEach(schedule -> {
+            Optional<Schedule> optionalSchedule = scheduleRepository.findById(schedule.getId());
+            optionalSchedule.ifPresentOrElse(System.out::println, () -> scheduleRepository.save(schedule));
         });
     }
 
@@ -224,62 +262,162 @@ public class Dataseeder implements ApplicationListener<ContextRefreshedEvent>, C
     }
 
     private void createListManager() {
-        List<Manager> managerList = Stream.generate(() ->
-                managerRepository.save(
-                        Manager.managerBuilder()
-                        .username(faker.name().username())
-                        .firstName(faker.name().firstName())
-                        .lastName(faker.name().lastName())
+//        List<Manager> managerList = Stream.generate(() ->
+//                managerRepository.save(
+//                        Manager.managerBuilder()
+//                        .username(faker.name().username())
+//                        .firstName(faker.name().firstName())
+//                        .lastName(faker.name().lastName())
+//                        .dateOfBirth(faker.date().birthday())
+//                        .password(faker.internet().password())
+//                        .phoneNumber(faker.phoneNumber().phoneNumber())
+//                        .role(2)
+//                        .status(1)
+//                        .address(
+//                                addressRepository.save(
+//                                        Address.builder()
+//                                                .addressLine(faker.address().streetAddress())
+//                                                .city(faker.address().cityName())
+//                                                .region(faker.address().country())
+//                                                .build()
+//                                )
+//                        )
+//                        .certificationManagement("Restaurant Management Certification")
+//                        .experiencedYear(String.valueOf(faker.number().numberBetween(1, 5)))
+//                        .foreignLanguage(faker.nation().language())
+//                        .createdDate(new Date())
+//                        .lastModifiedDate(new Date())
+//                        .enabled(Objects.equals(1, AccountStatus.ACTIVE_STATUS.getValue()))
+//                        .build())
+//        ).limit(10).toList();
+        managerRepository.save(
+                Manager.managerBuilder()
+                        .username("longmanager1")
+                        .firstName("Long")
+                        .lastName("Tran")
                         .dateOfBirth(faker.date().birthday())
-                        .password(faker.internet().password())
+                        .password(passwordEncoder.encode("longtran123"))
                         .phoneNumber(faker.phoneNumber().phoneNumber())
                         .role(2)
                         .status(1)
-                        .address(
-                                addressRepository.save(
-                                        Address.builder()
-                                                .addressLine(faker.address().streetAddress())
-                                                .city(faker.address().cityName())
-                                                .region(faker.address().country())
-                                                .build()
-                                )
-                        )
+                        .address(addressRepository.save(
+                                Address.builder()
+                                        .addressLine("123 Hoang Dieu 2")
+                                        .city("Long An")
+                                        .region("Southern")
+                                        .build()
+                        ))
                         .certificationManagement("Restaurant Management Certification")
                         .experiencedYear(String.valueOf(faker.number().numberBetween(1, 5)))
                         .foreignLanguage(faker.nation().language())
                         .createdDate(new Date())
                         .lastModifiedDate(new Date())
                         .enabled(Objects.equals(1, AccountStatus.ACTIVE_STATUS.getValue()))
-                        .build())
-        ).limit(10).toList();
-    }
-
-    private void createListStaff() {
-        List<Staff> staffList = Stream.generate(() ->
-                staffRepository.save(Staff.staffBuilder()
-                        .username(faker.name().username())
-                        .firstName(faker.name().firstName())
-                        .lastName(faker.name().lastName())
+                        .build()
+        );
+        managerRepository.save(
+                Manager.managerBuilder()
+                        .username("longmanager2")
+                        .firstName("Long")
+                        .lastName("Tran")
                         .dateOfBirth(faker.date().birthday())
-                        .password(faker.internet().password())
+                        .password(passwordEncoder.encode("longtran123"))
                         .phoneNumber(faker.phoneNumber().phoneNumber())
-                        .role(1)
+                        .role(2)
                         .status(1)
-                        .address(
-                                addressRepository.save(
-                                        Address.builder()
-                                                .addressLine(faker.address().streetAddress())
-                                                .city(faker.address().cityName())
-                                                .region(faker.address().country())
-                                                .build()
-                                )
-                        )
-                        .academicLevel("university")
+                        .address(addressRepository.save(
+                                Address.builder()
+                                        .addressLine("123 Hoang Dieu 2")
+                                        .city("Long An")
+                                        .region("Southern")
+                                        .build()
+                        ))
+                        .certificationManagement("Restaurant Management Certification")
+                        .experiencedYear(String.valueOf(faker.number().numberBetween(1, 5)))
                         .foreignLanguage(faker.nation().language())
                         .createdDate(new Date())
                         .lastModifiedDate(new Date())
                         .enabled(Objects.equals(1, AccountStatus.ACTIVE_STATUS.getValue()))
-                        .build())
-        ).limit(50).toList();
+                        .build()
+        );
+    }
+
+    private void createListStaff() {
+//        List<Staff> staffList = Stream.generate(() ->
+//                staffRepository.save(Staff.staffBuilder()
+//                        .username(faker.name().username())
+//                        .firstName(faker.name().firstName())
+//                        .lastName(faker.name().lastName())
+//                        .dateOfBirth(faker.date().birthday())
+//                        .password(faker.internet().password())
+//                        .phoneNumber(faker.phoneNumber().phoneNumber())
+//                        .role(1)
+//                        .status(1)
+//                        .address(
+//                                addressRepository.save(
+//                                        Address.builder()
+//                                                .addressLine(faker.address().streetAddress())
+//                                                .city(faker.address().cityName())
+//                                                .region(faker.address().country())
+//                                                .build()
+//                                )
+//                        )
+//                        .academicLevel("university")
+//                        .foreignLanguage(faker.nation().language())
+//                        .createdDate(new Date())
+//                        .lastModifiedDate(new Date())
+//                        .enabled(Objects.equals(1, AccountStatus.ACTIVE_STATUS.getValue()))
+//                        .build())
+//        ).limit(50).toList();
+        staffRepository.save(Staff.staffBuilder()
+                .username("longstaff1")
+                .firstName("Long")
+                .lastName("Staff1")
+                .dateOfBirth(faker.date().birthday())
+                .password(passwordEncoder.encode("longtran123"))
+                .phoneNumber(faker.phoneNumber().phoneNumber())
+                .role(1)
+                .status(1)
+                .address(
+                        addressRepository.save(
+                                Address.builder()
+                                        .addressLine(faker.address().streetAddress())
+                                        .city(faker.address().cityName())
+                                        .region(faker.address().country())
+                                        .build()
+                        )
+                )
+                .academicLevel("university")
+                .foreignLanguage(faker.nation().language())
+                .createdDate(new Date())
+                .lastModifiedDate(new Date())
+                .enabled(Objects.equals(1, AccountStatus.ACTIVE_STATUS.getValue()))
+                .build()
+        );
+        staffRepository.save(Staff.staffBuilder()
+                .username("longstaff2")
+                .firstName("Long")
+                .lastName("Staff2")
+                .dateOfBirth(faker.date().birthday())
+                .password(passwordEncoder.encode("longtran123"))
+                .phoneNumber(faker.phoneNumber().phoneNumber())
+                .role(1)
+                .status(1)
+                .address(
+                        addressRepository.save(
+                                Address.builder()
+                                        .addressLine(faker.address().streetAddress())
+                                        .city(faker.address().cityName())
+                                        .region(faker.address().country())
+                                        .build()
+                        )
+                )
+                .academicLevel("university")
+                .foreignLanguage(faker.nation().language())
+                .createdDate(new Date())
+                .lastModifiedDate(new Date())
+                .enabled(Objects.equals(1, AccountStatus.ACTIVE_STATUS.getValue()))
+                .build()
+        );
     }
 }

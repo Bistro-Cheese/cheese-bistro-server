@@ -11,8 +11,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.util.UUID;
+import java.time.DayOfWeek;
 
 @Getter
 @Setter
@@ -24,27 +23,24 @@ import java.util.UUID;
 @DynamicInsert
 @DynamicUpdate
 @Table(name = "work_schedule")
-public class WorkSchedule implements Serializable {
+public class Schedule implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
+
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @JsonIgnore
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private UUID id;
+    private int id;
 
-    @JsonIgnore
-    @Column(name = "start_time", nullable = false)
-    @JdbcTypeCode(SqlTypes.TIMESTAMP)
-    private LocalDateTime startTime;
-
-    @JsonIgnore
-    @Column(name = "end_time", nullable = false)
-    @JdbcTypeCode(SqlTypes.TIMESTAMP)
-    private LocalDateTime endTime;
+    @Column(name = "day", nullable = false)
+    @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NVARCHAR)
+    private DayOfWeek day;
 
     @Column(name = "shift", nullable = false)
+    @Enumerated(EnumType.STRING)
     @JdbcTypeCode(SqlTypes.NVARCHAR)
-    private String shift;
-
+    private Shift shift;
 }

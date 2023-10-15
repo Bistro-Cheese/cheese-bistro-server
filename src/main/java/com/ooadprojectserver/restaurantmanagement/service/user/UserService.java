@@ -8,12 +8,14 @@ import com.ooadprojectserver.restaurantmanagement.dto.response.model.PagingRespo
 import com.ooadprojectserver.restaurantmanagement.dto.response.model.UserResponse;
 import com.ooadprojectserver.restaurantmanagement.dto.response.util.APIStatus;
 import com.ooadprojectserver.restaurantmanagement.exception.CustomException;
+import com.ooadprojectserver.restaurantmanagement.model.user.type.Manager;
+import com.ooadprojectserver.restaurantmanagement.model.user.type.Staff;
 import com.ooadprojectserver.restaurantmanagement.model.user.type.User;
 import com.ooadprojectserver.restaurantmanagement.model.user.factory.UserFactory;
+import com.ooadprojectserver.restaurantmanagement.repository.schedule.TimekeepingRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.user.AddressRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.specification.UserSpecification;
 import com.ooadprojectserver.restaurantmanagement.repository.user.UserRepository;
-import com.ooadprojectserver.restaurantmanagement.service.authentication.AuthenticationService;
 import com.ooadprojectserver.restaurantmanagement.service.authentication.JwtService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +34,7 @@ import java.util.*;
 public class UserService {
     private final UserRepository userRepository;
     private final AddressRepository addressRepository;
-    private final AuthenticationService authenticationService;
+    private final TimekeepingRepository timekeepingRepository;
     private final UserFactory userFactory;
     private final JwtService jwtService;
 
@@ -46,8 +48,16 @@ public class UserService {
         return userResponseList;
     }
 
-    public void deleteUser(UUID user_id) {
-        this.userRepository.deleteById(user_id);
+    public void deleteUser(UUID user_id) throws CustomException {
+        User user = userRepository.findById(user_id).orElseThrow(
+                () -> new CustomException(APIStatus.USER_NOT_FOUND)
+        );
+        switch (user.getRole()) {
+            case 1 -> timekeepingRepository.deleteByStaff((Staff) user);
+            case 2 -> timekeepingRepository.deleteByManager((Manager) user);
+            case 3 -> throw new CustomException(APIStatus.ERR_DELETE_OWNER);
+        }
+        userRepository.delete(user);
     }
 
     public void updateUser(UpdateProfileRequest updateRequestBody, UUID user_id) {
@@ -56,7 +66,7 @@ public class UserService {
 
         //  Covert String to Date
         String sDob = updateRequestBody.getDateOfBirth();
-        Date dob = new Date();
+        Date dob;
         try {
             dob = new SimpleDateFormat(DateTimeConstant.FORMAT_DATE).parse(sDob);
         } catch (ParseException e) {
@@ -85,8 +95,7 @@ public class UserService {
     }
 
     public UserResponse getProfile(HttpServletRequest request) {
-        String accessToken = authenticationService.getTokenFromHeader(request);
-        String username = jwtService.extractUsername(accessToken);
+        String username = jwtService.getUsernameFromHeader(request);
         if (username == null) {
             throw new NoSuchElementException();
         }
@@ -94,7 +103,7 @@ public class UserService {
         return this.covertUserToUserResponse(user);
     }
 
-    public PagingResponseModel searchUser(String name, String role,String sort, int pageNumber, int pageSize) {
+    public PagingResponseModel searchUser(String name, String role, String sort, int pageNumber, int pageSize) {
         if (pageSize < 1 || pageNumber < 1) {
             throw new CustomException(APIStatus.ERR_PAGINATION);
         }
@@ -102,11 +111,11 @@ public class UserService {
         Page<User> userPage = userRepository.findAll(new UserSpecification(name, role, sort), pageable);
         List<UserResponse> userResponseList = new ArrayList<>();
         if (!userPage.isEmpty()) {
-            for (User user: userPage) {
+            for (User user : userPage) {
                 userResponseList.add(this.covertUserToUserResponse(user));
             }
         }
-        Page<UserResponse> userResponsePage= new PageImpl<UserResponse>(userResponseList);
+        Page<UserResponse> userResponsePage = new PageImpl<>(userResponseList);
         return new PagingResponseModel(
                 userResponsePage.getContent(),
                 userPage.getTotalElements(),
@@ -132,6 +141,7 @@ public class UserService {
             default -> throw new IllegalStateException("Unexpected value: " + user.getStatus());
         };
         return UserResponse.builder()
+            .id(user.getId())
             .username(user.getUsername())
             .firstName(user.getFirstName())
             .lastName(user.getLastName())
