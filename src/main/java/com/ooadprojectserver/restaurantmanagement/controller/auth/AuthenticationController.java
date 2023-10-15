@@ -1,4 +1,4 @@
-package com.ooadprojectserver.restaurantmanagement.controller;
+package com.ooadprojectserver.restaurantmanagement.controller.auth;
 
 import com.ooadprojectserver.restaurantmanagement.constant.APIConstant;
 import com.ooadprojectserver.restaurantmanagement.constant.MessageConstant;
@@ -9,7 +9,6 @@ import com.ooadprojectserver.restaurantmanagement.dto.response.model.Authenticat
 import com.ooadprojectserver.restaurantmanagement.dto.response.model.MessageResponse;
 import com.ooadprojectserver.restaurantmanagement.service.authentication.AuthenticationService;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -51,13 +50,12 @@ public class AuthenticationController {
 
     @GetMapping(APIConstant.REFRESH_TOKEN)
     public ResponseEntity<APIResponse<AuthenticationResponse>> refreshTokenController(
-            HttpServletRequest request,
-            HttpServletResponse response
+            HttpServletRequest request
     ) {
         return ResponseEntity.status(OK).body(
                 new APIResponse<>(
                         MessageConstant.REFRESH_TOKEN_SUCCESS,
-                        authenticationService.refreshToken(request, response)
+                        authenticationService.refreshToken(request)
                 )
         );
     }

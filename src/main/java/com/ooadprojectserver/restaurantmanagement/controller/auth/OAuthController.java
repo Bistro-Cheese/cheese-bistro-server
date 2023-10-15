@@ -1,4 +1,4 @@
-package com.ooadprojectserver.restaurantmanagement.controller;
+package com.ooadprojectserver.restaurantmanagement.controller.auth;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

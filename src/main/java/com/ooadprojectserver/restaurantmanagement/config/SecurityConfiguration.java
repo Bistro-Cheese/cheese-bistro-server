@@ -42,8 +42,8 @@ public class SecurityConfiguration {
                 .cors(withDefaults())
                 .csrf(cors -> cors.disable())
                 .authorizeHttpRequests(authorize -> authorize
-//                        .requestMatchers("/api/v1/auth/**").permitAll()
-                        .anyRequest().permitAll()
+                        .requestMatchers("/api/v1/auth/**").permitAll()
+                        .anyRequest().authenticated()
                 )
 //                .oauth2Login(oauth -> oauth.defaultSuccessUrl("/user"))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
