@@ -4,31 +4,38 @@ import com.ooadprojectserver.restaurantmanagement.constant.AccountStatus;
 import com.ooadprojectserver.restaurantmanagement.constant.DateTimeConstant;
 import com.ooadprojectserver.restaurantmanagement.dto.request.UpdateProfileRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.request.UserRegisterRequest;
+import com.ooadprojectserver.restaurantmanagement.dto.response.model.schedule.StaffScheduleResponse;
+import com.ooadprojectserver.restaurantmanagement.model.schedule.Schedule;
+import com.ooadprojectserver.restaurantmanagement.model.schedule.Timekeeping;
 import com.ooadprojectserver.restaurantmanagement.model.user.Address;
 import com.ooadprojectserver.restaurantmanagement.model.user.type.Staff;
 import com.ooadprojectserver.restaurantmanagement.model.user.type.User;
+import com.ooadprojectserver.restaurantmanagement.repository.schedule.TimekeepingRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.user.AddressRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.user.StaffRepository;
+import com.ooadprojectserver.restaurantmanagement.service.authentication.JwtService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
 public class StaffService {
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
+
     private final StaffRepository staffRepository;
     private final AddressRepository addressRepository;
+    private final TimekeepingRepository timekeepingRepository;
 
     public User createUser(UserRegisterRequest request) {
         String sDob = request.getDateOfBirth();
-        Date dob = null;
+        Date dob;
         try {
             dob = new SimpleDateFormat(DateTimeConstant.FORMAT_DATE).parse(sDob);
         } catch (ParseException e) {
@@ -44,13 +51,13 @@ public class StaffService {
                 .role(request.getRole().getValue())
                 .status(request.getStatus())
                 .address(
-                      addressRepository.save(
-                              Address.builder()
-                                      .addressLine(request.getAddressLine())
-                                      .city(request.getCity())
-                                      .region(request.getRegion())
-                                      .build()
-                      )
+                        addressRepository.save(
+                                Address.builder()
+                                        .addressLine(request.getAddressLine())
+                                        .city(request.getCity())
+                                        .region(request.getRegion())
+                                        .build()
+                        )
                 )
                 .academicLevel(request.getAcademicLevel())
                 .foreignLanguage(request.getForeignLanguage())
@@ -66,5 +73,24 @@ public class StaffService {
                 request.getForeignLanguage(),
                 user_id
         );
+    }
+
+    public StaffScheduleResponse getSchedule(HttpServletRequest request) {
+        String username = jwtService.getUsernameFromHeader(request);
+        List<Timekeeping> timekeepingList = timekeepingRepository.findStaffSchedule(username);
+        List<Schedule> scheduleList = new ArrayList<>();
+        for (Timekeeping timekeeping : timekeepingList) {
+            scheduleList.add(timekeeping.getSchedule());
+        }
+
+        Comparator<Schedule> comparator = Comparator
+                .comparing(Schedule::getDay)
+                .thenComparing(Schedule::getShift);
+
+        scheduleList.sort(comparator);
+
+        return StaffScheduleResponse.builder()
+                .schedule(scheduleList)
+                .build();
     }
 }

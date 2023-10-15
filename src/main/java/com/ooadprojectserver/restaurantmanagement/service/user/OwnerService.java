@@ -26,7 +26,7 @@ public class OwnerService {
 
     public User createUser(UserRegisterRequest request) {
         String sDob = request.getDateOfBirth();
-        Date dob = null;
+        Date dob;
         try {
             dob = new SimpleDateFormat(DateTimeConstant.FORMAT_DATE).parse(sDob);
         } catch (ParseException e) {
