@@ -1,4 +1,4 @@
-package com.ooadprojectserver.restaurantmanagement.constant;
+package com.ooadprojectserver.restaurantmanagement.model.food;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -6,10 +6,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Getter
 public enum FoodStatus {
-    AVAILABLE(1, "AVAILABLE"),
-    OUT_OF_STOCK(2, "Out of stock"),
-    UNAVAILABLE(3, "UNAVAILABLE");
-
+    AVAILABLE(1, "Available"),
+    UNAVAILABLE(2, "Unavailable"),
+    DRAFT(3, "Draft");
 
     private final Integer value;
     private final String status;

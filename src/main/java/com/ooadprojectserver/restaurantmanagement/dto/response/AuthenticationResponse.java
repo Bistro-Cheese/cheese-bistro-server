@@ -1,4 +1,4 @@
-package com.ooadprojectserver.restaurantmanagement.dto.response.model;
+package com.ooadprojectserver.restaurantmanagement.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;

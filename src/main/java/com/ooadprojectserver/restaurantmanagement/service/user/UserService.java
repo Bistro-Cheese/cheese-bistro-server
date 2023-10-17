@@ -1,12 +1,12 @@
 package com.ooadprojectserver.restaurantmanagement.service.user;
 
-import com.ooadprojectserver.restaurantmanagement.constant.AccountStatus;
+import com.ooadprojectserver.restaurantmanagement.model.user.AccountStatus;
 import com.ooadprojectserver.restaurantmanagement.constant.DateTimeConstant;
-import com.ooadprojectserver.restaurantmanagement.constant.RoleConstant.*;
+import com.ooadprojectserver.restaurantmanagement.model.user.RoleConstant.*;
 import com.ooadprojectserver.restaurantmanagement.dto.request.UpdateProfileRequest;
-import com.ooadprojectserver.restaurantmanagement.dto.response.model.PagingResponseModel;
-import com.ooadprojectserver.restaurantmanagement.dto.response.model.UserResponse;
-import com.ooadprojectserver.restaurantmanagement.dto.response.util.APIStatus;
+import com.ooadprojectserver.restaurantmanagement.dto.response.PagingResponseModel;
+import com.ooadprojectserver.restaurantmanagement.dto.response.UserResponse;
+import com.ooadprojectserver.restaurantmanagement.constant.APIStatus;
 import com.ooadprojectserver.restaurantmanagement.exception.CustomException;
 import com.ooadprojectserver.restaurantmanagement.model.user.type.Manager;
 import com.ooadprojectserver.restaurantmanagement.model.user.type.Staff;
@@ -60,18 +60,15 @@ public class UserService {
         userRepository.delete(user);
     }
 
-    public void updateUser(UpdateProfileRequest updateRequestBody, UUID user_id) {
-        User user = this.userRepository.findById(user_id).orElseThrow();
+    public void updateUser(UpdateProfileRequest updateRequestBody, UUID user_id) throws ParseException {
+        User user = this.userRepository.findById(user_id).orElseThrow(
+                () -> new CustomException(APIStatus.USER_NOT_FOUND)
+        );
         Date lastModifiedDate = new Date();
 
         //  Covert String to Date
         String sDob = updateRequestBody.getDateOfBirth();
-        Date dob;
-        try {
-            dob = new SimpleDateFormat(DateTimeConstant.FORMAT_DATE).parse(sDob);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
+        Date dob = new SimpleDateFormat(DateTimeConstant.FORMAT_DATE).parse(sDob);
 
         //  Update Address
         addressRepository.updateAddressById(
@@ -132,12 +129,8 @@ public class UserService {
             default -> throw new IllegalStateException("Unexpected value: " + user.getRole());
         };
         String sStatus = switch (user.getStatus()) {
-            case 1 -> AccountStatus.ACTIVE_STATUS.getType();
-            case 2 -> AccountStatus.DELETED_STATUS.getType();
-            case 3 -> AccountStatus.REVOKE_STATUS.getType();
-            case 4 -> AccountStatus.DISABLED_STATUS.getType();
-            case 5 -> AccountStatus.DELETED_FOREVER_STATUS.getType();
-            case 6 -> AccountStatus.PENDING.getType();
+            case 1 -> AccountStatus.ACTIVE.getStatus();
+            case 2 -> AccountStatus.INACTIVE.getStatus();
             default -> throw new IllegalStateException("Unexpected value: " + user.getStatus());
         };
         return UserResponse.builder()

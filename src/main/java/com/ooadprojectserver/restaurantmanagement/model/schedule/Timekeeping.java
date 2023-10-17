@@ -54,7 +54,6 @@ public class Timekeeping implements Serializable {
     private LocalDateTime workDate;
 
     @Column(name = "status")
-    @Enumerated(EnumType.STRING)
-    @JdbcTypeCode(SqlTypes.NVARCHAR)
-    private TimekeepingStatus status;
+    @JdbcTypeCode(SqlTypes.INTEGER)
+    private Integer status;
 }

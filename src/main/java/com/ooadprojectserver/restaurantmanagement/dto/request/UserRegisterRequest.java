@@ -1,7 +1,6 @@
 package com.ooadprojectserver.restaurantmanagement.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ooadprojectserver.restaurantmanagement.constant.RoleConstant;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,7 +24,7 @@ public class UserRegisterRequest {
     @JsonProperty("phone_number")
     private String phoneNumber;
     @JsonProperty("role")
-    private RoleConstant.ROLE role;
+    private Integer role;
     @JsonProperty("status")
     private Integer status;
 

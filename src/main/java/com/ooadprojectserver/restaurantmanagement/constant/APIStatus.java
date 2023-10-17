@@ -1,4 +1,4 @@
-package com.ooadprojectserver.restaurantmanagement.dto.response.util;
+package com.ooadprojectserver.restaurantmanagement.constant;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +17,8 @@ public enum APIStatus {
     USER_NOT_FOUND(404, "User Not Found"),
 
     //Food status
+    CATEGORY_NOT_FOUND(404, "Category Not Found"),
+    FOOD_NOT_FOUND(404, "Food Not Found"),
     CREATE_FOOD_ERROR(700, "Create product error"),
     DELETE_FOOD_ERROR(701, "Delete product error"),
     GET_FOOD_ERROR(702, "Can't get product detail"),

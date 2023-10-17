@@ -1,7 +1,7 @@
-package com.ooadprojectserver.restaurantmanagement.dto.response.model;
+package com.ooadprojectserver.restaurantmanagement.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.ooadprojectserver.restaurantmanagement.dto.response.util.APIStatus;
+import com.ooadprojectserver.restaurantmanagement.constant.APIStatus;
 import lombok.Getter;
 
 @Getter

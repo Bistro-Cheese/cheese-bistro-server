@@ -2,7 +2,7 @@ package com.ooadprojectserver.restaurantmanagement.service.authentication;
 
 import com.ooadprojectserver.restaurantmanagement.dto.request.UserLoginRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.request.UserRegisterRequest;
-import com.ooadprojectserver.restaurantmanagement.dto.response.model.AuthenticationResponse;
+import com.ooadprojectserver.restaurantmanagement.dto.response.AuthenticationResponse;
 import com.ooadprojectserver.restaurantmanagement.model.user.token.Token;
 import com.ooadprojectserver.restaurantmanagement.model.user.token.TokenType;
 import com.ooadprojectserver.restaurantmanagement.model.user.type.User;

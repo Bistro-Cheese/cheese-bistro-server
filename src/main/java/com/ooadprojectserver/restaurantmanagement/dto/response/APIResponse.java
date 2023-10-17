@@ -1,6 +1,6 @@
-package com.ooadprojectserver.restaurantmanagement.dto.response.model;
+package com.ooadprojectserver.restaurantmanagement.dto.response;
 
-import com.ooadprojectserver.restaurantmanagement.dto.response.util.APIStatus;
+import com.ooadprojectserver.restaurantmanagement.constant.APIStatus;
 import lombok.*;
 
 import java.io.Serializable;

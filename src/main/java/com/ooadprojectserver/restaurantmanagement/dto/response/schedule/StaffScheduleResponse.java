@@ -1,4 +1,4 @@
-package com.ooadprojectserver.restaurantmanagement.dto.response.model.schedule;
+package com.ooadprojectserver.restaurantmanagement.dto.response.schedule;
 
 import com.ooadprojectserver.restaurantmanagement.model.schedule.Schedule;
 import lombok.AllArgsConstructor;

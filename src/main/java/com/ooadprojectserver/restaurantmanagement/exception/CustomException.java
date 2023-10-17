@@ -1,6 +1,6 @@
 package com.ooadprojectserver.restaurantmanagement.exception;
 
-import com.ooadprojectserver.restaurantmanagement.dto.response.util.APIStatus;
+import com.ooadprojectserver.restaurantmanagement.constant.APIStatus;
 import lombok.*;
 
 @Getter

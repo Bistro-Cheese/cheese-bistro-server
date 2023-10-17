@@ -1,4 +1,4 @@
-package com.ooadprojectserver.restaurantmanagement.constant;
+package com.ooadprojectserver.restaurantmanagement.model.user;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
