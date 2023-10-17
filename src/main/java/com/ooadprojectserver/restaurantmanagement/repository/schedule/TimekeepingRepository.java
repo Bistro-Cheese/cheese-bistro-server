@@ -33,7 +33,7 @@ public interface TimekeepingRepository extends JpaRepository<Timekeeping, Long> 
     @Transactional
     @Modifying
     @Query("update Timekeeping t set t.workDate = ?1, t.status = ?2 where t.id = ?3")
-    void updateWorkDateAndStatusById(LocalDateTime workDate, TimekeepingStatus status, Long id);
+    void updateWorkDateAndStatusById(LocalDateTime workDate, Integer status, Long id);
 
     @Transactional
     @Modifying

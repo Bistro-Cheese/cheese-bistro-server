@@ -1,4 +1,4 @@
-package com.ooadprojectserver.restaurantmanagement.dto.response.model.schedule;
+package com.ooadprojectserver.restaurantmanagement.dto.response.schedule;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ooadprojectserver.restaurantmanagement.model.schedule.Shift;

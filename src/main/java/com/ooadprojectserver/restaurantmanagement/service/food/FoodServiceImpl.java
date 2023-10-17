@@ -1,9 +1,9 @@
 package com.ooadprojectserver.restaurantmanagement.service.food;
 
 import com.ooadprojectserver.restaurantmanagement.dto.request.FoodRequest;
-import com.ooadprojectserver.restaurantmanagement.dto.response.util.APIStatus;
-import com.ooadprojectserver.restaurantmanagement.exception.ApplicationException;
-import com.ooadprojectserver.restaurantmanagement.exception.FoodException;
+import com.ooadprojectserver.restaurantmanagement.constant.APIStatus;
+import com.ooadprojectserver.restaurantmanagement.dto.response.PagingResponseModel;
+import com.ooadprojectserver.restaurantmanagement.exception.CustomException;
 import com.ooadprojectserver.restaurantmanagement.model.food.Category;
 import com.ooadprojectserver.restaurantmanagement.model.food.Food;
 import com.ooadprojectserver.restaurantmanagement.repository.food.CategoryRepository;
@@ -12,6 +12,7 @@ import com.ooadprojectserver.restaurantmanagement.repository.specification.FoodS
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -28,68 +29,85 @@ public class FoodServiceImpl implements FoodService {
 
     //get all foods
     @Override
-    public List<Food> findAllProducts() {
+    public List<Food> getAllFoods() {
         return foodRepository.findAll();
     }
 
     //create food
     @Override
-    public Food createProduct(FoodRequest request) throws FoodException {
-        Optional<Category> category = categoryRepository.findByName(request.getCategory());
-        if (category.isEmpty()){
-            throw new FoodException("Not Found Food");
-        }
-        var food = Food.builder()
-                .name(request.getName())
-                .category(category.get())
-                .description(request.getDescription())
-                .price(request.getPrice())
-                .quantity(request.getQuantity())
-                .productImage(request.getProductImage())
-                .createdDate(new Date())
-                .lastModifiedDate(new Date())
-                .status(request.getStatus().getValue())
-                .build();
-        return foodRepository.save(food);
+    public void createFood(FoodRequest request) {
+        Category category = categoryRepository.findById(request.getCategory()).orElseThrow(
+                () -> new CustomException(APIStatus.CATEGORY_NOT_FOUND)
+        );
+        foodRepository.save(
+                Food.builder()
+                        .name(request.getName())
+                        .category(category)
+                        .description(request.getDescription())
+                        .price(request.getPrice())
+                        .productImage(request.getProductImage())
+                        .createdDate(new Date())
+                        .lastModifiedDate(new Date())
+                        .status(request.getStatus())
+                        .build()
+        );
     }
 
     //delete food
     @Override
-    public void deleteProduct(UUID foodId) throws FoodException {
-        foodRepository.deleteById(foodId);
+    public void deleteFood(UUID foodId) {
+        Food food = foodRepository.findById(foodId).orElseThrow(
+                () -> new CustomException(APIStatus.FOOD_NOT_FOUND)
+        );
+        foodRepository.delete(food);
     }
 
     @Override
-    public void updateProduct(UUID foodId, FoodRequest updatingFood) throws FoodException {
-        Optional<Food> existingFood = foodRepository.findById(foodId);
-        if (existingFood.isEmpty()){
-            throw new FoodException("Food Not Found");
-        }
-        Optional<Category> updateCategory = categoryRepository.findByName(updatingFood.getCategory());
-        if(updateCategory.isEmpty()){
-            throw new ApplicationException(APIStatus.ERR_BAD_REQUEST);
-        }
+    public void updateFood(UUID foodId, FoodRequest updatingFood) {
+        Food existingFood = foodRepository.findById(foodId).orElseThrow(
+                () -> new CustomException(APIStatus.FOOD_NOT_FOUND)
+        );
+        Category updateCategory = categoryRepository.findById(updatingFood.getCategory()).orElseThrow(
+                () -> new CustomException(APIStatus.CATEGORY_NOT_FOUND)
+        );
         Date lastModifiedDate = new Date();
-        foodRepository.updateFoodById(updatingFood.getName(), updateCategory.get(), updatingFood.getDescription(),
-                updatingFood.getQuantity(), updatingFood.getProductImage(), updatingFood.getPrice(), lastModifiedDate,
-                updatingFood.getStatus().getValue(), existingFood.get().getId());
+        foodRepository.updateFoodById(
+                updatingFood.getName(),
+                updateCategory,
+                updatingFood.getDescription(),
+                updatingFood.getProductImage(),
+                updatingFood.getPrice(),
+                lastModifiedDate,
+                updatingFood.getStatus(),
+                existingFood.getId()
+        );
     }
 
     @Override
-    public Food findFoodById(UUID id) throws FoodException {
-        Optional<Food> foundFood = foodRepository.findById(id);
-        if(foundFood.isPresent()){
-            return foundFood.get();
-        }else {
-            throw new FoodException("Not Found Food");
+    public PagingResponseModel doFilterSearchSortPagingFood(
+            String category, String searchKey, BigDecimal minPrice,
+            BigDecimal maxPrice, Integer sortCase, Boolean isAscSort,
+            Integer pageNumber, Integer pageSize
+    ) {
+        if (pageSize < 1 || pageNumber < 1) {
+            throw new CustomException(APIStatus.ERR_PAGINATION);
         }
-    }
-
-    @Override
-    public Page<Food> doFilterSearchSortPagingFood(String category, String searchKey, BigDecimal minPrice,BigDecimal maxPrice,
-                                                   Integer sortCase, Boolean isAscSort, Integer pageNumber,
-                                                   Integer pageSize) {
-        return foodRepository.findAll(new FoodSpecification(category, searchKey, minPrice, maxPrice, sortCase, isAscSort), PageRequest.of(pageNumber, pageSize));
+        Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
+        Page<Food> foodPage = foodRepository.findAll(
+                new FoodSpecification(
+                        category,
+                        searchKey,
+                        minPrice,
+                        maxPrice,
+                        sortCase,
+                        isAscSort
+                ), pageable);
+        return new PagingResponseModel(
+                foodPage.getContent(),
+                foodPage.getTotalElements(),
+                foodPage.getTotalPages(),
+                foodPage.getNumber() + 1
+        );
     }
 
 }

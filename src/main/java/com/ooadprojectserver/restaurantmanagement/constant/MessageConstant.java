@@ -20,9 +20,9 @@ public class MessageConstant {
     public static final String TIMEKEEPING_SUCCESS = "Timekeeping Successfully";
     // Food
     public static final String GET_ALL_FOODS_SUCCESS = "Get all foods Successfully";
-    public static final String FIND_FOOD_SUCCESS = "Finding Food Successfully";
-    public static final String FOOD_CREATED_SUCCESS = "Creating Food Successfully";
-    public static final String FOOD_DELETED_SUCCESS = "Deleting Food Successfully";
-    public static final String FOOD_UPDATE_SUCCESS = "updating Food Successfully";
-    public static final String FOOD_FILTER_SUCCESS = "Filter Foods Successfully";
+    public static final String FIND_FOOD_SUCCESS = "Find Food Successfully";
+    public static final String CREATE_FOOD_SUCCESS = "Create Food Successfully";
+    public static final String DELETE_FOOD_SUCCESS = "Delete Food Successfully";
+    public static final String UPDATE_FOOD_SUCCESS = "Update Food Successfully";
+    public static final String SEARCH_FOOD_SUCCESS = "Search Food Successfully";
 }

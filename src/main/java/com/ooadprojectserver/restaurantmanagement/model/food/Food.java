@@ -37,16 +37,12 @@ public class Food implements Serializable {
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
     @Column(name = "description", nullable = false)
     @JdbcTypeCode(SqlTypes.NVARCHAR)
     private String description;
-
-    @Column(name = "quantity", nullable = false)
-    @JdbcTypeCode(SqlTypes.INTEGER)
-    private Integer quantity;
 
     @Column(name = "product_image", nullable = false)
     @JdbcTypeCode(SqlTypes.NVARCHAR)

@@ -1,6 +1,6 @@
 package com.ooadprojectserver.restaurantmanagement.exception.handler;
 
-import com.ooadprojectserver.restaurantmanagement.dto.response.model.ErrorResponse;
+import com.ooadprojectserver.restaurantmanagement.dto.response.ErrorResponse;
 import com.ooadprojectserver.restaurantmanagement.exception.CustomException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

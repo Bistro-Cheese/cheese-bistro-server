@@ -2,7 +2,7 @@ package com.ooadprojectserver.restaurantmanagement.service.authentication;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ooadprojectserver.restaurantmanagement.constant.MessageConstant;
-import com.ooadprojectserver.restaurantmanagement.dto.response.model.MessageResponse;
+import com.ooadprojectserver.restaurantmanagement.dto.response.MessageResponse;
 import com.ooadprojectserver.restaurantmanagement.model.user.token.Token;
 import com.ooadprojectserver.restaurantmanagement.model.user.type.User;
 import com.ooadprojectserver.restaurantmanagement.repository.user.TokenRepository;

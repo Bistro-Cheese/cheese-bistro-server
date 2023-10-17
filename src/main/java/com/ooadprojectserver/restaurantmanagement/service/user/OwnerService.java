@@ -1,12 +1,11 @@
 package com.ooadprojectserver.restaurantmanagement.service.user;
 
-import com.ooadprojectserver.restaurantmanagement.constant.AccountStatus;
+import com.ooadprojectserver.restaurantmanagement.model.user.AccountStatus;
 import com.ooadprojectserver.restaurantmanagement.constant.DateTimeConstant;
 import com.ooadprojectserver.restaurantmanagement.dto.request.UpdateProfileRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.request.UserRegisterRequest;
 import com.ooadprojectserver.restaurantmanagement.model.user.Address;
 import com.ooadprojectserver.restaurantmanagement.model.user.type.Owner;
-import com.ooadprojectserver.restaurantmanagement.model.user.type.User;
 import com.ooadprojectserver.restaurantmanagement.repository.user.AddressRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.user.OwnerRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +23,7 @@ public class OwnerService {
     private final OwnerRepository ownerRepository;
     private final AddressRepository addressRepository;
 
-    public User createUser(UserRegisterRequest request) {
+    public void createUser(UserRegisterRequest request) {
         String sDob = request.getDateOfBirth();
         Date dob;
         try {
@@ -32,14 +31,14 @@ public class OwnerService {
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
-        return ownerRepository.save(Owner.ownerBuilder()
+        ownerRepository.save(Owner.ownerBuilder()
                 .username(request.getUsername())
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
                 .dateOfBirth(dob)
                 .password(passwordEncoder.encode(request.getPassword()))
                 .phoneNumber(request.getPhoneNumber())
-                .role(request.getRole().getValue())
+                .role(request.getRole())
                 .status(request.getStatus())
                 .address(
                         addressRepository.save(
@@ -54,12 +53,11 @@ public class OwnerService {
                 .branch(request.getBranch())
                 .createdDate(new Date())
                 .lastModifiedDate(new Date())
-                .enabled(Objects.equals(request.getStatus(), AccountStatus.ACTIVE_STATUS.getValue()))
+                .enabled(Objects.equals(request.getStatus(), AccountStatus.ACTIVE.getValue()))
                 .build());
     }
 
     public void updateUser(UUID user_id, UpdateProfileRequest request) {
-        System.out.println(request.getBranch());
         ownerRepository.updateOwner(
                 request.getBranch(),
                 request.getLicenseBusiness(),

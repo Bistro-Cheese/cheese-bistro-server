@@ -3,10 +3,10 @@ package com.ooadprojectserver.restaurantmanagement.controller.user;
 import com.ooadprojectserver.restaurantmanagement.constant.APIConstant;
 import com.ooadprojectserver.restaurantmanagement.constant.MessageConstant;
 import com.ooadprojectserver.restaurantmanagement.dto.request.UpdateProfileRequest;
-import com.ooadprojectserver.restaurantmanagement.dto.response.model.APIResponse;
-import com.ooadprojectserver.restaurantmanagement.dto.response.model.MessageResponse;
-import com.ooadprojectserver.restaurantmanagement.dto.response.model.PagingResponseModel;
-import com.ooadprojectserver.restaurantmanagement.dto.response.model.UserResponse;
+import com.ooadprojectserver.restaurantmanagement.dto.response.APIResponse;
+import com.ooadprojectserver.restaurantmanagement.dto.response.MessageResponse;
+import com.ooadprojectserver.restaurantmanagement.dto.response.PagingResponseModel;
+import com.ooadprojectserver.restaurantmanagement.dto.response.UserResponse;
 import com.ooadprojectserver.restaurantmanagement.service.user.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.UUID;
 
@@ -40,7 +41,7 @@ public class UserController {
     public ResponseEntity<MessageResponse> updateUserById(
             @RequestBody UpdateProfileRequest updateRequestBody,
             @PathVariable UUID user_id
-    ) {
+    ) throws ParseException {
         userService.updateUser(updateRequestBody, user_id);
         return ResponseEntity.status(OK).body(
                 new MessageResponse(MessageConstant.UPDATE_USER_SUCCESS)

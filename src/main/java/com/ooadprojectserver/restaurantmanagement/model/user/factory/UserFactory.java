@@ -5,7 +5,7 @@ import com.ooadprojectserver.restaurantmanagement.dto.request.UserRegisterReques
 import com.ooadprojectserver.restaurantmanagement.model.user.type.User;
 
 public interface UserFactory {
-    User createUser(UserRegisterRequest registerRequest);
+    void createUser(UserRegisterRequest registerRequest);
 
     void updateUser(User user, UpdateProfileRequest updateProfileRequest);
 }

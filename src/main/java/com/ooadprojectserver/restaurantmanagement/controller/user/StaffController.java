@@ -2,8 +2,8 @@ package com.ooadprojectserver.restaurantmanagement.controller.user;
 
 import com.ooadprojectserver.restaurantmanagement.constant.APIConstant;
 import com.ooadprojectserver.restaurantmanagement.constant.MessageConstant;
-import com.ooadprojectserver.restaurantmanagement.dto.response.model.APIResponse;
-import com.ooadprojectserver.restaurantmanagement.dto.response.model.schedule.StaffScheduleResponse;
+import com.ooadprojectserver.restaurantmanagement.dto.response.APIResponse;
+import com.ooadprojectserver.restaurantmanagement.dto.response.schedule.StaffScheduleResponse;
 import com.ooadprojectserver.restaurantmanagement.service.user.StaffService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;

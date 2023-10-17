@@ -1,15 +1,15 @@
 package com.ooadprojectserver.restaurantmanagement.service.user;
 
-import com.ooadprojectserver.restaurantmanagement.constant.AccountStatus;
+import com.ooadprojectserver.restaurantmanagement.model.user.AccountStatus;
 import com.ooadprojectserver.restaurantmanagement.constant.DateTimeConstant;
 import com.ooadprojectserver.restaurantmanagement.dto.request.AssignScheduleRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.request.UpdateProfileRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.request.UserRegisterRequest;
-import com.ooadprojectserver.restaurantmanagement.dto.response.model.schedule.DayResponse;
-import com.ooadprojectserver.restaurantmanagement.dto.response.model.schedule.ManagerScheduleRespone;
-import com.ooadprojectserver.restaurantmanagement.dto.response.model.schedule.ShiftResponse;
-import com.ooadprojectserver.restaurantmanagement.dto.response.model.schedule.UserInfoResponse;
-import com.ooadprojectserver.restaurantmanagement.dto.response.util.APIStatus;
+import com.ooadprojectserver.restaurantmanagement.dto.response.schedule.DayResponse;
+import com.ooadprojectserver.restaurantmanagement.dto.response.schedule.ManagerScheduleRespone;
+import com.ooadprojectserver.restaurantmanagement.dto.response.schedule.ShiftResponse;
+import com.ooadprojectserver.restaurantmanagement.dto.response.schedule.UserInfoResponse;
+import com.ooadprojectserver.restaurantmanagement.constant.APIStatus;
 import com.ooadprojectserver.restaurantmanagement.exception.CustomException;
 import com.ooadprojectserver.restaurantmanagement.model.schedule.Schedule;
 import com.ooadprojectserver.restaurantmanagement.model.schedule.Shift;
@@ -18,7 +18,6 @@ import com.ooadprojectserver.restaurantmanagement.model.schedule.TimekeepingStat
 import com.ooadprojectserver.restaurantmanagement.model.user.Address;
 import com.ooadprojectserver.restaurantmanagement.model.user.type.Manager;
 import com.ooadprojectserver.restaurantmanagement.model.user.type.Staff;
-import com.ooadprojectserver.restaurantmanagement.model.user.type.User;
 import com.ooadprojectserver.restaurantmanagement.repository.schedule.ScheduleRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.schedule.TimekeepingRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.user.AddressRepository;
@@ -27,7 +26,6 @@ import com.ooadprojectserver.restaurantmanagement.repository.user.StaffRepositor
 import com.ooadprojectserver.restaurantmanagement.service.authentication.JwtService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -50,7 +48,7 @@ public class ManagerService {
     private final TimekeepingRepository timekeepingRepository;
     private final ScheduleRepository scheduleRepository;
 
-    public User createUser(UserRegisterRequest request) {
+    public void createUser(UserRegisterRequest request) {
         String sDob = request.getDateOfBirth();
         Date dob;
         try {
@@ -58,14 +56,14 @@ public class ManagerService {
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
-        return managerRepository.save(Manager.managerBuilder()
+        managerRepository.save(Manager.managerBuilder()
                 .username(request.getUsername())
                 .firstName(request.getFirstName())
                 .lastName(request.getLastName())
                 .dateOfBirth(dob)
                 .password(passwordEncoder.encode(request.getPassword()))
                 .phoneNumber(request.getPhoneNumber())
-                .role(request.getRole().getValue())
+                .role(request.getRole())
                 .status(request.getStatus())
                 .address(
                         addressRepository.save(
@@ -76,7 +74,7 @@ public class ManagerService {
                                         .build()
                         )
                 )
-                .enabled(Objects.equals(request.getStatus(), AccountStatus.ACTIVE_STATUS.getValue()))
+                .enabled(Objects.equals(request.getStatus(), AccountStatus.ACTIVE.getValue()))
                 .foreignLanguage(request.getForeignLanguage())
                 .experiencedYear(request.getExperiencedYear())
                 .certificationManagement(request.getCertificationManagement())
@@ -95,27 +93,17 @@ public class ManagerService {
     }
 
     public ManagerScheduleRespone getManagerSchedule(HttpServletRequest request) {
-        final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (authHeader == null || !authHeader.contains("Bearer ")) {
-            throw new RuntimeException("No Authorization Header");
-        }
-        String username = jwtService.extractUsername(authHeader.substring(7));
+        String username = jwtService.getUsernameFromHeader(request);
         return getManagerScheduleRespone(username);
     }
 
     public void assignSchedule(String staff_username, AssignScheduleRequest request, HttpServletRequest httpServletRequest) {
-        final String authHeader = httpServletRequest.getHeader(HttpHeaders.AUTHORIZATION);
-        if (authHeader == null || !authHeader.contains("Bearer ")) {
-            throw new RuntimeException("No Authorization Header");
-        }
-        String username = jwtService.extractUsername(authHeader.substring(7));
-
+        String username = jwtService.getUsernameFromHeader(httpServletRequest);
         Optional<Timekeeping> existedTimekeeping = timekeepingRepository.findStaffSchedule(
                 staff_username,
                 request.getDayOfWeek(),
                 request.getShift()
         );
-
         if (existedTimekeeping.isEmpty()) {
             Manager manager = (Manager) managerRepository.findByUsername(username).orElseThrow();
             Staff staff = (Staff) staffRepository.findByUsername(staff_username).orElseThrow();
@@ -151,15 +139,15 @@ public class ManagerService {
         }
 
         LocalDateTime timekeepingDate = LocalDateTime.now(ZoneId.of(DateTimeConstant.TIMEZONE));
-        TimekeepingStatus timekeepingStatus;
+        int timekeepingStatus;
         Shift shift = timekeeping.getSchedule().getShift();
 
         if (timekeepingDate.getHour() >= shift.getEndTime()) {
-            timekeepingStatus = TimekeepingStatus.ABSENCE;
+            timekeepingStatus = TimekeepingStatus.ABSENT.getValue();
         } else if (timekeepingDate.getHour() >= shift.getStartTime() && timekeepingDate.getMinute() != 0) {
-            timekeepingStatus = TimekeepingStatus.LATE;
+            timekeepingStatus = TimekeepingStatus.LATE.getValue();
         } else {
-            timekeepingStatus = TimekeepingStatus.ON_TIME;
+            timekeepingStatus = TimekeepingStatus.ON_TIME.getValue();
         }
 
         timekeepingRepository.updateWorkDateAndStatusById(timekeepingDate, timekeepingStatus, timekeeping_id);

@@ -1,7 +1,7 @@
 package com.ooadprojectserver.restaurantmanagement.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ooadprojectserver.restaurantmanagement.constant.FoodStatus;
+import com.ooadprojectserver.restaurantmanagement.model.food.FoodStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,18 +17,13 @@ public class FoodRequest {
     @JsonProperty("name")
     private String name;
     @JsonProperty("category")
-    private String category;
-
+    private Integer category;
     @JsonProperty("description")
     private String description;
-
-    @JsonProperty("quantity")
-    private Integer quantity;
     @JsonProperty("product_image")
     private String productImage;
     @JsonProperty("price")
     private BigDecimal price;
-
     @JsonProperty("status")
-    private FoodStatus status;
+    private Integer status;
 }

@@ -1,7 +1,8 @@
 package com.ooadprojectserver.restaurantmanagement.boostrap;
 
 import com.github.javafaker.Faker;
-import com.ooadprojectserver.restaurantmanagement.constant.AccountStatus;
+import com.ooadprojectserver.restaurantmanagement.model.food.FoodStatus;
+import com.ooadprojectserver.restaurantmanagement.model.user.AccountStatus;
 import com.ooadprojectserver.restaurantmanagement.constant.DateTimeConstant;
 import com.ooadprojectserver.restaurantmanagement.model.schedule.Schedule;
 import com.ooadprojectserver.restaurantmanagement.model.schedule.Shift;
@@ -57,10 +58,10 @@ public class Dataseeder implements ApplicationListener<ContextRefreshedEvent>, C
 
     private final List<String> listCategory = new ArrayList<>(
             List.of(
-                    "appetizer",
-                    "dessert",
-                    "drink",
-                    "main Course"
+                    "Appetizer",
+                    "Dessert",
+                    "Drink",
+                    "Main Course"
             )
     );
 
@@ -76,15 +77,15 @@ public class Dataseeder implements ApplicationListener<ContextRefreshedEvent>, C
     public void run(String... args) throws ParseException {
 //        logger.info("Loading Food");
 //        this.createListFakeFood();
+//
+        logger.info("Loading Owner");
+        this.createListOwner();
 
-//        logger.info("Loading Owner");
-//        this.createListOwner();
-//
-//        logger.info("Loading Manager");
-//        this.createListManager();
-//
-//        logger.info("Loading Staff");
-//        this.createListStaff();
+        logger.info("Loading Manager");
+        this.createListManager();
+
+        logger.info("Loading Staff");
+        this.createListStaff();
     }
 
     private void loadRoles() {
@@ -136,10 +137,10 @@ public class Dataseeder implements ApplicationListener<ContextRefreshedEvent>, C
     private void LoadCategory() {
         List<Category> categories = new ArrayList<>(
                 List.of(
-                        new Category(UUID.randomUUID(), "drink"),
-                        new Category(UUID.randomUUID(), "main Course"),
-                        new Category(UUID.randomUUID(), "appetizer"),
-                        new Category(UUID.randomUUID(), "dessert")
+                        new Category(1, "Appetizer"),
+                        new Category(2, "Main Course"),
+                        new Category(3, "Dessert"),
+                        new Category(4, "Drink")
                 )
         );
         categories.forEach(category -> {
@@ -148,34 +149,33 @@ public class Dataseeder implements ApplicationListener<ContextRefreshedEvent>, C
         });
     }
 
-    private Category randomCategory() {
-        Random categoryName = new Random();
-        String randomCategoryName = this.listCategory.get(
-                categoryName.nextInt(
-                        this.listCategory.size()
-                )
-        );
-        Optional<Category> category = categoryRepository.findByName(randomCategoryName);
-        return category.orElse(null);
-    }
+//    private Category randomCategory() {
+//        Random categoryName = new Random();
+//        String randomCategoryName = this.listCategory.get(
+//                categoryName.nextInt(
+//                        this.listCategory.size()
+//                )
+//        );
+//        Optional<Category> category = categoryRepository.findByName(randomCategoryName);
+//        return category.orElse(null);
+//    }
 
-    private void createListFakeFood() {
-        List<Food> listFood = Stream.generate(() ->
-                new Food(
-                        UUID.randomUUID(),
-                        faker.name().name(),
-                        randomCategory(),
-                        faker.lorem().characters(100),
-                        faker.number().numberBetween(100, 400),
-                        faker.food().ingredient(),
-                        BigDecimal.valueOf(faker.number().numberBetween(50000, 1000000)),
-                        faker.number().numberBetween(1, 3),
-                        new Date(),
-                        new Date()
-                )
-        ).limit(100).collect(Collectors.toList());
-        foodRepository.saveAll(listFood);
-    }
+//    private void createListFakeFood() {
+//        List<Food> listFood = Stream.generate(() ->
+//                new Food(
+//                        UUID.randomUUID(),
+//                        faker.name().name(),
+//                        randomCategory(),
+//                        faker.lorem().characters(100),
+//                        faker.food().ingredient(),
+//                        BigDecimal.valueOf(faker.number().numberBetween(50000, 1000000)),
+//                        FoodStatus.AVAILABLE,
+//                        new Date(),
+//                        new Date()
+//                )
+//        ).limit(100).collect(Collectors.toList());
+//        foodRepository.saveAll(listFood);
+//    }
 
     private void createListOwner() throws ParseException {
         String longSdob = "22-09-2003";
@@ -207,7 +207,7 @@ public class Dataseeder implements ApplicationListener<ContextRefreshedEvent>, C
                 .branch("Thu Duc")
                 .createdDate(new Date())
                 .lastModifiedDate(new Date())
-                .enabled(Objects.equals(1, AccountStatus.ACTIVE_STATUS.getValue()))
+                .enabled(Objects.equals(1, AccountStatus.ACTIVE.getValue()))
                 .build());
 
         ownerRepository.save(Owner.ownerBuilder()
@@ -232,7 +232,7 @@ public class Dataseeder implements ApplicationListener<ContextRefreshedEvent>, C
                 .branch("Di An")
                 .createdDate(new Date())
                 .lastModifiedDate(new Date())
-                .enabled(Objects.equals(1, AccountStatus.ACTIVE_STATUS.getValue()))
+                .enabled(Objects.equals(1, AccountStatus.ACTIVE.getValue()))
                 .build());
 
         ownerRepository.save(Owner.ownerBuilder()
@@ -257,7 +257,7 @@ public class Dataseeder implements ApplicationListener<ContextRefreshedEvent>, C
                 .branch("Binh Thanh")
                 .createdDate(new Date())
                 .lastModifiedDate(new Date())
-                .enabled(Objects.equals(1, AccountStatus.ACTIVE_STATUS.getValue()))
+                .enabled(Objects.equals(1, AccountStatus.ACTIVE.getValue()))
                 .build());
     }
 
@@ -312,7 +312,7 @@ public class Dataseeder implements ApplicationListener<ContextRefreshedEvent>, C
                         .foreignLanguage(faker.nation().language())
                         .createdDate(new Date())
                         .lastModifiedDate(new Date())
-                        .enabled(Objects.equals(1, AccountStatus.ACTIVE_STATUS.getValue()))
+                        .enabled(Objects.equals(1, AccountStatus.ACTIVE.getValue()))
                         .build()
         );
         managerRepository.save(
@@ -337,7 +337,7 @@ public class Dataseeder implements ApplicationListener<ContextRefreshedEvent>, C
                         .foreignLanguage(faker.nation().language())
                         .createdDate(new Date())
                         .lastModifiedDate(new Date())
-                        .enabled(Objects.equals(1, AccountStatus.ACTIVE_STATUS.getValue()))
+                        .enabled(Objects.equals(1, AccountStatus.ACTIVE.getValue()))
                         .build()
         );
     }
@@ -391,7 +391,7 @@ public class Dataseeder implements ApplicationListener<ContextRefreshedEvent>, C
                 .foreignLanguage(faker.nation().language())
                 .createdDate(new Date())
                 .lastModifiedDate(new Date())
-                .enabled(Objects.equals(1, AccountStatus.ACTIVE_STATUS.getValue()))
+                .enabled(Objects.equals(1, AccountStatus.ACTIVE.getValue()))
                 .build()
         );
         staffRepository.save(Staff.staffBuilder()
@@ -416,7 +416,7 @@ public class Dataseeder implements ApplicationListener<ContextRefreshedEvent>, C
                 .foreignLanguage(faker.nation().language())
                 .createdDate(new Date())
                 .lastModifiedDate(new Date())
-                .enabled(Objects.equals(1, AccountStatus.ACTIVE_STATUS.getValue()))
+                .enabled(Objects.equals(1, AccountStatus.ACTIVE.getValue()))
                 .build()
         );
     }
