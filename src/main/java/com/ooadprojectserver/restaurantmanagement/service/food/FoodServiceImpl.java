@@ -4,11 +4,16 @@ import com.ooadprojectserver.restaurantmanagement.dto.request.FoodRequest;
 import com.ooadprojectserver.restaurantmanagement.constant.APIStatus;
 import com.ooadprojectserver.restaurantmanagement.dto.response.PagingResponseModel;
 import com.ooadprojectserver.restaurantmanagement.exception.CustomException;
-import com.ooadprojectserver.restaurantmanagement.model.food.Category;
-import com.ooadprojectserver.restaurantmanagement.model.food.Food;
+import com.ooadprojectserver.restaurantmanagement.model.composition.food.Category;
+import com.ooadprojectserver.restaurantmanagement.model.composition.food.Food;
+import com.ooadprojectserver.restaurantmanagement.model.user.type.User;
 import com.ooadprojectserver.restaurantmanagement.repository.food.CategoryRepository;
+import com.ooadprojectserver.restaurantmanagement.repository.food.CompositionRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.food.FoodRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.specification.FoodSpecification;
+import com.ooadprojectserver.restaurantmanagement.repository.user.UserRepository;
+import com.ooadprojectserver.restaurantmanagement.service.authentication.JwtService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,21 +21,40 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Service
 public class FoodServiceImpl implements FoodService {
+    private final JwtService jwtService;
+
+    private final UserRepository userRepository;
     private final FoodRepository foodRepository;
     private final CategoryRepository categoryRepository;
-
+    private final CompositionRepository compositionRepository;
     //get all foods
     @Override
-    public List<Food> getAllFoods() {
-        return foodRepository.findAll();
+    public List<Food> getAllFoods(
+            HttpServletRequest request
+    ) {
+        String username = jwtService.getUsernameFromHeader(request);
+        User user = userRepository.findByUsername(username).orElseThrow(
+                () -> new CustomException(APIStatus.USER_NOT_FOUND)
+        );
+        List<Food> foodList = new ArrayList<>();
+        switch (user.getRole()) {
+            case 1 -> foodList.addAll(foodRepository.findByStatus(1));
+            case 2 -> {
+                foodList.addAll(foodRepository.findByStatus(1));
+                foodList.addAll(foodRepository.findByStatus(2));
+            }
+            case 3 -> foodList.addAll(foodRepository.findAll());
+        };
+        Comparator<Food> foodComparator = Comparator.comparing(
+                food -> food.getCategory().getId()
+        );
+        foodList.sort(foodComparator);
+        return foodList;
     }
 
     //create food
@@ -39,18 +63,23 @@ public class FoodServiceImpl implements FoodService {
         Category category = categoryRepository.findById(request.getCategory()).orElseThrow(
                 () -> new CustomException(APIStatus.CATEGORY_NOT_FOUND)
         );
-        foodRepository.save(
-                Food.builder()
-                        .name(request.getName())
-                        .category(category)
-                        .description(request.getDescription())
-                        .price(request.getPrice())
-                        .productImage(request.getProductImage())
-                        .createdDate(new Date())
-                        .lastModifiedDate(new Date())
-                        .status(request.getStatus())
-                        .build()
-        );
+        Optional<Food> optionalFood = foodRepository.findByName(request.getName());
+        if (optionalFood.isPresent()) {
+            throw new CustomException(APIStatus.FOOD_ALREADY_EXISTED);
+        } else {
+            foodRepository.save(
+                    Food.builder()
+                            .name(request.getName())
+                            .category(category)
+                            .description(request.getDescription())
+                            .price(request.getPrice())
+                            .productImage(request.getProductImage())
+                            .createdDate(new Date())
+                            .lastModifiedDate(new Date())
+                            .status(request.getStatus())
+                            .build()
+            );
+        }
     }
 
     //delete food
@@ -59,6 +88,7 @@ public class FoodServiceImpl implements FoodService {
         Food food = foodRepository.findById(foodId).orElseThrow(
                 () -> new CustomException(APIStatus.FOOD_NOT_FOUND)
         );
+        compositionRepository.deleteByFood(food);
         foodRepository.delete(food);
     }
 
@@ -83,8 +113,14 @@ public class FoodServiceImpl implements FoodService {
         );
     }
 
+    public Food getDetailFood(UUID foodId) {
+        return foodRepository.findById(foodId).orElseThrow(
+                () -> new CustomException(APIStatus.FOOD_NOT_FOUND)
+        );
+    }
+
     @Override
-    public PagingResponseModel doFilterSearchSortPagingFood(
+    public PagingResponseModel searchFood(
             String category, String searchKey, BigDecimal minPrice,
             BigDecimal maxPrice, Integer sortCase, Boolean isAscSort,
             Integer pageNumber, Integer pageSize
@@ -109,5 +145,4 @@ public class FoodServiceImpl implements FoodService {
                 foodPage.getNumber() + 1
         );
     }
-
 }

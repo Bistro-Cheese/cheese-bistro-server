@@ -36,7 +36,7 @@ public class UserController {
         );
     }
 
-    @PatchMapping(APIConstant.USER_ID)
+    @PutMapping(APIConstant.USER_ID)
     @PreAuthorize("hasRole('OWNER')")
     public ResponseEntity<MessageResponse> updateUserById(
             @RequestBody UpdateProfileRequest updateRequestBody,
@@ -69,7 +69,7 @@ public class UserController {
         );
     }
 
-    @GetMapping("/search")
+    @GetMapping(APIConstant.SEARCH)
     @PreAuthorize("hasRole('OWNER')")
     public ResponseEntity<APIResponse<PagingResponseModel>> searchUser (
             @RequestParam(required = false) String name,

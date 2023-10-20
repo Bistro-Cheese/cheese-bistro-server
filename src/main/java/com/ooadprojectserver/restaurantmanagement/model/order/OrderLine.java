@@ -1,6 +1,6 @@
 package com.ooadprojectserver.restaurantmanagement.model.order;
 
-import com.ooadprojectserver.restaurantmanagement.model.food.Food;
+import com.ooadprojectserver.restaurantmanagement.model.composition.food.Food;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;

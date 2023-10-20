@@ -1,4 +1,4 @@
-package com.ooadprojectserver.restaurantmanagement.model.food;
+package com.ooadprojectserver.restaurantmanagement.model.composition.food;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ooadprojectserver.restaurantmanagement.constant.DateTimeConstant;
