@@ -32,7 +32,7 @@ public class Schedule implements Serializable {
     @JsonIgnore
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private int id;
+    private Integer id;
 
     @Column(name = "day", nullable = false)
     @Enumerated(EnumType.STRING)

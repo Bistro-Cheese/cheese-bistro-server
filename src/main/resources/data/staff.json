@@ -1,0 +1,41 @@
+[
+  {
+    "username": "longstaff",
+    "firstname": "Long",
+    "lastname": "Staff",
+    "date_of_birth": "22-09-2003",
+    "password": "longtran123",
+    "phone_number": "0810000006",
+    "status": 1,
+    "address_line": "124 Hoang Dieu 2",
+    "city": "Long An",
+    "region": "Southern",
+    "academic_level": "university"
+  },
+  {
+    "username": "tuanstaff",
+    "firstname": "Tuan",
+    "lastname": "Staff",
+    "date_of_birth": "21-02-2003",
+    "password": "tuannguyen123",
+    "phone_number": "0810000007",
+    "status": 1,
+    "address_line": "124 Hoang Dieu 2",
+    "city": "Quang Tri",
+    "region": "Central",
+    "academic_level": "university"
+  },
+  {
+    "username": "nhatstaff",
+    "firstname": "Nhat",
+    "lastname": "Staff",
+    "date_of_birth": "18-07-2003",
+    "password": "nhatnguyen123",
+    "phone_number": "0810000008",
+    "status": 1,
+    "address_line": "124 Hoang Dieu 2",
+    "city": "Da Nang",
+    "region": "Central",
+    "academic_level": "university"
+  }
+]

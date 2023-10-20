@@ -1,18 +1,19 @@
 package com.ooadprojectserver.restaurantmanagement.boostrap;
 
 import com.github.javafaker.Faker;
-import com.ooadprojectserver.restaurantmanagement.model.food.FoodStatus;
+import com.ooadprojectserver.restaurantmanagement.model.composition.ingredient.Ingredient;
 import com.ooadprojectserver.restaurantmanagement.model.user.AccountStatus;
 import com.ooadprojectserver.restaurantmanagement.constant.DateTimeConstant;
 import com.ooadprojectserver.restaurantmanagement.model.schedule.Schedule;
 import com.ooadprojectserver.restaurantmanagement.model.schedule.Shift;
 import com.ooadprojectserver.restaurantmanagement.model.user.Address;
-import com.ooadprojectserver.restaurantmanagement.model.food.Category;
+import com.ooadprojectserver.restaurantmanagement.model.composition.food.Category;
 import com.ooadprojectserver.restaurantmanagement.model.user.Role;
-import com.ooadprojectserver.restaurantmanagement.model.food.Food;
+import com.ooadprojectserver.restaurantmanagement.model.composition.food.Food;
 import com.ooadprojectserver.restaurantmanagement.model.user.type.Manager;
 import com.ooadprojectserver.restaurantmanagement.model.user.type.Owner;
 import com.ooadprojectserver.restaurantmanagement.model.user.type.Staff;
+import com.ooadprojectserver.restaurantmanagement.repository.food.IngredientRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.schedule.ScheduleRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.user.AddressRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.food.CategoryRepository;
@@ -23,6 +24,9 @@ import com.ooadprojectserver.restaurantmanagement.repository.user.OwnerRepositor
 import com.ooadprojectserver.restaurantmanagement.repository.user.StaffRepository;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import net.minidev.json.JSONArray;
+import net.minidev.json.JSONObject;
+import net.minidev.json.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -31,13 +35,13 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Component
 @RequiredArgsConstructor
@@ -55,29 +59,26 @@ public class Dataseeder implements ApplicationListener<ContextRefreshedEvent>, C
     private final StaffRepository staffRepository;
     private final AddressRepository addressRepository;
     private final CategoryRepository categoryRepository;
-
-    private final List<String> listCategory = new ArrayList<>(
-            List.of(
-                    "Appetizer",
-                    "Dessert",
-                    "Drink",
-                    "Main Course"
-            )
-    );
+    private final IngredientRepository ingredientRepository;
 
     @Override
     public void onApplicationEvent(@NonNull ContextRefreshedEvent event) {
-        logger.info("Loading Roles, Schedules and Categories");
+        logger.info("Loading...");
         this.loadRoles();
-        this.LoadCategory();
+        this.loadCategory();
         this.loadSchedules();
+        this.loadIngredient();
     }
 
     @Override
     public void run(String... args) throws ParseException {
-//        logger.info("Loading Food");
-//        this.createListFakeFood();
-//
+        logger.info("Loading Food");
+        try {
+            this.createListFood();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
         logger.info("Loading Owner");
         this.createListOwner();
 
@@ -134,7 +135,7 @@ public class Dataseeder implements ApplicationListener<ContextRefreshedEvent>, C
         });
     }
 
-    private void LoadCategory() {
+    private void loadCategory() {
         List<Category> categories = new ArrayList<>(
                 List.of(
                         new Category(1, "Appetizer"),
@@ -149,275 +150,309 @@ public class Dataseeder implements ApplicationListener<ContextRefreshedEvent>, C
         });
     }
 
-//    private Category randomCategory() {
-//        Random categoryName = new Random();
-//        String randomCategoryName = this.listCategory.get(
-//                categoryName.nextInt(
-//                        this.listCategory.size()
-//                )
-//        );
-//        Optional<Category> category = categoryRepository.findByName(randomCategoryName);
-//        return category.orElse(null);
-//    }
+    private void loadIngredient() {
+        List<Ingredient> ingredients = new ArrayList<>(
+                List.of(
+                        new Ingredient(1L, "Bread", 1),
+                        new Ingredient(2L, "Cheese", 1)
+                )
+        );
+        ingredients.forEach(ingredient -> {
+            Optional<Ingredient> optionalIngredient = ingredientRepository.findByName(ingredient.getName());
+            optionalIngredient.ifPresentOrElse(System.out::println, () -> ingredientRepository.save(ingredient));
+        });
+    }
 
-//    private void createListFakeFood() {
-//        List<Food> listFood = Stream.generate(() ->
-//                new Food(
-//                        UUID.randomUUID(),
-//                        faker.name().name(),
-//                        randomCategory(),
-//                        faker.lorem().characters(100),
-//                        faker.food().ingredient(),
-//                        BigDecimal.valueOf(faker.number().numberBetween(50000, 1000000)),
-//                        FoodStatus.AVAILABLE,
-//                        new Date(),
-//                        new Date()
-//                )
-//        ).limit(100).collect(Collectors.toList());
-//        foodRepository.saveAll(listFood);
-//    }
+    private void createListFood() throws FileNotFoundException {
+        JSONParser parser = new JSONParser();
+        JSONArray jsonArray;
+        try {
+            jsonArray = (JSONArray) parser.parse(
+                    new FileReader("./src/main/resources/data/menu.json")
+            );
+        } catch (net.minidev.json.parser.ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+        List<Food> listFood = new ArrayList<>();
+
+        for (Object food : jsonArray) {
+            JSONObject foodObject = (JSONObject) food;
+            String name = (String) foodObject.get("name");
+            String description = (String) foodObject.get("description");
+            Integer category = (Integer) foodObject.get("category");
+            Integer status = (Integer) foodObject.get("status");
+            listFood.add(createFood(name, description, category, status));
+        }
+
+        foodRepository.saveAll(listFood);
+    }
+
+    private Food createFood(String name, String description, Integer category_id, Integer status) {
+        Category category = categoryRepository.findById(category_id).orElseThrow();
+        return new Food(
+                UUID.randomUUID(),
+                name,
+                category,
+                description,
+                faker.internet().image(),
+                BigDecimal.valueOf(faker.number().numberBetween(50000, 1000000)),
+                status,
+                new Date(),
+                new Date()
+        );
+    }
 
     private void createListOwner() throws ParseException {
-        String longSdob = "22-09-2003";
-        String tuanSdob = "18-07-2003";
-        String nhatSdob = "21-02-2003";
-        Date longDob = new SimpleDateFormat(DateTimeConstant.FORMAT_DATE).parse(longSdob);
-        Date tuanDob = new SimpleDateFormat(DateTimeConstant.FORMAT_DATE).parse(tuanSdob);
-        Date nhatDob = new SimpleDateFormat(DateTimeConstant.FORMAT_DATE).parse(nhatSdob);
+        JSONParser parser = new JSONParser();
+        JSONArray jsonArray;
+        try {
+            jsonArray = (JSONArray) parser.parse(
+                    new FileReader("./src/main/resources/data/owner.json")
+            );
+        } catch (FileNotFoundException | net.minidev.json.parser.ParseException e) {
+            throw new RuntimeException(e);
+        }
 
-        ownerRepository.save(Owner.ownerBuilder()
-                .username("longowner")
-                .firstName("Long")
-                .lastName("Tran")
-                .dateOfBirth(longDob)
-                .password(passwordEncoder.encode("longtran123"))
-                .phoneNumber(faker.phoneNumber().phoneNumber())
-                .role(3)
-                .status(1)
-                .address(
-                        addressRepository.save(
-                                Address.builder()
-                                        .addressLine("123 Hoang Dieu 2")
-                                        .city("Long An")
-                                        .region("Southern")
-                                        .build()
-                        )
-                )
-                .licenseBusiness("Restaurant Business License")
-                .branch("Thu Duc")
-                .createdDate(new Date())
-                .lastModifiedDate(new Date())
-                .enabled(Objects.equals(1, AccountStatus.ACTIVE.getValue()))
-                .build());
+        List<Owner> ownerList = new ArrayList<>();
 
-        ownerRepository.save(Owner.ownerBuilder()
-                .username("tuanowner")
-                .firstName("Tuan")
-                .lastName("Nguyen")
-                .dateOfBirth(tuanDob)
-                .password(passwordEncoder.encode("tuannguyen123"))
-                .phoneNumber(faker.phoneNumber().phoneNumber())
-                .role(3)
-                .status(1)
-                .address(
-                        addressRepository.save(
-                                Address.builder()
-                                        .addressLine("124 Hoang Dieu 2")
-                                        .city("Quang Tri")
-                                        .region("Central")
-                                        .build()
-                        )
-                )
-                .licenseBusiness("Restaurant Business License")
-                .branch("Di An")
-                .createdDate(new Date())
-                .lastModifiedDate(new Date())
-                .enabled(Objects.equals(1, AccountStatus.ACTIVE.getValue()))
-                .build());
+        for (Object owner : jsonArray) {
+            JSONObject ownerObject = (JSONObject) owner;
+            String username = (String) ownerObject.get("username");
+            String firstName = (String) ownerObject.get("firstname");
+            String lastName = (String) ownerObject.get("lastname");
+            String dob = (String) ownerObject.get("date_of_birth");
+            String password = (String) ownerObject.get("password");
+            String phoneNumber = (String) ownerObject.get("phone_number");
+            Integer status = (Integer) ownerObject.get("status");
+            String addressLine = (String) ownerObject.get("address_line");
+            String city = (String) ownerObject.get("city");
+            String region = (String) ownerObject.get("region");
+            String licenseBusiness = (String) ownerObject.get("license_business");
+            String branch = (String) ownerObject.get("branch");
+            ownerList.add(createOwner(
+                    username,
+                    firstName,
+                    lastName,
+                    dob,
+                    password,
+                    phoneNumber,
+                    status,
+                    addressLine,
+                    city,
+                    region,
+                    licenseBusiness,
+                    branch
+            ));
+        }
 
-        ownerRepository.save(Owner.ownerBuilder()
-                .username("nhatowner")
-                .firstName("Nhat")
-                .lastName("Nguyen")
-                .dateOfBirth(nhatDob)
-                .password(passwordEncoder.encode("nhatnguyen123"))
-                .phoneNumber(faker.phoneNumber().phoneNumber())
-                .role(3)
-                .status(1)
-                .address(
-                        addressRepository.save(
-                                Address.builder()
-                                        .addressLine("125 Hoang Dieu 2")
-                                        .city("Da Nang")
-                                        .region("Central")
-                                        .build()
-                        )
-                )
-                .licenseBusiness("Restaurant Business License")
-                .branch("Binh Thanh")
-                .createdDate(new Date())
-                .lastModifiedDate(new Date())
-                .enabled(Objects.equals(1, AccountStatus.ACTIVE.getValue()))
-                .build());
+        ownerRepository.saveAll(ownerList);
     }
 
-    private void createListManager() {
-//        List<Manager> managerList = Stream.generate(() ->
-//                managerRepository.save(
-//                        Manager.managerBuilder()
-//                        .username(faker.name().username())
-//                        .firstName(faker.name().firstName())
-//                        .lastName(faker.name().lastName())
-//                        .dateOfBirth(faker.date().birthday())
-//                        .password(faker.internet().password())
-//                        .phoneNumber(faker.phoneNumber().phoneNumber())
-//                        .role(2)
-//                        .status(1)
-//                        .address(
-//                                addressRepository.save(
-//                                        Address.builder()
-//                                                .addressLine(faker.address().streetAddress())
-//                                                .city(faker.address().cityName())
-//                                                .region(faker.address().country())
-//                                                .build()
-//                                )
-//                        )
-//                        .certificationManagement("Restaurant Management Certification")
-//                        .experiencedYear(String.valueOf(faker.number().numberBetween(1, 5)))
-//                        .foreignLanguage(faker.nation().language())
-//                        .createdDate(new Date())
-//                        .lastModifiedDate(new Date())
-//                        .enabled(Objects.equals(1, AccountStatus.ACTIVE_STATUS.getValue()))
-//                        .build())
-//        ).limit(10).toList();
-        managerRepository.save(
-                Manager.managerBuilder()
-                        .username("longmanager1")
-                        .firstName("Long")
-                        .lastName("Tran")
-                        .dateOfBirth(faker.date().birthday())
-                        .password(passwordEncoder.encode("longtran123"))
-                        .phoneNumber(faker.phoneNumber().phoneNumber())
-                        .role(2)
-                        .status(1)
-                        .address(addressRepository.save(
-                                Address.builder()
-                                        .addressLine("123 Hoang Dieu 2")
-                                        .city("Long An")
-                                        .region("Southern")
-                                        .build()
-                        ))
-                        .certificationManagement("Restaurant Management Certification")
-                        .experiencedYear(String.valueOf(faker.number().numberBetween(1, 5)))
-                        .foreignLanguage(faker.nation().language())
-                        .createdDate(new Date())
-                        .lastModifiedDate(new Date())
-                        .enabled(Objects.equals(1, AccountStatus.ACTIVE.getValue()))
+    private Owner createOwner(
+            String username,
+            String firstName,
+            String lastName,
+            String dob,
+            String password,
+            String phoneNumber,
+            Integer status,
+            String addressLine,
+            String city,
+            String region,
+            String licenseBusiness,
+            String branch
+    ) throws ParseException {
+        Date dateOfBirth = new SimpleDateFormat(DateTimeConstant.FORMAT_DATE).parse(dob);
+        Address address = addressRepository.save(
+                Address.builder()
+                        .addressLine(addressLine)
+                        .city(city)
+                        .region(region)
                         .build()
         );
-        managerRepository.save(
-                Manager.managerBuilder()
-                        .username("longmanager2")
-                        .firstName("Long")
-                        .lastName("Tran")
-                        .dateOfBirth(faker.date().birthday())
-                        .password(passwordEncoder.encode("longtran123"))
-                        .phoneNumber(faker.phoneNumber().phoneNumber())
-                        .role(2)
-                        .status(1)
-                        .address(addressRepository.save(
-                                Address.builder()
-                                        .addressLine("123 Hoang Dieu 2")
-                                        .city("Long An")
-                                        .region("Southern")
-                                        .build()
-                        ))
-                        .certificationManagement("Restaurant Management Certification")
-                        .experiencedYear(String.valueOf(faker.number().numberBetween(1, 5)))
-                        .foreignLanguage(faker.nation().language())
-                        .createdDate(new Date())
-                        .lastModifiedDate(new Date())
-                        .enabled(Objects.equals(1, AccountStatus.ACTIVE.getValue()))
-                        .build()
-        );
+        return Owner.ownerBuilder()
+                .username(username)
+                .firstName(firstName)
+                .lastName(lastName)
+                .dateOfBirth(dateOfBirth)
+                .password(passwordEncoder.encode(password))
+                .phoneNumber(phoneNumber)
+                .role(3)
+                .status(status)
+                .address(address)
+                .licenseBusiness(licenseBusiness)
+                .branch(branch)
+                .createdDate(new Date())
+                .lastModifiedDate(new Date())
+                .enabled(Objects.equals(status, AccountStatus.ACTIVE.getValue()))
+                .build();
     }
 
-    private void createListStaff() {
-//        List<Staff> staffList = Stream.generate(() ->
-//                staffRepository.save(Staff.staffBuilder()
-//                        .username(faker.name().username())
-//                        .firstName(faker.name().firstName())
-//                        .lastName(faker.name().lastName())
-//                        .dateOfBirth(faker.date().birthday())
-//                        .password(faker.internet().password())
-//                        .phoneNumber(faker.phoneNumber().phoneNumber())
-//                        .role(1)
-//                        .status(1)
-//                        .address(
-//                                addressRepository.save(
-//                                        Address.builder()
-//                                                .addressLine(faker.address().streetAddress())
-//                                                .city(faker.address().cityName())
-//                                                .region(faker.address().country())
-//                                                .build()
-//                                )
-//                        )
-//                        .academicLevel("university")
-//                        .foreignLanguage(faker.nation().language())
-//                        .createdDate(new Date())
-//                        .lastModifiedDate(new Date())
-//                        .enabled(Objects.equals(1, AccountStatus.ACTIVE_STATUS.getValue()))
-//                        .build())
-//        ).limit(50).toList();
-        staffRepository.save(Staff.staffBuilder()
-                .username("longstaff1")
-                .firstName("Long")
-                .lastName("Staff1")
-                .dateOfBirth(faker.date().birthday())
-                .password(passwordEncoder.encode("longtran123"))
-                .phoneNumber(faker.phoneNumber().phoneNumber())
-                .role(1)
-                .status(1)
-                .address(
-                        addressRepository.save(
-                                Address.builder()
-                                        .addressLine(faker.address().streetAddress())
-                                        .city(faker.address().cityName())
-                                        .region(faker.address().country())
-                                        .build()
-                        )
-                )
-                .academicLevel("university")
+    private void createListManager() throws ParseException {
+        JSONParser parser = new JSONParser();
+        JSONArray jsonArray;
+        try {
+            jsonArray = (JSONArray) parser.parse(
+                    new FileReader("./src/main/resources/data/manager.json")
+            );
+        } catch (FileNotFoundException | net.minidev.json.parser.ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+        List<Manager> managerList = new ArrayList<>();
+
+        for (Object manager : jsonArray) {
+            JSONObject managerObject = (JSONObject) manager;
+            String username = (String) managerObject.get("username");
+            String firstName = (String) managerObject.get("firstname");
+            String lastName = (String) managerObject.get("lastname");
+            String dob = (String) managerObject.get("date_of_birth");
+            String password = (String) managerObject.get("password");
+            String phoneNumber = (String) managerObject.get("phone_number");
+            Integer status = (Integer) managerObject.get("status");
+            String addressLine = (String) managerObject.get("address_line");
+            String city = (String) managerObject.get("city");
+            String region = (String) managerObject.get("region");
+            String certificationManagement = (String) managerObject.get("certification_management");
+            managerList.add(createManager(
+                    username,
+                    firstName,
+                    lastName,
+                    dob,
+                    password,
+                    phoneNumber,
+                    status,
+                    addressLine,
+                    city,
+                    region,
+                    certificationManagement
+            ));
+        }
+        managerRepository.saveAll(managerList);
+    }
+
+    private Manager createManager(
+            String username,
+            String firstName,
+            String lastName,
+            String dob,
+            String password,
+            String phoneNumber,
+            Integer status,
+            String addressLine,
+            String city,
+            String region,
+            String certificationManagement
+    ) throws ParseException {
+        Date dateOfBirth = new SimpleDateFormat(DateTimeConstant.FORMAT_DATE).parse(dob);
+        Address address = addressRepository.save(
+                Address.builder()
+                        .addressLine(addressLine)
+                        .city(city)
+                        .region(region)
+                        .build()
+        );
+        return Manager.managerBuilder()
+                .username(username)
+                .firstName(firstName)
+                .lastName(lastName)
+                .dateOfBirth(dateOfBirth)
+                .password(passwordEncoder.encode(password))
+                .phoneNumber(phoneNumber)
+                .role(2)
+                .status(status)
+                .address(address)
+                .certificationManagement(certificationManagement)
+                .experiencedYear(String.valueOf(faker.number().numberBetween(1, 5)))
                 .foreignLanguage(faker.nation().language())
                 .createdDate(new Date())
                 .lastModifiedDate(new Date())
-                .enabled(Objects.equals(1, AccountStatus.ACTIVE.getValue()))
-                .build()
+                .enabled(Objects.equals(status, AccountStatus.ACTIVE.getValue()))
+                .build();
+    }
+
+    private void createListStaff() throws ParseException {
+        JSONParser parser = new JSONParser();
+        JSONArray jsonArray;
+        try {
+            jsonArray = (JSONArray) parser.parse(
+                    new FileReader("./src/main/resources/data/staff.json")
+            );
+        } catch (FileNotFoundException | net.minidev.json.parser.ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+        List<Staff> staffList = new ArrayList<>();
+
+        for (Object staff : jsonArray) {
+            JSONObject staffObject = (JSONObject) staff;
+            String username = (String) staffObject.get("username");
+            String firstName = (String) staffObject.get("firstname");
+            String lastName = (String) staffObject.get("lastname");
+            String dob = (String) staffObject.get("date_of_birth");
+            String password = (String) staffObject.get("password");
+            String phoneNumber = (String) staffObject.get("phone_number");
+            Integer status = (Integer) staffObject.get("status");
+            String addressLine = (String) staffObject.get("address_line");
+            String city = (String) staffObject.get("city");
+            String region = (String) staffObject.get("region");
+            String academicLevel = (String) staffObject.get("academic_level");
+            staffList.add(createStaff(
+                    username,
+                    firstName,
+                    lastName,
+                    dob,
+                    password,
+                    phoneNumber,
+                    status,
+                    addressLine,
+                    city,
+                    region,
+                    academicLevel
+            ));
+        }
+        staffRepository.saveAll(staffList);
+    }
+
+    private Staff createStaff(
+            String username,
+            String firstName,
+            String lastName,
+            String dob,
+            String password,
+            String phoneNumber,
+            Integer status,
+            String addressLine,
+            String city,
+            String region,
+            String academicLevel
+    ) throws ParseException {
+        Date dateOfBirth = new SimpleDateFormat(DateTimeConstant.FORMAT_DATE).parse(dob);
+        Address address = addressRepository.save(
+                Address.builder()
+                        .addressLine(addressLine)
+                        .city(city)
+                        .region(region)
+                        .build()
         );
-        staffRepository.save(Staff.staffBuilder()
-                .username("longstaff2")
-                .firstName("Long")
-                .lastName("Staff2")
-                .dateOfBirth(faker.date().birthday())
-                .password(passwordEncoder.encode("longtran123"))
-                .phoneNumber(faker.phoneNumber().phoneNumber())
+        return Staff.staffBuilder()
+                .username(username)
+                .firstName(firstName)
+                .lastName(lastName)
+                .dateOfBirth(dateOfBirth)
+                .password(passwordEncoder.encode(password))
+                .phoneNumber(phoneNumber)
                 .role(1)
-                .status(1)
-                .address(
-                        addressRepository.save(
-                                Address.builder()
-                                        .addressLine(faker.address().streetAddress())
-                                        .city(faker.address().cityName())
-                                        .region(faker.address().country())
-                                        .build()
-                        )
-                )
-                .academicLevel("university")
+                .status(status)
+                .address(address)
                 .foreignLanguage(faker.nation().language())
+                .academicLevel(academicLevel)
                 .createdDate(new Date())
                 .lastModifiedDate(new Date())
-                .enabled(Objects.equals(1, AccountStatus.ACTIVE.getValue()))
-                .build()
-        );
+                .enabled(Objects.equals(status, AccountStatus.ACTIVE.getValue()))
+                .build();
     }
 }
+
+

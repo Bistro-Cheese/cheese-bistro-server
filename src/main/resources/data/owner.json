@@ -1,0 +1,44 @@
+[
+  {
+    "username": "longowner",
+    "firstname": "Long",
+    "lastname": "Tran",
+    "date_of_birth": "22-09-2003",
+    "password": "longtran123",
+    "phone_number": "0810000000",
+    "status": 1,
+    "address_line": "124 Hoang Dieu 2",
+    "city": "Long An",
+    "region": "Southern",
+    "license_business": "Restaurant Business License",
+    "branch": "Thu Duc"
+  },
+  {
+    "username": "tuanowner",
+    "firstname": "Tuan",
+    "lastname": "Nguyen",
+    "date_of_birth": "21-02-2003",
+    "password": "tuannguyen123",
+    "phone_number": "0810000001",
+    "status": 1,
+    "address_line": "124 Hoang Dieu 2",
+    "city": "Quang Tri",
+    "region": "Central",
+    "license_business": "Restaurant Business License",
+    "branch": "Di An"
+  },
+  {
+    "username": "nhatowner",
+    "firstname": "Nhat",
+    "lastname": "Nguyen",
+    "date_of_birth": "18-07-2003",
+    "password": "nhatnguyen123",
+    "phone_number": "0810000002",
+    "status": 1,
+    "address_line": "124 Hoang Dieu 2",
+    "city": "Da Nang",
+    "region": "Central",
+    "license_business": "Restaurant Business License",
+    "branch": "Binh Thanh"
+  }
+]

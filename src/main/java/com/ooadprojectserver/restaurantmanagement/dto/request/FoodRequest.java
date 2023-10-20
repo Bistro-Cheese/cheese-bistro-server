@@ -1,7 +1,6 @@
 package com.ooadprojectserver.restaurantmanagement.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ooadprojectserver.restaurantmanagement.model.food.FoodStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

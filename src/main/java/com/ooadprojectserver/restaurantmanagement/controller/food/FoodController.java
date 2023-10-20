@@ -1,4 +1,4 @@
-package com.ooadprojectserver.restaurantmanagement.controller;
+package com.ooadprojectserver.restaurantmanagement.controller.food;
 
 import com.ooadprojectserver.restaurantmanagement.constant.APIConstant;
 import com.ooadprojectserver.restaurantmanagement.constant.MessageConstant;
@@ -6,13 +6,12 @@ import com.ooadprojectserver.restaurantmanagement.dto.request.FoodRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.response.APIResponse;
 import com.ooadprojectserver.restaurantmanagement.dto.response.MessageResponse;
 import com.ooadprojectserver.restaurantmanagement.dto.response.PagingResponseModel;
-import com.ooadprojectserver.restaurantmanagement.constant.APIStatus;
-import com.ooadprojectserver.restaurantmanagement.exception.ApplicationException;
-import com.ooadprojectserver.restaurantmanagement.model.food.Food;
+import com.ooadprojectserver.restaurantmanagement.model.composition.food.Food;
 import com.ooadprojectserver.restaurantmanagement.service.food.FoodService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -30,16 +29,19 @@ public class FoodController {
 
     ///get all food
     @GetMapping()
-    public ResponseEntity<APIResponse<List<Food>>> getAllFoods() {
+    public ResponseEntity<APIResponse<List<Food>>> getAllFoods(
+            HttpServletRequest request
+    ) {
         return ResponseEntity.status(OK).body(
-                new APIResponse<List<Food>>(
+                new APIResponse<>(
                         MessageConstant.GET_ALL_FOODS_SUCCESS,
-                        foodService.getAllFoods()
+                        foodService.getAllFoods(request)
                 )
         );
     }
 
     //create food
+    @PreAuthorize("hasRole('OWNER')")
     @PostMapping()
     public ResponseEntity<MessageResponse> createFood(
             @RequestBody FoodRequest request
@@ -53,6 +55,7 @@ public class FoodController {
     }
 
     //delete food
+    @PreAuthorize("hasRole('OWNER')")
     @DeleteMapping(APIConstant.FOOD_ID)
     public ResponseEntity<MessageResponse> deleteFood(
             @PathVariable("food_id") UUID foodId
@@ -64,6 +67,7 @@ public class FoodController {
     }
 
     //update food
+    @PreAuthorize("hasRole('OWNER')")
     @PutMapping(APIConstant.FOOD_ID)
     public ResponseEntity<MessageResponse> updateFood(
             @PathVariable("food_id") UUID foodId,
@@ -76,8 +80,8 @@ public class FoodController {
     }
 
     //search food
-    @GetMapping(value = APIConstant.SEARCH_FOOD)
-    public ResponseEntity<APIResponse<PagingResponseModel>> getFoodFilterList(
+    @GetMapping(APIConstant.SEARCH)
+    public ResponseEntity<APIResponse<PagingResponseModel>> searchFood(
             @RequestParam(name = "category", required = false) String category,
             @RequestParam(name = "search_key", required = false) String searchKey,
             @RequestParam(name = "min_price", required = false) BigDecimal minPrice,
@@ -88,9 +92,9 @@ public class FoodController {
             @RequestParam(name = "page_size", defaultValue = "10") Integer pageSize
     ) {
         return ResponseEntity.status(OK).body(
-                new APIResponse<PagingResponseModel>(
+                new APIResponse<>(
                         MessageConstant.SEARCH_FOOD_SUCCESS,
-                        foodService.doFilterSearchSortPagingFood(category, searchKey,
+                        foodService.searchFood(category, searchKey,
                                 minPrice, maxPrice, sortCase, isAscSort, pageNumber, pageSize)
                 )
         );
