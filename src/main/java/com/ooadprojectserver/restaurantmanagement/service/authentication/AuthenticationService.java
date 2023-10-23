@@ -30,7 +30,7 @@ public class AuthenticationService {
     private final UserRepository userRepository;
     private final TokenRepository tokenRepository;
 
-    @Value("${application.security.jwt.refreshCookieName}")
+    @Value("${application.security.jwt.refresh-cookie-name}")
     private String CookieName;
 
     public void register(UserRegisterRequest request) {

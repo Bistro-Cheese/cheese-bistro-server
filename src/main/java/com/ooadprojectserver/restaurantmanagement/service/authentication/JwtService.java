@@ -30,7 +30,7 @@ public class JwtService {
     @Value("${application.security.jwt.refresh-token.expiration}")
     private int refreshExpiration;
 
-    @Value("${application.security.jwt.refreshCookieName}")
+    @Value("${application.security.jwt.refresh-cookie-name}")
     private String jwtRefreshCookie;
 
     public String extractUsername(String token) {
