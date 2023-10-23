@@ -42,6 +42,9 @@ public class UserRegisterRequest {
     @JsonProperty("license_business")
     private String licenseBusiness;
 
+    @JsonProperty("email")
+    private String email;
+
     //    Manager
     @JsonProperty("experienced_year")
     private String experiencedYear;

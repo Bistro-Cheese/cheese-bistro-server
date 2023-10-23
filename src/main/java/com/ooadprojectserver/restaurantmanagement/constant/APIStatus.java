@@ -33,7 +33,11 @@ public enum APIStatus {
     SCHEDULE_ALREADY_EXISTED(400, "This staff already assigned to this schedule."),
 
     //    Composition
-    COMPOSITION_NOT_FOUND(404,"Composition Not Found");
+    COMPOSITION_NOT_FOUND(404,"Composition Not Found"),
+
+    EMAIL_SEND_FAILED(500, "Email send failed"),
+    EMAIL_SEND_SUCCESS(201, "Email send success"),
+    EMAIL_NOT_FOUND(404, "Email not found");
 
     private final int status;
     private final String message;

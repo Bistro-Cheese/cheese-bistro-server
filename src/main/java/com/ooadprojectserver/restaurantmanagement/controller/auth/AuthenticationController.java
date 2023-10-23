@@ -30,7 +30,6 @@ public class AuthenticationController {
         return ResponseEntity.status(CREATED).body(
                 new MessageResponse(MessageConstant.REGISTER_SUCCESS)
         );
-
     }
 
     @PostMapping(APIConstant.LOGIN)

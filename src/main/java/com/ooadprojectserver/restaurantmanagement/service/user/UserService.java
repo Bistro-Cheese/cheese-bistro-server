@@ -138,6 +138,7 @@ public class UserService {
             .username(user.getUsername())
             .firstName(user.getFirstName())
             .lastName(user.getLastName())
+            .email(user.getEmail())
             .phoneNumber(user.getPhoneNumber())
             .dateOfBirth(user.getDateOfBirth())
             .address(user.getAddress())

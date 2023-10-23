@@ -37,4 +37,7 @@ public class MessageConstant {
     //    Inventory
     public static final String GET_INVENTORY_SUCCESS = "Get Inventory Successfully";
     public static final String IMPORT_INGREDIENT_SUCCESS = "Import Ingredient Successfully";
+
+    //email
+    public static final String EMAIL_SEND_SUCCESS = "Email Send Successfully";
 }

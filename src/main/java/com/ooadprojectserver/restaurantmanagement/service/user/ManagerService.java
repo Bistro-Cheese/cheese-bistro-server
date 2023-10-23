@@ -64,7 +64,7 @@ public class ManagerService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .phoneNumber(request.getPhoneNumber())
                 .role(request.getRole())
-                .status(request.getStatus())
+                .status(AccountStatus.INACTIVE.getValue())
                 .address(
                         addressRepository.save(
                                 Address.builder()
@@ -74,10 +74,11 @@ public class ManagerService {
                                         .build()
                         )
                 )
-                .enabled(Objects.equals(request.getStatus(), AccountStatus.ACTIVE.getValue()))
+                .enabled(false)
                 .foreignLanguage(request.getForeignLanguage())
                 .experiencedYear(request.getExperiencedYear())
                 .certificationManagement(request.getCertificationManagement())
+                .email(request.getEmail())
                 .createdDate(new Date())
                 .lastModifiedDate(new Date())
                 .build());

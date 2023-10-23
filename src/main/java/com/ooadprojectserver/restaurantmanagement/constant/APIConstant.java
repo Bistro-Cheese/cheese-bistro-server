@@ -11,13 +11,20 @@ public class APIConstant {
     public static final String REFRESH_TOKEN = "/refresh-token";
     //    Users Routes
     public static final String USERS = VERSION + "/users";
-    public static final String USER_ID = "/{user_id}";
     public static final String STAFF_USERNAME = "/{staff_username}";
     public static final String PROFILE = "/profile";
+    public static final String USER_ID = "/{user_id}";
+    //    Owner Routes
     public static final String OWNER = VERSION + "/owner";
+    public static final String ALL_USERS = "/users";
+    public static final String OWNER_USER_ID = ALL_USERS +  USER_ID;
+
+    //    Manager Routes
     public static final String MANAGER = VERSION + "/manager";
     public static final String SCHEDULE = "/schedule";
     public static final String TIMEKEEPING_ID = "/{timekeeping_id}";
+
+    //    Staff Routes
     public static final String STAFF = VERSION + "/staff";
     public static final String FOOD = VERSION + "/foods";
     public static final String FOOD_ID = "/{food_id}";
@@ -27,4 +34,9 @@ public class APIConstant {
     public static final String COMPOSITION = VERSION + "/compositions";
     public static final String COMPOSITION_ID = "/{composition_id}";
     public static final String INVENTORY = VERSION + "/inventory";
+
+    //email
+    public static final String EMAIL = "/email";
+    public static final String EMAIL_SEND = EMAIL + "/send";
+    public static final String EMAIL_SEND_FILE = EMAIL + "/file";
 }

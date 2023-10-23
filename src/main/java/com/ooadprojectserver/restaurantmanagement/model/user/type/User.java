@@ -54,6 +54,10 @@ public class User implements UserDetails, Serializable {
     @JdbcTypeCode(SqlTypes.NVARCHAR)
     private String lastName;
 
+    @Column(name = "email", nullable = false, unique = true)
+    @JdbcTypeCode(SqlTypes.NVARCHAR)
+    private String email;
+
     @Column(name = "date_of_birth", nullable = false)
     @JsonFormat(pattern = DateTimeConstant.FORMAT_DATE, timezone = DateTimeConstant.TIMEZONE)
     @JdbcTypeCode(SqlTypes.DATE)
@@ -99,6 +103,7 @@ public class User implements UserDetails, Serializable {
             String username,
             String firstName,
             String lastName,
+            String email,
             Date dateOfBirth,
             String password,
             String phoneNumber,
@@ -112,6 +117,7 @@ public class User implements UserDetails, Serializable {
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.email = email;
         this.dateOfBirth = dateOfBirth;
         this.password = password;
         this.phoneNumber = phoneNumber;
