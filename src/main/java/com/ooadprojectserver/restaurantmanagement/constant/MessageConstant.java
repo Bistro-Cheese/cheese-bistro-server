@@ -9,13 +9,32 @@ public class MessageConstant {
     //    Users
     public static final String GET_USERS_SUCCESS = "Get Users Successfully";
     public static final String DELETE_USER_SUCCESS = "Delete User Successfully";
+    public static final String UPDATE_USER_SUCCESS = "Update User Successfully";
     public static final String GET_PROFILE_SUCCESS = "Get Profile Successfully";
-    public static final String UPDATE_PROFILE_SUCCESS = "Update Profile Successfully";
+    public static final String SEARCH_USER_SUCCESS = "Search User Successfully";
+    //    Manager
+    public static final String GET_ALL_SCHEDULE_SUCCESS = "Get All Schedule Successfully";
+    public static final String ASSIGN_SCHEDULE_SUCCESS = "Assign Work Schedule Successfully";
+    public static final String GET_SCHEDULE_SUCCESS = "Get Schedule Successfully";
+    public static final String DELETE_SCHEDULE_SUCCESS = "Delete Schedule Successfully";
+    public static final String TIMEKEEPING_SUCCESS = "Timekeeping Successfully";
     // Food
     public static final String GET_ALL_FOODS_SUCCESS = "Get all foods Successfully";
-    public static final String FIND_FOOD_SUCCESS = "Finding Food Successfully";
-    public static final String FOOD_CREATED_SUCCESS = "Creating Food Successfully";
-    public static final String FOOD_DELETED_SUCCESS = "Deleting Food Successfully";
-    public static final String FOOD_UPDATE_SUCCESS = "updating Food Successfully";
-    public static final String FOOD_FILTER_SUCCESS = "Filter Foods Successfully";
+    public static final String CREATE_FOOD_SUCCESS = "Create Food Successfully";
+    public static final String DELETE_FOOD_SUCCESS = "Delete Food Successfully";
+    public static final String UPDATE_FOOD_SUCCESS = "Update Food Successfully";
+    public static final String SEARCH_FOOD_SUCCESS = "Search Food Successfully";
+    //    Ingredient
+    public static final String GET_INGREDIENT_SUCCESS = "Get Ingredient Successfully";
+    public static final String CREATE_INGREDIENT_SUCCESS = "Create Ingredient Successfully";
+    public static final String DELETE_INGREDIENT_SUCCESS = "Delete Ingredient Successfully";
+    public static final String UPDATE_INGREDIENT_SUCCESS = "Update Ingredient Successfully";
+    //    Composition
+    public static final String GET_COMPOSITION_SUCCESS = "Get Composition Successfully";
+    public static final String CREATE_COMPOSITION_SUCCESS = "Create Composition Successfully";
+    public static final String DELETE_COMPOSITION_SUCCESS = "Delete Composition Successfully";
+    public static final String UPDATE_COMPOSITION_SUCCESS = "Update Composition Successfully";
+
+    //email
+    public static final String EMAIL_SEND_SUCCESS = "Email Send Successfully";
 }

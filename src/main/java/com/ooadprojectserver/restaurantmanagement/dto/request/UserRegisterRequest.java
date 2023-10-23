@@ -1,14 +1,10 @@
 package com.ooadprojectserver.restaurantmanagement.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ooadprojectserver.restaurantmanagement.constant.RoleConstant;
-import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 
 @Data
 @Builder
@@ -28,7 +24,7 @@ public class UserRegisterRequest {
     @JsonProperty("phone_number")
     private String phoneNumber;
     @JsonProperty("role")
-    private RoleConstant.ROLE role;
+    private Integer role;
     @JsonProperty("status")
     private Integer status;
 
@@ -45,6 +41,9 @@ public class UserRegisterRequest {
     private String branch;
     @JsonProperty("license_business")
     private String licenseBusiness;
+
+    @JsonProperty("email")
+    private String email;
 
     //    Manager
     @JsonProperty("experienced_year")

@@ -1,0 +1,44 @@
+[
+  {
+    "username": "longmanager",
+    "firstname": "Long",
+    "lastname": "Manager",
+    "email": "emailmanager1@gmail.com",
+    "date_of_birth": "22-09-2003",
+    "password": "longtran123",
+    "phone_number": "0810000003",
+    "status": 1,
+    "address_line": "124 Hoang Dieu 2",
+    "city": "Long An",
+    "region": "Southern",
+    "certification_management": "Restaurant Management Certification"
+  },
+  {
+    "username": "tuanmanager",
+    "firstname": "Tuan",
+    "lastname": "Manager",
+    "email": "emailmanager2@gmail.com",
+    "date_of_birth": "21-02-2003",
+    "password": "tuannguyen123",
+    "phone_number": "0810000004",
+    "status": 1,
+    "address_line": "124 Hoang Dieu 2",
+    "city": "Quang Tri",
+    "region": "Central",
+    "certification_management": "Restaurant Management Certification"
+  },
+  {
+    "username": "nhatmanager",
+    "firstname": "Nhat",
+    "lastname": "Manager",
+    "email": "emailmanager3@gmail.com",
+    "date_of_birth": "18-07-2003",
+    "password": "nhatnguyen123",
+    "phone_number": "0810000005",
+    "status": 1,
+    "address_line": "124 Hoang Dieu 2",
+    "city": "Da Nang",
+    "region": "Central",
+    "certification_management": "Restaurant Management Certification"
+  }
+]

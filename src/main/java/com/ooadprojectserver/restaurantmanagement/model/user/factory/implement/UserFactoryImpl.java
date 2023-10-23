@@ -2,7 +2,7 @@ package com.ooadprojectserver.restaurantmanagement.model.user.factory.implement;
 
 import com.ooadprojectserver.restaurantmanagement.dto.request.UpdateProfileRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.request.UserRegisterRequest;
-import com.ooadprojectserver.restaurantmanagement.model.user.User;
+import com.ooadprojectserver.restaurantmanagement.model.user.type.User;
 import com.ooadprojectserver.restaurantmanagement.model.user.factory.UserFactory;
 import com.ooadprojectserver.restaurantmanagement.service.user.ManagerService;
 import com.ooadprojectserver.restaurantmanagement.service.user.OwnerService;
@@ -20,11 +20,11 @@ public class UserFactoryImpl implements UserFactory {
     private final OwnerService ownerService;
 
     @Override
-    public User createUser(UserRegisterRequest request) {
-        return switch (request.getRole()) {
-            case OWNER -> ownerService.createUser(request);
-            case MANAGER -> managerService.createUser(request);
-            case STAFF -> staffService.createUser(request);
+    public void createUser(UserRegisterRequest request) {
+        switch (request.getRole()) {
+            case 1 -> staffService.createUser(request);
+            case 2 -> managerService.createUser(request);
+            case 3 -> ownerService.createUser(request);
             default -> throw new RuntimeException();
         };
     }

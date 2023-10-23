@@ -2,20 +2,17 @@ package com.ooadprojectserver.restaurantmanagement.service.authentication;
 
 import com.ooadprojectserver.restaurantmanagement.dto.request.UserLoginRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.request.UserRegisterRequest;
-import com.ooadprojectserver.restaurantmanagement.dto.response.model.AuthenticationResponse;
-import com.ooadprojectserver.restaurantmanagement.model.token.Token;
-import com.ooadprojectserver.restaurantmanagement.model.token.TokenType;
-import com.ooadprojectserver.restaurantmanagement.model.user.User;
-import com.ooadprojectserver.restaurantmanagement.repository.AddressRepository;
-import com.ooadprojectserver.restaurantmanagement.repository.TokenRepository;
+import com.ooadprojectserver.restaurantmanagement.dto.response.AuthenticationResponse;
+import com.ooadprojectserver.restaurantmanagement.model.user.token.Token;
+import com.ooadprojectserver.restaurantmanagement.model.user.token.TokenType;
+import com.ooadprojectserver.restaurantmanagement.model.user.type.User;
+import com.ooadprojectserver.restaurantmanagement.repository.user.TokenRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.user.UserRepository;
 import com.ooadprojectserver.restaurantmanagement.model.user.factory.UserFactory;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -35,20 +32,18 @@ public class AuthenticationService {
 
     @Value("${application.security.jwt.refreshCookieName}")
     private String CookieName;
-    private final AddressRepository addressRepository;
 
     public void register(UserRegisterRequest request) {
-        User user = userFactory.createUser(request);
+        userFactory.createUser(request);
     }
 
     public AuthenticationResponse login(UserLoginRequest request) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
         User user = userRepository.findByUsername(request.getUsername()).orElseThrow();
-
         return this.generateToken(user);
     }
 
-    public AuthenticationResponse refreshToken(HttpServletRequest request, HttpServletResponse response) {
+    public AuthenticationResponse refreshToken(HttpServletRequest request) {
         final String refreshToken;
         Cookie[] cookies = request.getCookies();
         Stream<Cookie> stream = Objects.nonNull(cookies) ? Arrays.stream(cookies) : Stream.empty();
@@ -65,26 +60,6 @@ public class AuthenticationService {
             return AuthenticationResponse.builder().accessToken(accessToken).build();
         }
         return null;
-    }
-
-
-    public User getProfile(
-            HttpServletRequest request
-    ) {
-        String accessToken = getTokenFromHeader(request);
-        String username = jwtService.extractUsername(accessToken);
-        if (username == null) {
-            throw new NoSuchElementException();
-        }
-        return this.userRepository.findByUsername(username).orElseThrow();
-    }
-
-    public String getTokenFromHeader(HttpServletRequest request) {
-        final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (authHeader == null || !authHeader.contains("Bearer ")) {
-            throw new RuntimeException("No Authorization Header");
-        }
-        return authHeader.substring(7);
     }
 
     private AuthenticationResponse generateToken(User user) {

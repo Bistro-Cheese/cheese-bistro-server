@@ -1,9 +1,8 @@
 package com.ooadprojectserver.restaurantmanagement.repository.specification;
 
 import com.ooadprojectserver.restaurantmanagement.constant.SortCase;
-import com.ooadprojectserver.restaurantmanagement.controller.LoggerController;
-import com.ooadprojectserver.restaurantmanagement.model.Category;
-import com.ooadprojectserver.restaurantmanagement.model.food.Food;
+import com.ooadprojectserver.restaurantmanagement.model.composition.food.Category;
+import com.ooadprojectserver.restaurantmanagement.model.composition.food.Food;
 import jakarta.persistence.criteria.*;
 
 import org.slf4j.Logger;

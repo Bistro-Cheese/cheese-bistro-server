@@ -1,11 +1,9 @@
 package com.ooadprojectserver.restaurantmanagement.service.food;
 
 import com.ooadprojectserver.restaurantmanagement.dto.request.FoodRequest;
-import com.ooadprojectserver.restaurantmanagement.dto.response.model.APIResponse;
-import com.ooadprojectserver.restaurantmanagement.exception.FoodException;
-import com.ooadprojectserver.restaurantmanagement.model.food.Food;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import org.springframework.data.domain.Page;
+import com.ooadprojectserver.restaurantmanagement.dto.response.PagingResponseModel;
+import com.ooadprojectserver.restaurantmanagement.model.composition.food.Food;
+import jakarta.servlet.http.HttpServletRequest;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -14,17 +12,17 @@ import java.util.UUID;
 public interface FoodService {
 
     //Implement Product
-    List<Food> findAllProducts();
+    List<Food> getAllFoods(HttpServletRequest request);
 
-    public Food createProduct(FoodRequest request) throws FoodException;
+    void createFood(FoodRequest request);
 
-    public void deleteProduct(UUID foodId) throws FoodException;
+    void deleteFood(UUID foodId);
 
-    public void updateProduct(UUID foodId, FoodRequest updatingFood) throws FoodException;
+    void updateFood(UUID foodId, FoodRequest updatingFood);
 
-    public Food findFoodById(UUID id) throws FoodException;
+    Food getDetailFood(UUID foodId);
 
-    public Page<Food> doFilterSearchSortPagingFood(String category, String searchKey, BigDecimal minPrice, BigDecimal maxPrice,
-                                                   Integer sortCase, Boolean isAscSort, Integer pageNumber,
-                                                   Integer pageSize);
+    PagingResponseModel searchFood(String category, String searchKey, BigDecimal minPrice, BigDecimal maxPrice,
+                                                     Integer sortCase, Boolean isAscSort, Integer pageNumber,
+                                                     Integer pageSize);
 }

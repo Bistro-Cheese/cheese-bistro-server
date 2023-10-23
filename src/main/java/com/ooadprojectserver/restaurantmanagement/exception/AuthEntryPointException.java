@@ -1,8 +1,8 @@
 package com.ooadprojectserver.restaurantmanagement.exception;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ooadprojectserver.restaurantmanagement.dto.response.model.StatusResponse;
-import com.ooadprojectserver.restaurantmanagement.dto.response.util.APIStatus;
+import com.ooadprojectserver.restaurantmanagement.dto.response.StatusResponse;
+import com.ooadprojectserver.restaurantmanagement.constant.APIStatus;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
