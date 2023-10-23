@@ -11,5 +11,5 @@ import lombok.*;
 public class QuantityIngredientRequest {
     @JsonProperty("ingredient_id")
     private Long ingredientId;
-    private Integer quantity;
+    private Integer portion;
 }

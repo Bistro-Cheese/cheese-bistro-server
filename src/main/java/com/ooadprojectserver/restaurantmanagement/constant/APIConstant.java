@@ -26,4 +26,5 @@ public class APIConstant {
     public static final String INGREDIENT_ID = "/{ingredient_id}";
     public static final String COMPOSITION = VERSION + "/compositions";
     public static final String COMPOSITION_ID = "/{composition_id}";
+    public static final String INVENTORY = VERSION + "/inventory";
 }

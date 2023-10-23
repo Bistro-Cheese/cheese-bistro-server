@@ -1,7 +1,10 @@
 package com.ooadprojectserver.restaurantmanagement.model.inventory;
 
+import com.ooadprojectserver.restaurantmanagement.model.composition.ingredient.Ingredient;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -20,5 +23,13 @@ public class Inventory implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private long id;
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "ingredient_id", nullable = false)
+    private Ingredient ingredient;
+
+    @Column(name = "quantity", nullable = false)
+    @JdbcTypeCode(SqlTypes.INTEGER)
+    private Integer quantity;
 }

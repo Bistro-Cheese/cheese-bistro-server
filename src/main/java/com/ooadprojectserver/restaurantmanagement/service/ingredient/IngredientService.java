@@ -4,7 +4,9 @@ import com.ooadprojectserver.restaurantmanagement.constant.APIStatus;
 import com.ooadprojectserver.restaurantmanagement.dto.request.IngredientRequest;
 import com.ooadprojectserver.restaurantmanagement.exception.CustomException;
 import com.ooadprojectserver.restaurantmanagement.model.composition.ingredient.Ingredient;
+import com.ooadprojectserver.restaurantmanagement.repository.food.CompositionRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.food.IngredientRepository;
+import com.ooadprojectserver.restaurantmanagement.repository.inventory.InventoryRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,8 @@ import java.util.Optional;
 @AllArgsConstructor
 public class IngredientService {
     private final IngredientRepository ingredientRepository;
+    private final InventoryRepository inventoryRepository;
+    private final CompositionRepository compositionRepository;
 
     public List<Ingredient> getAllIngredients() {
         List<Ingredient> ingredientList = ingredientRepository.findAll();
@@ -42,6 +46,8 @@ public class IngredientService {
         Ingredient ingredient = ingredientRepository.findById(ingredient_id).orElseThrow(
                 () -> new CustomException(APIStatus.INGREDIENT_NOT_FOUND)
         );
+        inventoryRepository.deleteByIngredient(ingredient);
+        compositionRepository.deleteByIngredient(ingredient);
         ingredientRepository.delete(ingredient);
     }
 
