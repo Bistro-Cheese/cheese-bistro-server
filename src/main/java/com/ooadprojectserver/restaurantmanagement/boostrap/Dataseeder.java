@@ -83,6 +83,7 @@ public class Dataseeder implements ApplicationListener<ContextRefreshedEvent>, C
         logger.info("Loading Food");
         try {
             this.createListFood();
+            this.updateFoodStatus(foodRepository.findAll());
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -187,7 +188,7 @@ public class Dataseeder implements ApplicationListener<ContextRefreshedEvent>, C
         for (Object object : jsonArray) {
             JSONObject jsonObject = (JSONObject) object;
             Long id = Long.valueOf((Integer) jsonObject.get("ingredient_id"));
-            Integer quantity = (Integer) jsonObject.get("quantity");
+            Double quantity = Double.valueOf((Integer) jsonObject.get("quantity"));
             Ingredient ingredient = ingredientRepository.findById(id).orElseThrow();
             list.add(
                     Inventory.builder()
@@ -515,6 +516,48 @@ private Staff createStaff(
                 .enabled(Objects.equals(status, AccountStatus.ACTIVE.getValue()))
                 .build();
     }
+
+    private void updateFoodStatus(List<Food> foodList) {
+        for (Food food : foodList) {
+            boolean isOutOfStock = false;
+            List<Composition> compositionList = compositionRepository.findByFood(food.getId());
+            if (compositionList.isEmpty()) {
+                foodRepository.updateStatusAndLastModifiedDateById(
+                        FoodStatus.DRAFT.getValue(),
+                        new Date(),
+                        food.getId()
+                );
+                food.setStatus(FoodStatus.DRAFT.getValue());
+                continue;
+            }
+            for (Composition composition : compositionList) {
+                Long ingredient_id = composition.getIngredient().getId();
+                Double quantity = inventoryRepository.findByIngredient_Id(ingredient_id).getQuantity();
+                if (composition.getPortion() > quantity) {
+                    isOutOfStock = true;
+                    break;
+                }
+            }
+            if (isOutOfStock) {
+                foodRepository.updateStatusAndLastModifiedDateById(
+                        FoodStatus.OUT_OF_STOCK.getValue(),
+                        new Date(),
+                        food.getId()
+                );
+                food.setStatus(FoodStatus.OUT_OF_STOCK.getValue());
+            } else {
+                foodRepository.updateStatusAndLastModifiedDateById(
+                        FoodStatus.AVAILABLE.getValue(),
+                        new Date(),
+                        food.getId()
+                );
+                food.setStatus(FoodStatus.AVAILABLE.getValue());
+            }
+        }
+    }
 }
+
+
+
 
 

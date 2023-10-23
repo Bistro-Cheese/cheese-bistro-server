@@ -27,7 +27,16 @@
     "description": "Bánh mì sandwich với lớp phô mai Gruyère thơm ngon và lớp Prosciutto mỏng, nướng vàng giòn",
     "category": 1,
     "status": 2,
-    "ingredients": []
+    "ingredients": [
+      {
+        "ingredient_id": 1,
+        "portion": 100
+      },
+      {
+        "ingredient_id": 2,
+        "portion": 300
+      }
+    ]
   },
   {
     "name": "Bánh Mì Nướng Phô Mai Ricotta Và Mứt Dâu",

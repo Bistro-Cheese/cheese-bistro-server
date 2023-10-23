@@ -32,7 +32,9 @@ public interface FoodRepository extends JpaRepository<Food, UUID>, JpaSpecificat
                         BigDecimal price, Date lastModifiedDate,
                         Integer status, UUID id);
 
-    List<Food> findByStatus(Integer status);
+    @Modifying
+    @Query("update Food f set f.status = ?1, f.lastModifiedDate = ?2 where f.id = ?3")
+    void updateStatusAndLastModifiedDateById(Integer status, Date lastModifiedDate, UUID id);
 
     Optional<Food> findByName(String name);
 }

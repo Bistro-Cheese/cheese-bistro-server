@@ -22,7 +22,7 @@ import java.util.UUID;
 @EntityListeners(AuditingEntityListener.class)
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "new_entity")
+@Table(name = "order_line")
 public class OrderLine implements Serializable {
 
     @Serial
@@ -39,10 +39,9 @@ public class OrderLine implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "order_id")
-    private RestaurantOrder restaurantOrder;
+    private Order order;
 
     @Column(name = "quantity")
     @JdbcTypeCode(SqlTypes.INTEGER)
     private Integer quantity;
-
 }

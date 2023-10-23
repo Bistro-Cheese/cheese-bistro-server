@@ -4,16 +4,15 @@ import com.ooadprojectserver.restaurantmanagement.dto.request.FoodRequest;
 import com.ooadprojectserver.restaurantmanagement.constant.APIStatus;
 import com.ooadprojectserver.restaurantmanagement.dto.response.PagingResponseModel;
 import com.ooadprojectserver.restaurantmanagement.exception.CustomException;
+import com.ooadprojectserver.restaurantmanagement.model.composition.Composition;
 import com.ooadprojectserver.restaurantmanagement.model.composition.food.Category;
 import com.ooadprojectserver.restaurantmanagement.model.composition.food.Food;
-import com.ooadprojectserver.restaurantmanagement.model.user.type.User;
+import com.ooadprojectserver.restaurantmanagement.model.composition.food.FoodStatus;
 import com.ooadprojectserver.restaurantmanagement.repository.food.CategoryRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.food.CompositionRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.food.FoodRepository;
+import com.ooadprojectserver.restaurantmanagement.repository.inventory.InventoryRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.specification.FoodSpecification;
-import com.ooadprojectserver.restaurantmanagement.repository.user.UserRepository;
-import com.ooadprojectserver.restaurantmanagement.service.authentication.JwtService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -26,30 +25,15 @@ import java.util.*;
 @RequiredArgsConstructor
 @Service
 public class FoodServiceImpl implements FoodService {
-    private final JwtService jwtService;
-
-    private final UserRepository userRepository;
     private final FoodRepository foodRepository;
     private final CategoryRepository categoryRepository;
     private final CompositionRepository compositionRepository;
+    private final InventoryRepository inventoryRepository;
     //get all foods
     @Override
-    public List<Food> getAllFoods(
-            HttpServletRequest request
-    ) {
-        String username = jwtService.getUsernameFromHeader(request);
-        User user = userRepository.findByUsername(username).orElseThrow(
-                () -> new CustomException(APIStatus.USER_NOT_FOUND)
-        );
-        List<Food> foodList = new ArrayList<>();
-        switch (user.getRole()) {
-            case 1 -> foodList.addAll(foodRepository.findByStatus(1));
-            case 2 -> {
-                foodList.addAll(foodRepository.findByStatus(1));
-                foodList.addAll(foodRepository.findByStatus(2));
-            }
-            case 3 -> foodList.addAll(foodRepository.findAll());
-        };
+    public List<Food> getAllFoods() {
+        List<Food> foodList = foodRepository.findAll();
+        updateFoodStatus(foodList);
         Comparator<Food> foodComparator = Comparator.comparing(
                 food -> food.getCategory().getId()
         );
@@ -144,5 +128,44 @@ public class FoodServiceImpl implements FoodService {
                 foodPage.getTotalPages(),
                 foodPage.getNumber() + 1
         );
+    }
+
+    private void updateFoodStatus(List<Food> foodList) {
+        for (Food food : foodList) {
+            boolean isOutOfStock = false;
+            List<Composition> compositionList = compositionRepository.findByFood(food.getId());
+            if (compositionList.isEmpty()) {
+                foodRepository.updateStatusAndLastModifiedDateById(
+                        FoodStatus.DRAFT.getValue(),
+                        new Date(),
+                        food.getId()
+                );
+                food.setStatus(FoodStatus.DRAFT.getValue());
+                continue;
+            }
+            for (Composition composition : compositionList) {
+                Long ingredient_id = composition.getIngredient().getId();
+                Double quantity = inventoryRepository.findByIngredient_Id(ingredient_id).getQuantity();
+                if (composition.getPortion() > quantity) {
+                    isOutOfStock = true;
+                    break;
+                }
+            }
+            if (isOutOfStock) {
+                foodRepository.updateStatusAndLastModifiedDateById(
+                        FoodStatus.OUT_OF_STOCK.getValue(),
+                        new Date(),
+                        food.getId()
+                );
+                food.setStatus(FoodStatus.OUT_OF_STOCK.getValue());
+            } else {
+                foodRepository.updateStatusAndLastModifiedDateById(
+                        FoodStatus.AVAILABLE.getValue(),
+                        new Date(),
+                        food.getId()
+                );
+                food.setStatus(FoodStatus.AVAILABLE.getValue());
+            }
+        }
     }
 }
