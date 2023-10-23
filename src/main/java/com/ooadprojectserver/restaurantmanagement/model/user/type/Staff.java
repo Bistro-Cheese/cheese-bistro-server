@@ -32,12 +32,12 @@ public class Staff extends User {
     private String academicLevel;
 
     @Builder(builderMethodName = "staffBuilder")
-    public Staff(String username, String firstName, String lastName,
+    public Staff(String username, String firstName, String lastName, String email,
                  Date dateOfBirth, String password, String phoneNumber, Integer role, Integer status, Address address,
                  Date createdDate, Date lastModifiedDate, boolean enabled, String foreignLanguage, String academicLevel){
-        super( username, firstName, lastName, dateOfBirth, password, phoneNumber, role, address, status, createdDate, lastModifiedDate, enabled);
+        super( username, firstName, lastName, email, dateOfBirth, password, phoneNumber, role, address, status, createdDate,
+                lastModifiedDate, enabled);
         this.academicLevel = academicLevel;
         this.foreignLanguage = foreignLanguage;
     }
-
 }

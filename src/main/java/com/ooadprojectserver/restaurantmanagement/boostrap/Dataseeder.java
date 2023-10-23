@@ -221,6 +221,7 @@ public class Dataseeder implements ApplicationListener<ContextRefreshedEvent>, C
             String username = (String) ownerObject.get("username");
             String firstName = (String) ownerObject.get("firstname");
             String lastName = (String) ownerObject.get("lastname");
+            String email = (String) ownerObject.get("email");
             String dob = (String) ownerObject.get("date_of_birth");
             String password = (String) ownerObject.get("password");
             String phoneNumber = (String) ownerObject.get("phone_number");
@@ -234,6 +235,7 @@ public class Dataseeder implements ApplicationListener<ContextRefreshedEvent>, C
                     username,
                     firstName,
                     lastName,
+                    email,
                     dob,
                     password,
                     phoneNumber,
@@ -253,6 +255,7 @@ public class Dataseeder implements ApplicationListener<ContextRefreshedEvent>, C
             String username,
             String firstName,
             String lastName,
+            String email,
             String dob,
             String password,
             String phoneNumber,
@@ -275,6 +278,7 @@ public class Dataseeder implements ApplicationListener<ContextRefreshedEvent>, C
                 .username(username)
                 .firstName(firstName)
                 .lastName(lastName)
+                .email(email)
                 .dateOfBirth(dateOfBirth)
                 .password(passwordEncoder.encode(password))
                 .phoneNumber(phoneNumber)
@@ -307,6 +311,7 @@ public class Dataseeder implements ApplicationListener<ContextRefreshedEvent>, C
             String username = (String) managerObject.get("username");
             String firstName = (String) managerObject.get("firstname");
             String lastName = (String) managerObject.get("lastname");
+            String email = (String) managerObject.get("email");
             String dob = (String) managerObject.get("date_of_birth");
             String password = (String) managerObject.get("password");
             String phoneNumber = (String) managerObject.get("phone_number");
@@ -319,6 +324,7 @@ public class Dataseeder implements ApplicationListener<ContextRefreshedEvent>, C
                     username,
                     firstName,
                     lastName,
+                    email,
                     dob,
                     password,
                     phoneNumber,
@@ -336,6 +342,7 @@ public class Dataseeder implements ApplicationListener<ContextRefreshedEvent>, C
             String username,
             String firstName,
             String lastName,
+            String email,
             String dob,
             String password,
             String phoneNumber,
@@ -357,6 +364,7 @@ public class Dataseeder implements ApplicationListener<ContextRefreshedEvent>, C
                 .username(username)
                 .firstName(firstName)
                 .lastName(lastName)
+                .email(email)
                 .dateOfBirth(dateOfBirth)
                 .password(passwordEncoder.encode(password))
                 .phoneNumber(phoneNumber)
@@ -390,6 +398,7 @@ public class Dataseeder implements ApplicationListener<ContextRefreshedEvent>, C
             String username = (String) staffObject.get("username");
             String firstName = (String) staffObject.get("firstname");
             String lastName = (String) staffObject.get("lastname");
+            String email = (String) staffObject.get("email");
             String dob = (String) staffObject.get("date_of_birth");
             String password = (String) staffObject.get("password");
             String phoneNumber = (String) staffObject.get("phone_number");
@@ -402,6 +411,7 @@ public class Dataseeder implements ApplicationListener<ContextRefreshedEvent>, C
                     username,
                     firstName,
                     lastName,
+                    email,
                     dob,
                     password,
                     phoneNumber,
@@ -419,6 +429,7 @@ public class Dataseeder implements ApplicationListener<ContextRefreshedEvent>, C
             String username,
             String firstName,
             String lastName,
+            String email,
             String dob,
             String password,
             String phoneNumber,
@@ -440,6 +451,7 @@ public class Dataseeder implements ApplicationListener<ContextRefreshedEvent>, C
                 .username(username)
                 .firstName(firstName)
                 .lastName(lastName)
+                .email(email)
                 .dateOfBirth(dateOfBirth)
                 .password(passwordEncoder.encode(password))
                 .phoneNumber(phoneNumber)

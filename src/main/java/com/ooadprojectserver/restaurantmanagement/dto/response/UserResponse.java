@@ -18,6 +18,7 @@ public class UserResponse {
     private String username;
     private String firstName;
     private String lastName;
+    private String email;
     private String phoneNumber;
     private String role;
     private Date dateOfBirth;
