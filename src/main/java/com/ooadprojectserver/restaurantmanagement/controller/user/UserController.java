@@ -25,38 +25,6 @@ import static org.springframework.http.HttpStatus.OK;
 public class UserController {
     private final UserService userService;
 
-    @GetMapping()
-    @PreAuthorize("hasRole('OWNER')")
-    public ResponseEntity<APIResponse<List<UserResponse>>> getAllUsers() {
-        return ResponseEntity.status(OK).body(
-                new APIResponse<>(
-                        MessageConstant.GET_USERS_SUCCESS,
-                        userService.getUsers()
-                )
-        );
-    }
-
-    @PutMapping(APIConstant.USER_ID)
-    @PreAuthorize("hasRole('OWNER')")
-    public ResponseEntity<MessageResponse> updateUserById(
-            @RequestBody UpdateProfileRequest updateRequestBody,
-            @PathVariable UUID user_id
-    ) throws ParseException {
-        userService.updateUser(updateRequestBody, user_id);
-        return ResponseEntity.status(OK).body(
-                new MessageResponse(MessageConstant.UPDATE_USER_SUCCESS)
-        );
-    }
-
-    @DeleteMapping(APIConstant.USER_ID)
-    @PreAuthorize("hasRole('OWNER')")
-    public ResponseEntity<MessageResponse> deleteUser(@PathVariable UUID user_id) {
-        userService.deleteUser(user_id);
-        return ResponseEntity.status(OK).body(
-                new MessageResponse(MessageConstant.DELETE_USER_SUCCESS)
-        );
-    }
-
     @GetMapping(APIConstant.PROFILE)
     public ResponseEntity<APIResponse<UserResponse>> getProfile(
             HttpServletRequest request
@@ -70,7 +38,6 @@ public class UserController {
     }
 
     @GetMapping(APIConstant.SEARCH)
-    @PreAuthorize("hasRole('OWNER')")
     public ResponseEntity<APIResponse<PagingResponseModel>> searchUser (
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String role,

@@ -30,10 +30,10 @@ public class Owner extends User {
     private String licenseBusiness;
 
     @Builder(builderMethodName = "ownerBuilder")
-    public Owner(String username, String firstName, String lastName,
+    public Owner(String username, String firstName, String lastName, String email,
                  Date dateOfBirth, String password, String phoneNumber, Integer role, Integer status, Address address,
                  Date createdDate, Date lastModifiedDate, boolean enabled, String branch, String licenseBusiness){
-        super(username, firstName, lastName, dateOfBirth, password, phoneNumber, role, address, status, createdDate, lastModifiedDate, enabled);
+        super(username, firstName, lastName, email, dateOfBirth, password, phoneNumber, role, address, status, createdDate, lastModifiedDate, enabled);
         this.branch = branch;
         this.licenseBusiness = licenseBusiness;
     }

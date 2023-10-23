@@ -34,4 +34,7 @@ public class MessageConstant {
     public static final String CREATE_COMPOSITION_SUCCESS = "Create Composition Successfully";
     public static final String DELETE_COMPOSITION_SUCCESS = "Delete Composition Successfully";
     public static final String UPDATE_COMPOSITION_SUCCESS = "Update Composition Successfully";
+
+    //email
+    public static final String EMAIL_SEND_SUCCESS = "Email Send Successfully";
 }
