@@ -37,7 +37,7 @@ public class IngredientController {
     @PostMapping()
     public ResponseEntity<MessageResponse> createIngredient(@RequestBody IngredientRequest request) {
         ingredientService.createIngredient(request);
-        return ResponseEntity.status(HttpStatus.OK).body(
+        return ResponseEntity.status(HttpStatus.CREATED).body(
                 new MessageResponse(MessageConstant.CREATE_INGREDIENT_SUCCESS)
         );
     }

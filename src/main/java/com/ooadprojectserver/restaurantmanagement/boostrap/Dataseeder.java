@@ -1,7 +1,10 @@
 package com.ooadprojectserver.restaurantmanagement.boostrap;
 
 import com.github.javafaker.Faker;
+import com.ooadprojectserver.restaurantmanagement.model.composition.Composition;
+import com.ooadprojectserver.restaurantmanagement.model.composition.food.FoodStatus;
 import com.ooadprojectserver.restaurantmanagement.model.composition.ingredient.Ingredient;
+import com.ooadprojectserver.restaurantmanagement.model.inventory.Inventory;
 import com.ooadprojectserver.restaurantmanagement.model.user.AccountStatus;
 import com.ooadprojectserver.restaurantmanagement.constant.DateTimeConstant;
 import com.ooadprojectserver.restaurantmanagement.model.schedule.Schedule;
@@ -13,7 +16,9 @@ import com.ooadprojectserver.restaurantmanagement.model.composition.food.Food;
 import com.ooadprojectserver.restaurantmanagement.model.user.type.Manager;
 import com.ooadprojectserver.restaurantmanagement.model.user.type.Owner;
 import com.ooadprojectserver.restaurantmanagement.model.user.type.Staff;
+import com.ooadprojectserver.restaurantmanagement.repository.food.CompositionRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.food.IngredientRepository;
+import com.ooadprojectserver.restaurantmanagement.repository.inventory.InventoryRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.schedule.ScheduleRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.user.AddressRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.food.CategoryRepository;
@@ -60,6 +65,8 @@ public class Dataseeder implements ApplicationListener<ContextRefreshedEvent>, C
     private final AddressRepository addressRepository;
     private final CategoryRepository categoryRepository;
     private final IngredientRepository ingredientRepository;
+    private final InventoryRepository inventoryRepository;
+    private final CompositionRepository compositionRepository;
 
     @Override
     public void onApplicationEvent(@NonNull ContextRefreshedEvent event) {
@@ -68,6 +75,7 @@ public class Dataseeder implements ApplicationListener<ContextRefreshedEvent>, C
         this.loadCategory();
         this.loadSchedules();
         this.loadIngredient();
+        this.loadInventory();
     }
 
     @Override
@@ -163,6 +171,34 @@ public class Dataseeder implements ApplicationListener<ContextRefreshedEvent>, C
         });
     }
 
+    private void loadInventory() {
+        JSONParser parser = new JSONParser();
+        JSONArray jsonArray;
+        try {
+            jsonArray = (JSONArray) parser.parse(
+                    new FileReader("./src/main/resources/data/inventory.json")
+            );
+        } catch (net.minidev.json.parser.ParseException | FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        List<Inventory> list = new ArrayList<>();
+
+        for (Object object : jsonArray) {
+            JSONObject jsonObject = (JSONObject) object;
+            Long id = Long.valueOf((Integer) jsonObject.get("ingredient_id"));
+            Integer quantity = (Integer) jsonObject.get("quantity");
+            Ingredient ingredient = ingredientRepository.findById(id).orElseThrow();
+            list.add(
+                    Inventory.builder()
+                            .ingredient(ingredient)
+                            .quantity(quantity)
+                            .build()
+            );
+        }
+        inventoryRepository.saveAll(list);
+    }
+
     private void createListFood() throws FileNotFoundException {
         JSONParser parser = new JSONParser();
         JSONArray jsonArray;
@@ -174,30 +210,45 @@ public class Dataseeder implements ApplicationListener<ContextRefreshedEvent>, C
             throw new RuntimeException(e);
         }
 
-        List<Food> listFood = new ArrayList<>();
-
         for (Object food : jsonArray) {
             JSONObject foodObject = (JSONObject) food;
             String name = (String) foodObject.get("name");
             String description = (String) foodObject.get("description");
             Integer category = (Integer) foodObject.get("category");
-            Integer status = (Integer) foodObject.get("status");
-            listFood.add(createFood(name, description, category, status));
-        }
 
-        foodRepository.saveAll(listFood);
+            Food newFood = createFood(name, description, category);
+            foodRepository.save(newFood);
+
+            JSONArray ingredients = (JSONArray) foodObject.get("ingredients");
+            for (Object ingredient : ingredients) {
+                JSONObject ingredientObject = (JSONObject) ingredient;
+
+                Long id = Long.valueOf((Integer) ingredientObject.get("ingredient_id"));
+                Integer portion = (Integer) ingredientObject.get("portion");
+
+                Ingredient existedIngredient = ingredientRepository.findById(id).orElseThrow();
+                compositionRepository.save(
+                        Composition.builder()
+                                .food(newFood)
+                                .ingredient(existedIngredient)
+                                .portion(portion)
+                                .build()
+                );
+            }
+        }
     }
 
-    private Food createFood(String name, String description, Integer category_id, Integer status) {
+    private Food createFood(String name, String description, Integer category_id) {
         Category category = categoryRepository.findById(category_id).orElseThrow();
+        UUID food_id = UUID.randomUUID();
         return new Food(
-                UUID.randomUUID(),
+                food_id,
                 name,
                 category,
                 description,
                 faker.internet().image(),
                 BigDecimal.valueOf(faker.number().numberBetween(50000, 1000000)),
-                status,
+                FoodStatus.DRAFT.getValue(),
                 new Date(),
                 new Date()
         );
@@ -337,7 +388,6 @@ public class Dataseeder implements ApplicationListener<ContextRefreshedEvent>, C
         }
         managerRepository.saveAll(managerList);
     }
-
     private Manager createManager(
             String username,
             String firstName,
@@ -424,8 +474,8 @@ public class Dataseeder implements ApplicationListener<ContextRefreshedEvent>, C
         }
         staffRepository.saveAll(staffList);
     }
-
-    private Staff createStaff(
+                                  
+private Staff createStaff(
             String username,
             String firstName,
             String lastName,

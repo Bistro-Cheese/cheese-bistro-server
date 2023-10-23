@@ -3,120 +3,149 @@
     "name": "Bánh Mì Nướng Phô Mai Camembert",
     "description": "Bánh mì nướng giòn với lớp vỏ ngoài và phô mai Camembert nướng tan chảy bên trong. Được kèm theo mứt dâu và hạt dẻ",
     "category": 1,
-    "status": 1
+    "status": 1,
+    "ingredients": [
+      {
+        "ingredient_id": 1,
+        "portion": 200
+      },
+      {
+        "ingredient_id": 2,
+        "portion": 300
+      }
+    ]
   },
   {
     "name": "Salad Cà Chua Caprese",
     "description": "Cà chua tươi ngon, phô mai Mozzarella cắt lát mỏng, và lá bạc hà, tất cả được chế biến cùng với dầu ô-liu và nước cốt chanh",
     "category": 1,
-    "status": 2
+    "status": 2,
+    "ingredients": []
   },
   {
     "name": "Bánh Mì Sandwich Phô Mai Gruyère Và Prosciutto",
     "description": "Bánh mì sandwich với lớp phô mai Gruyère thơm ngon và lớp Prosciutto mỏng, nướng vàng giòn",
     "category": 1,
-    "status": 2
+    "status": 2,
+    "ingredients": []
   },
   {
     "name": "Bánh Mì Nướng Phô Mai Ricotta Và Mứt Dâu",
     "description": "Bánh mì sandwich với lớp phô mai Gruyère thơm ngon và lớp Prosciutto mỏng, nướng vàng giòn",
     "category": 1,
-    "status": 2
+    "status": 2,
+    "ingredients": []
   },
   {
     "name": "Hộp Súp Hành Phô Mai",
     "description": "Súp hành trắng thơm ngon, phủ lớp phô mai Swiss nướng trên mặt",
     "category": 1,
-    "status": 2
+    "status": 2,
+    "ingredients": []
   },
   {
     "name": "Bánh Mì Burger Phô Mai",
     "description": "Burger bò mỹ phẩm với phô mai Cheddar, hành tây, bơ rút, và rau sống trên bánh mì hấp",
     "category": 2,
-    "status": 1
+    "status": 1,
+    "ingredients": []
   },
   {
     "name": "Pizza Quattro Formaggi",
     "description": "Pizza với tổ hợp bốn loại phô mai: Mozzarella, Gorgonzola, Parmesan và Ricotta",
     "category": 2,
-    "status": 1
+    "status": 1,
+    "ingredients": []
   },
   {
     "name": "Ravioli Phô Mai Sốt Nấm Trắng",
     "description": "Ravioli nhân phô mai Ricotta, được phủ lớp sốt nấm trắng kem ngon",
     "category": 2,
-    "status": 2
+    "status": 2,
+    "ingredients": []
   },
   {
     "name": "Lasagna Bolognese Phô Mai Parmesan",
     "description": "Lasagna cổ điển với lớp bò bolognese, mousse phô mai Ricotta và phủ lớp phô mai Parmesan nướng",
     "category": 2,
-    "status": 2
+    "status": 2,
+    "ingredients": []
   },
   {
     "name": "Quiche Lorraine Phô Mai Gruyère",
     "description": "Quiche với nhân bánh béo ngậy, bacon và phô mai Gruyère",
     "category": 2,
-    "status": 2
+    "status": 2,
+    "ingredients": []
   },
   {
     "name": "Bánh Phô Mai New York Cheesecake",
     "description": "Cheesecake New York đậm đà với lớp phô mai kem trên đỉnh, được kết hợp với sốt dâu tây",
     "category": 3,
-    "status": 1
+    "status": 1,
+    "ingredients": []
   },
   {
     "name": "Mousse Phô Mai Hương Vị Cam",
     "description": "Mousse phô mai mềm mịn với hương vị cam tự nhiên và lớp kem sữa tươi",
     "category": 3,
-    "status": 2
+    "status": 2,
+    "ingredients": []
   },
   {
     "name": "Bánh Roulade Phô Mai Sốt Sô-cô-la",
     "description": "Bánh cuốn mềm mịn với nhân phô mai và phủ lớp sốt sô-cô-la đắng",
     "category": 3,
-    "status": 2
+    "status": 2,
+    "ingredients": []
   },
   {
     "name": "Panna Cotta Quả Dâu Vị Phô Mai",
     "description": "Panna Cotta đặc biệt với hương vị phô mai, kèm theo quả dâu tươi ngon",
     "category": 3,
-    "status": 2
+    "status": 2,
+    "ingredients": []
   },
   {
     "name": "Tiramisu Phô Mai Mascarpone",
     "description": "Tiramisu truyền thống với lớp phô mai Mascarpone thơm ngon và bột cacao",
     "category": 3,
-    "status": 2
+    "status": 2,
+    "ingredients": []
   },
   {
     "name": "Martini Phô Mai",
     "description": "Một phiên bản độc đáo của Martini với phô mai Blue Cheese và một lát hành vàng",
     "category": 4,
-    "status": 2
+    "status": 2,
+    "ingredients": []
   },
   {
     "name": "Wine & Cheese Pairing",
     "description": "Menu chọn món ăn kèm với các loại rượu và phô mai, bao gồm Chardonnay và Gouda, Merlot và Brie, và Shiraz và Gorgonzola",
     "category": 4,
-    "status": 2
+    "status": 2,
+    "ingredients": []
   },
   {
     "name": "Cappuccino Phô Mai",
     "description": "Cappuccino béo ngậy với lớp bọt sữa phô mai và bột cacao",
     "category": 4,
-    "status": 1
+    "status": 1,
+    "ingredients": []
   },
   {
     "name": "Sữa Phô Mai Dâu",
     "description": "Sữa dâu thơm ngon kèm theo lớp phô mai cream trên đỉnh",
     "category": 4,
-    "status": 2
+    "status": 2,
+    "ingredients": []
   },
   {
     "name": "Espresso Affogato",
     "description": "Espresso đen và nóng với một viên cà phê kem và lớp phô mai Mascarpone",
     "category": 4,
-    "status": 2
+    "status": 2,
+    "ingredients": []
   }
 ]
