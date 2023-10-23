@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 public interface InventoryRepository extends JpaRepository<Inventory, Long> {
     @Query("select i from Inventory i where i.ingredient.id = ?1")
-    @Nullable
     Inventory findByIngredient_Id(Long id);
 
     @Transactional

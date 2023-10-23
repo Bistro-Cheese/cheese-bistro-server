@@ -29,13 +29,11 @@ public class FoodController {
 
     ///get all food
     @GetMapping()
-    public ResponseEntity<APIResponse<List<Food>>> getAllFoods(
-            HttpServletRequest request
-    ) {
+    public ResponseEntity<APIResponse<List<Food>>> getAllFoods() {
         return ResponseEntity.status(OK).body(
                 new APIResponse<>(
                         MessageConstant.GET_ALL_FOODS_SUCCESS,
-                        foodService.getAllFoods(request)
+                        foodService.getAllFoods()
                 )
         );
     }

@@ -1,10 +1,10 @@
 [
   {
     "ingredient_id": 1,
-    "quantity": 50
+    "quantity": 1000
   },
   {
     "ingredient_id": 2,
-    "quantity": 100
+    "quantity": 1000
   }
 ]

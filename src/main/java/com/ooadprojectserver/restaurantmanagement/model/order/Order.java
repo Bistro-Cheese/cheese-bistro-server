@@ -1,7 +1,7 @@
 package com.ooadprojectserver.restaurantmanagement.model.order;
 
-import com.ooadprojectserver.restaurantmanagement.model.payment.PaymentMethod;
-import com.ooadprojectserver.restaurantmanagement.model.user.type.User;
+import com.ooadprojectserver.restaurantmanagement.model.order.payment.PaymentMethod;
+import com.ooadprojectserver.restaurantmanagement.model.user.type.Staff;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
@@ -24,8 +24,8 @@ import java.util.UUID;
 @EntityListeners(AuditingEntityListener.class)
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "restaurant_order")
-public class RestaurantOrder implements Serializable {
+@jakarta.persistence.Table(name = "restaurant_order")
+public class Order implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -35,11 +35,11 @@ public class RestaurantOrder implements Serializable {
     private UUID id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "staff_id")
+    private Staff user;
 
     @ManyToOne
-    @JoinColumn(name = "order_table_id")
+    @JoinColumn(name = "table_id")
     private OrderTable orderTable;
 
     @Column(name = "order_date", nullable = false)
@@ -50,12 +50,13 @@ public class RestaurantOrder implements Serializable {
     @JoinColumn(name = "payment_method_id")
     private PaymentMethod paymentMethod;
 
-    @Column(name = "order_total", nullable = false)
+    @Column(name = "total", nullable = false)
     @JdbcTypeCode(SqlTypes.BIGINT)
-    private Long orderTotal;
+    private Long total;
 
-    @ManyToOne
-    @JoinColumn(name = "order_status_id")
-    private OrderStatus orderStatus;
+    @Column(name = "status", nullable = false)
+    @Enumerated(EnumType.ORDINAL)
+    @JdbcTypeCode(SqlTypes.INTEGER)
+    private OrderStatus status;
 
 }

@@ -12,7 +12,7 @@ import java.util.UUID;
 public interface FoodService {
 
     //Implement Product
-    List<Food> getAllFoods(HttpServletRequest request);
+    List<Food> getAllFoods();
 
     void createFood(FoodRequest request);
 

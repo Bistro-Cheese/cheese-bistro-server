@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public enum FoodStatus {
     AVAILABLE(1, "Available"),
-    UNAVAILABLE(2, "Unavailable"),
+    OUT_OF_STOCK(2, "Out of stock"),
     DRAFT(3, "Draft");
 
     private final Integer value;

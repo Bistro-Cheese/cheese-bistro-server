@@ -8,5 +8,5 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ImportInventoryRequest {
-    private Integer quantity;
+    private Double quantity;
 }

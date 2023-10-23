@@ -1,4 +1,4 @@
-package com.ooadprojectserver.restaurantmanagement.model.payment;
+package com.ooadprojectserver.restaurantmanagement.model.order.payment;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -27,8 +27,9 @@ public class PaymentMethod {
     @Column(name = "id", nullable = false)
     private UUID id;
 
-    @ManyToOne
-    @JoinColumn(name = "payment_type_id")
+    @Column(name = "type", nullable = false)
+    @Enumerated(EnumType.ORDINAL)
+    @JdbcTypeCode(SqlTypes.INTEGER)
     private PaymentType paymentType;
 
     @Column(name = "expired_date")
