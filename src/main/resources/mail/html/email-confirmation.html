@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,maximum-scale=1,minimum-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"><link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>Cheese Bistro | Cấp tài khoản</title>
+    <style>*{box-sizing:border-box;margin:0;padding:0;font-family:Quicksand,SansSerif;font-weight:500;color:rgba(0,0,0,.85);font-size:14px}body{background-color:#f0f2f5}@media (min-width:0){.container{width:80%}}@media (min-width:1024px){.container{width:40%}}</style>
+</head>
+<body>
+<div class="container" style="background-color:#fff;margin:auto;margin-top:3rem;padding:1rem;border-radius:2rem">
+    <div>
+        <div style="margin:2.5rem 1rem 0;padding-bottom:1rem;color:#466c95;border-bottom:2px solid #f0f2f5;text-transform:uppercase;font-size:16px;font-weight:700">CẤP TÀI KHOẢN CHEESE BISTRO</div>
+        <div style="padding:1rem"><div th:text="'Xin chào ' + ${userFullName}" style="margin-bottom:1rem">Xin chào Trần Anh!</div>
+            <div style="margin-bottom:1rem">Bạn đã được cấp tài khoản Cheese Bistro.</div>
+            <div style="margin-bottom:.5rem" th:text="'- Tên đăng nhập: ' + ${username}">- Tên đăng nhập: anhtd</div>
+            <div style="margin-bottom:.5rem" th:text="'- Mật khẩu: ' + ${password}">- Mật khẩu: 123456aA@</div>
+            <div style="margin-bottom:1rem">Để đảm bảo an toàn bảo mật thông tin, vui lòng đổi mật khẩu trong 24h sau khi được cấp tài khoản. Nếu sau 24h mà bạn không đổi mật khẩu, tài khoản của bạn sẽ bị khóa.</div>
+            <div>Trân trọng!</div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

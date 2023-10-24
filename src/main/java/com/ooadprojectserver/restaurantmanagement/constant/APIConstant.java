@@ -36,7 +36,7 @@ public class APIConstant {
     public static final String INVENTORY = VERSION + "/inventory";
 
     //email
-    public static final String EMAIL = "/email";
+    public static final String EMAIL = "/mail";
     public static final String EMAIL_SEND = EMAIL + "/send";
     public static final String EMAIL_SEND_FILE = EMAIL + "/file";
 }
