@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ooadprojectserver.restaurantmanagement.constant.DateTimeConstant;
 import com.ooadprojectserver.restaurantmanagement.model.user.RoleConstant;
-import com.ooadprojectserver.restaurantmanagement.model.user.AccountStatus;
 import com.ooadprojectserver.restaurantmanagement.model.user.Address;
 import jakarta.persistence.*;
 import jakarta.persistence.CascadeType;
@@ -54,7 +53,7 @@ public class User implements UserDetails, Serializable {
     @JdbcTypeCode(SqlTypes.NVARCHAR)
     private String lastName;
 
-    @Column(name = "email", nullable = false, unique = true)
+    @Column(name = "mail", nullable = false, unique = true)
     @JdbcTypeCode(SqlTypes.NVARCHAR)
     private String email;
 

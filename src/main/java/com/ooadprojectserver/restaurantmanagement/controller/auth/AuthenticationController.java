@@ -27,35 +27,21 @@ public class AuthenticationController {
     @PreAuthorize("hasRole('OWNER')")
     public ResponseEntity<MessageResponse> registerController(@RequestBody UserRegisterRequest request) {
         authenticationService.register(request);
-        return ResponseEntity.status(CREATED).body(
-                new MessageResponse(MessageConstant.REGISTER_SUCCESS)
-        );
+
+        return ResponseEntity.status(CREATED).body(new MessageResponse(MessageConstant.REGISTER_SUCCESS));
     }
 
     @PostMapping(APIConstant.LOGIN)
     public ResponseEntity<APIResponse<AuthenticationResponse>> loginController(@RequestBody UserLoginRequest request) {
-       
-      AuthenticationResponse authResponse = authenticationService.login(request);
 
-        return ResponseEntity.status(OK)
-                .header(HttpHeaders.SET_COOKIE, authResponse.getRefreshTokenCookie().toString())
-                .body(
-                        new APIResponse<>(
-                                MessageConstant.LOGIN_SUCCESS,
-                                authResponse
-                        )
-                );
+        AuthenticationResponse authResponse = authenticationService.login(request);
+
+        return ResponseEntity.status(OK).header(HttpHeaders.SET_COOKIE, authResponse.getRefreshTokenCookie().toString()).body(new APIResponse<>(MessageConstant.LOGIN_SUCCESS, authResponse));
     }
 
     @GetMapping(APIConstant.REFRESH_TOKEN)
-    public ResponseEntity<APIResponse<AuthenticationResponse>> refreshTokenController(
-            HttpServletRequest request
-    ) {
-        return ResponseEntity.status(OK).body(
-                new APIResponse<>(
-                        MessageConstant.REFRESH_TOKEN_SUCCESS,
-                        authenticationService.refreshToken(request)
-                )
-        );
+    public ResponseEntity<APIResponse<AuthenticationResponse>> refreshTokenController(HttpServletRequest request) {
+        return ResponseEntity.status(OK).body(new APIResponse<>(MessageConstant.REFRESH_TOKEN_SUCCESS, authenticationService.refreshToken(request)));
     }
+
 }

@@ -5,7 +5,7 @@ import com.ooadprojectserver.restaurantmanagement.constant.MessageConstant;
 import com.ooadprojectserver.restaurantmanagement.dto.request.composition.CompositionRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.response.APIResponse;
 import com.ooadprojectserver.restaurantmanagement.dto.response.MessageResponse;
-import com.ooadprojectserver.restaurantmanagement.model.composition.Composition;
+import com.ooadprojectserver.restaurantmanagement.dto.response.composition.CompositionResponse;
 import com.ooadprojectserver.restaurantmanagement.service.food.CompositionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,7 +26,7 @@ public class CompositionController {
 
     @GetMapping()
     @PreAuthorize("hasRole('OWNER') or hasRole('MANAGER')")
-    public ResponseEntity<APIResponse<List<Composition>>> getAllCompositions() {
+    public ResponseEntity<APIResponse<List<CompositionResponse>>> getAllCompositions() {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new APIResponse<>(
                         MessageConstant.GET_COMPOSITION_SUCCESS,
@@ -41,7 +41,7 @@ public class CompositionController {
             @RequestBody CompositionRequest compositionRequest
     ) {
         compositionService.createComposition(foodId, compositionRequest);
-        return ResponseEntity.status(HttpStatus.OK).body(
+        return ResponseEntity.status(HttpStatus.CREATED).body(
                 new MessageResponse(MessageConstant.CREATE_COMPOSITION_SUCCESS)
         );
     }

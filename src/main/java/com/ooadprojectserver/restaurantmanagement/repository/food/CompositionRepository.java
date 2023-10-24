@@ -25,6 +25,11 @@ public interface CompositionRepository extends JpaRepository<Composition, UUID> 
     @Query("delete from Composition c where c.food = ?1")
     void deleteByFood(Food food);
 
+    @Transactional
+    @Modifying
+    @Query("delete from Composition c where c.ingredient = ?1")
+    void deleteByIngredient(Ingredient ingredient);
+
     @Query("select c from Composition c where c.food.id = ?1")
     List<Composition> findByFood(UUID id);
 }
