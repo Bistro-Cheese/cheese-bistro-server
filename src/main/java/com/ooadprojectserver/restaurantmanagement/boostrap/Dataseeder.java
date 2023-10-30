@@ -5,6 +5,8 @@ import com.ooadprojectserver.restaurantmanagement.model.composition.Composition;
 import com.ooadprojectserver.restaurantmanagement.model.composition.food.FoodStatus;
 import com.ooadprojectserver.restaurantmanagement.model.composition.ingredient.Ingredient;
 import com.ooadprojectserver.restaurantmanagement.model.inventory.Inventory;
+import com.ooadprojectserver.restaurantmanagement.model.order.OrderTable;
+import com.ooadprojectserver.restaurantmanagement.model.order.TableStatus;
 import com.ooadprojectserver.restaurantmanagement.model.user.AccountStatus;
 import com.ooadprojectserver.restaurantmanagement.constant.DateTimeConstant;
 import com.ooadprojectserver.restaurantmanagement.model.schedule.Schedule;
@@ -19,6 +21,7 @@ import com.ooadprojectserver.restaurantmanagement.model.user.type.Staff;
 import com.ooadprojectserver.restaurantmanagement.repository.food.CompositionRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.food.IngredientRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.inventory.InventoryRepository;
+import com.ooadprojectserver.restaurantmanagement.repository.order.OrderTableRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.schedule.ScheduleRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.user.AddressRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.food.CategoryRepository;
@@ -42,7 +45,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
@@ -55,7 +57,6 @@ public class Dataseeder implements ApplicationListener<ContextRefreshedEvent>, C
     private final PasswordEncoder passwordEncoder;
     Logger logger = LoggerFactory.getLogger(Dataseeder.class);
 
-
     private final RoleRepository roleRepository;
     private final ScheduleRepository scheduleRepository;
     private final FoodRepository foodRepository;
@@ -67,6 +68,7 @@ public class Dataseeder implements ApplicationListener<ContextRefreshedEvent>, C
     private final IngredientRepository ingredientRepository;
     private final InventoryRepository inventoryRepository;
     private final CompositionRepository compositionRepository;
+    private final OrderTableRepository orderTableRepository;
 
     @Override
     public void onApplicationEvent(@NonNull ContextRefreshedEvent event) {
@@ -76,6 +78,7 @@ public class Dataseeder implements ApplicationListener<ContextRefreshedEvent>, C
         this.loadSchedules();
         this.loadIngredient();
         this.loadInventory();
+        this.loadOrderTable();
     }
 
     @Override
@@ -200,6 +203,34 @@ public class Dataseeder implements ApplicationListener<ContextRefreshedEvent>, C
         inventoryRepository.saveAll(list);
     }
 
+    private void loadOrderTable() {
+        JSONParser parser = new JSONParser();
+        JSONArray jsonArray;
+        try {
+            jsonArray = (JSONArray) parser.parse(
+                    new FileReader("./src/main/resources/data/table.json")
+            );
+        } catch (net.minidev.json.parser.ParseException | FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        List<OrderTable> orderTables = new ArrayList<>();
+        for (Object object : jsonArray) {
+            JSONObject jsonObject = (JSONObject) object;
+            Integer tableNumber = (Integer) jsonObject.get("table_number");
+            Integer seatNumber = (Integer) jsonObject.get("seat_number");
+            orderTables.add(
+                    OrderTable.builder()
+                            .tableNumber(tableNumber)
+                            .seatNumber(seatNumber)
+                            .tableStatus(TableStatus.EMPTY)
+                            .nameCustomer(null)
+                            .build()
+            );
+        }
+        orderTableRepository.saveAll(orderTables);
+    }
+
     private void createListFood() throws FileNotFoundException {
         JSONParser parser = new JSONParser();
         JSONArray jsonArray;
@@ -248,7 +279,7 @@ public class Dataseeder implements ApplicationListener<ContextRefreshedEvent>, C
                 category,
                 description,
                 faker.internet().image(),
-                BigDecimal.valueOf(faker.number().numberBetween(50000, 1000000)),
+                (long) faker.number().numberBetween(50000, 1000000),
                 FoodStatus.DRAFT.getValue(),
                 new Date(),
                 new Date()

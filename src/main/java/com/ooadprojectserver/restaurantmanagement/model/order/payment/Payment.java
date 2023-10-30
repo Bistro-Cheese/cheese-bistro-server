@@ -1,5 +1,6 @@
 package com.ooadprojectserver.restaurantmanagement.model.order.payment;
 
+import com.ooadprojectserver.restaurantmanagement.model.order.Order;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
@@ -8,7 +9,6 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
@@ -20,20 +20,23 @@ import java.util.UUID;
 @EntityListeners(AuditingEntityListener.class)
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "payment_method")
-public class PaymentMethod {
+@Table(name = "payment")
+public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false)
     private UUID id;
 
-    @Column(name = "type", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private Order order;
+
+    @Column(name = "payment_type", nullable = false)
     @Enumerated(EnumType.ORDINAL)
     @JdbcTypeCode(SqlTypes.INTEGER)
     private PaymentType paymentType;
 
-    @Column(name = "expired_date")
-    @JdbcTypeCode(SqlTypes.TIMESTAMP)
-    private LocalDateTime expiredDate;
-
+    @Column(name = "total", nullable = false)
+    @JdbcTypeCode(SqlTypes.BIGINT)
+    private Long total;
 }

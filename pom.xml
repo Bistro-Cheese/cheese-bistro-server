@@ -14,7 +14,7 @@
 	<name>restaurantmanagement</name>
 	<description>server uses Spring for managing restaurant</description>
 	<properties>
-		<java.version>21</java.version>
+		<java.version>20</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
