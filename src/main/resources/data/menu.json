@@ -7,11 +7,11 @@
     "ingredients": [
       {
         "ingredient_id": 1,
-        "portion": 200
+        "portion": 100
       },
       {
         "ingredient_id": 2,
-        "portion": 300
+        "portion": 200
       }
     ]
   },
@@ -30,11 +30,11 @@
     "ingredients": [
       {
         "ingredient_id": 1,
-        "portion": 100
+        "portion": 300
       },
       {
         "ingredient_id": 2,
-        "portion": 300
+        "portion": 400
       }
     ]
   },

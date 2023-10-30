@@ -22,7 +22,7 @@ public class FoodRequest {
     @JsonProperty("product_image")
     private String productImage;
     @JsonProperty("price")
-    private BigDecimal price;
+    private Long price;
     @JsonProperty("status")
     private Integer status;
 }

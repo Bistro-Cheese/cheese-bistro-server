@@ -23,26 +23,21 @@ public class OrderTable implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Integer id;
+    private Long id;
 
-    @Column(name = "table_name", nullable = false, unique = true)
+    @Column(name = "table_number", nullable = false, unique = true)
     @JdbcTypeCode(SqlTypes.INTEGER)
-    private Integer tableName;
+    private Integer tableNumber;
+
+    @Column(name = "table_status", nullable = false)
+    @JdbcTypeCode(SqlTypes.INTEGER)
+    private TableStatus tableStatus;
 
     @Column(name = "seat_number", nullable = false)
     @JdbcTypeCode(SqlTypes.INTEGER)
     private Integer seatNumber;
 
-    @Column(name = "is_empty")
-    @JdbcTypeCode(SqlTypes.BOOLEAN)
-    private Boolean isEmpty;
-
-    @Column(name = "is_reserved")
-    @JdbcTypeCode(SqlTypes.BOOLEAN)
-    private Boolean isReserved;
-
     @Column(name = "name_customer")
     @JdbcTypeCode(SqlTypes.NVARCHAR)
     private String nameCustomer;
-
 }

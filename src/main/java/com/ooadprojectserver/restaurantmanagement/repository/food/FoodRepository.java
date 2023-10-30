@@ -29,7 +29,7 @@ public interface FoodRepository extends JpaRepository<Food, UUID>, JpaSpecificat
             where f.id = ?8
             """)
     void updateFoodById(String name, Category category, String description, String product_image,
-                        BigDecimal price, Date lastModifiedDate,
+                        Long price, Date lastModifiedDate,
                         Integer status, UUID id);
 
     @Modifying

@@ -1,6 +1,5 @@
 package com.ooadprojectserver.restaurantmanagement.model.order;
 
-import com.ooadprojectserver.restaurantmanagement.model.order.payment.PaymentMethod;
 import com.ooadprojectserver.restaurantmanagement.model.user.type.Staff;
 import jakarta.persistence.*;
 import lombok.*;
@@ -12,7 +11,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.UUID;
 
 @Getter
@@ -31,32 +30,24 @@ public class Order implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false)
     private UUID id;
 
     @ManyToOne
-    @JoinColumn(name = "staff_id")
-    private Staff user;
+    @JoinColumn(name = "staff_id", nullable = false)
+    private Staff staff;
 
     @ManyToOne
-    @JoinColumn(name = "table_id")
+    @JoinColumn(name = "table_id", nullable = false)
     private OrderTable orderTable;
 
     @Column(name = "order_date", nullable = false)
     @JdbcTypeCode(SqlTypes.TIMESTAMP)
-    private LocalDateTime orderDate;
-
-    @ManyToOne
-    @JoinColumn(name = "payment_method_id")
-    private PaymentMethod paymentMethod;
-
-    @Column(name = "total", nullable = false)
-    @JdbcTypeCode(SqlTypes.BIGINT)
-    private Long total;
+    private Date orderDate;
 
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.ORDINAL)
     @JdbcTypeCode(SqlTypes.INTEGER)
     private OrderStatus status;
-
 }
