@@ -40,4 +40,12 @@ public class MessageConstant {
 
     //email
     public static final String EMAIL_SEND_SUCCESS = "Email Send Successfully";
+
+    //    Order
+    public static final String GET_ORDER_SUCCESS = "Get Orders Successfully";
+    public static final String CREATE_ORDER_SUCCESS = "Create Order Successfully";
+    public static final String DELETE_ORDER_SUCCESS = "Delete Order Successfully";
+    public static final String CREATE_ORDER_LINE_SUCCESS = "Create Order Line Successfully";
+    public static final String DELETE_ORDER_LINE_SUCCESS = "Delete Order Line Successfully";
+    public static final String UPDATE_ORDER_LINE_SUCCESS = "Update Order Line Successfully";
 }

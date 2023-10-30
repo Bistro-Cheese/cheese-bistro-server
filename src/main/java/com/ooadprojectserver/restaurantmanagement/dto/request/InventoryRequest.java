@@ -7,6 +7,6 @@ import lombok.*;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ImportInventoryRequest {
+public class InventoryRequest {
     private Double quantity;
 }

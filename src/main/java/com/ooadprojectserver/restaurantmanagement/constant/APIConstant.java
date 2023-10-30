@@ -17,7 +17,7 @@ public class APIConstant {
     //    Owner Routes
     public static final String OWNER = VERSION + "/owner";
     public static final String ALL_USERS = "/users";
-    public static final String OWNER_USER_ID = ALL_USERS +  USER_ID;
+    public static final String OWNER_USER_ID = ALL_USERS + USER_ID;
 
     //    Manager Routes
     public static final String MANAGER = VERSION + "/manager";
@@ -26,6 +26,10 @@ public class APIConstant {
 
     //    Staff Routes
     public static final String STAFF = VERSION + "/staff";
+    public static final String ORDER = "/orders";
+    public static final String ORDER_ID = ORDER + "/{order_id}";
+    public static final String ORDER_LINE_ID = "/{order_line_id}";
+    //    Food Routes
     public static final String FOOD = VERSION + "/foods";
     public static final String FOOD_ID = "/{food_id}";
     public static final String SEARCH = "/search";

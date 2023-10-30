@@ -49,8 +49,8 @@ public class Food implements Serializable {
     private String productImage;
 
     @Column(name = "price", nullable = false)
-    @JdbcTypeCode(SqlTypes.NVARCHAR)
-    private BigDecimal price;
+    @JdbcTypeCode(SqlTypes.INTEGER)
+    private Long price;
 
 
     @Column(name = "status", nullable = false)
