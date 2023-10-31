@@ -1,4 +1,4 @@
-package com.ooadprojectserver.restaurantmanagement.controller.composition;
+package com.ooadprojectserver.restaurantmanagement.controller;
 
 import com.ooadprojectserver.restaurantmanagement.constant.APIConstant;
 import com.ooadprojectserver.restaurantmanagement.constant.MessageConstant;

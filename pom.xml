@@ -116,6 +116,11 @@
 			<artifactId>jakarta.activation</artifactId>
 			<version>2.0.1</version>
 		</dependency>
+		<dependency>
+			<groupId>org.thymeleaf</groupId>
+			<artifactId>thymeleaf-spring5</artifactId>
+			<version>3.1.1.RELEASE</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>

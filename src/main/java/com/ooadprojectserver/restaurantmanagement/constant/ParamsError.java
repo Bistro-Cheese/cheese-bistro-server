@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 public enum ParamsError {
         MISSING_USERNAME_AND_EMAIL("accountName", "Missing both user name and email address"),
         USER_NAME("userName", "Invalid user name"),
-        EMAIL_ADDRESS("email", "Invalid email address"),
+        EMAIL_ADDRESS("mail", "Invalid email address"),
         PASSWORD("passwordHash", "Invalid password hash"),
         PHONE_NUMBER("phone", "Invalid phone number"),
         FIRST_NAME("firstName", "Invalid first name"),

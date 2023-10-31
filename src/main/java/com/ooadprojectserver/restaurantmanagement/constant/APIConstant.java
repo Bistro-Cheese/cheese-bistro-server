@@ -29,6 +29,7 @@ public class APIConstant {
     public static final String ORDER = "/orders";
     public static final String ORDER_ID = ORDER + "/{order_id}";
     public static final String ORDER_LINE_ID = "/{order_line_id}";
+    public static final String PAY = "/bill";
     //    Food Routes
     public static final String FOOD = VERSION + "/foods";
     public static final String FOOD_ID = "/{food_id}";
@@ -40,7 +41,7 @@ public class APIConstant {
     public static final String INVENTORY = VERSION + "/inventory";
 
     //email
-    public static final String EMAIL = "/email";
+    public static final String EMAIL = "/mail";
     public static final String EMAIL_SEND = EMAIL + "/send";
     public static final String EMAIL_SEND_FILE = EMAIL + "/file";
 }

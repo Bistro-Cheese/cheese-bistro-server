@@ -4,10 +4,13 @@ import com.ooadprojectserver.restaurantmanagement.constant.APIConstant;
 import com.ooadprojectserver.restaurantmanagement.constant.MessageConstant;
 import com.ooadprojectserver.restaurantmanagement.dto.request.order.OrderLineRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.request.order.OrderRequest;
+import com.ooadprojectserver.restaurantmanagement.dto.request.order.PaymentRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.response.APIResponse;
 import com.ooadprojectserver.restaurantmanagement.dto.response.MessageResponse;
 import com.ooadprojectserver.restaurantmanagement.dto.response.order.OrderResponse;
 import com.ooadprojectserver.restaurantmanagement.dto.response.schedule.StaffScheduleResponse;
+import com.ooadprojectserver.restaurantmanagement.model.order.payment.Payment;
+import com.ooadprojectserver.restaurantmanagement.service.payment.PaymentService;
 import com.ooadprojectserver.restaurantmanagement.service.user.StaffService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +28,7 @@ import java.util.UUID;
 @PreAuthorize("hasRole('STAFF')")
 public class StaffController {
     private final StaffService staffService;
+    private final PaymentService paymentService;
 
     @GetMapping(APIConstant.SCHEDULE)
     public ResponseEntity<APIResponse<StaffScheduleResponse>> getSchedule(
@@ -54,7 +58,7 @@ public class StaffController {
     public ResponseEntity<MessageResponse> createOrder(
             HttpServletRequest request,
             @RequestBody OrderRequest orderRequest
-            ) {
+    ) {
         staffService.createOrder(request, orderRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 new MessageResponse(
@@ -109,6 +113,19 @@ public class StaffController {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new MessageResponse(
                         MessageConstant.DELETE_ORDER_LINE_SUCCESS
+                )
+        );
+    }
+
+    @PostMapping(APIConstant.ORDER_ID + APIConstant.PAY)
+    public ResponseEntity<APIResponse<Payment>> createBill(
+            @PathVariable("order_id") UUID orderId,
+            @RequestBody PaymentRequest request
+    ) {
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new APIResponse<>(
+                        MessageConstant.CREATE_BILL_SUCCESS,
+                        paymentService.createBill(request, orderId)
                 )
         );
     }

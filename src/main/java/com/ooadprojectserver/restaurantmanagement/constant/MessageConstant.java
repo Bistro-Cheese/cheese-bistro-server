@@ -48,4 +48,6 @@ public class MessageConstant {
     public static final String CREATE_ORDER_LINE_SUCCESS = "Create Order Line Successfully";
     public static final String DELETE_ORDER_LINE_SUCCESS = "Delete Order Line Successfully";
     public static final String UPDATE_ORDER_LINE_SUCCESS = "Update Order Line Successfully";
+    //    Payment
+    public static final String CREATE_BILL_SUCCESS = "Create Bill Successfully";
 }
