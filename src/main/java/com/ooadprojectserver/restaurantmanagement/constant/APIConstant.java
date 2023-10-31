@@ -29,6 +29,7 @@ public class APIConstant {
     public static final String ORDER = "/orders";
     public static final String ORDER_ID = ORDER + "/{order_id}";
     public static final String ORDER_LINE_ID = "/{order_line_id}";
+    public static final String PAY = "/bill";
     //    Food Routes
     public static final String FOOD = VERSION + "/foods";
     public static final String FOOD_ID = "/{food_id}";
