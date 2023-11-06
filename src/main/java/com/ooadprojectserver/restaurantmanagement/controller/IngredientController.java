@@ -19,12 +19,10 @@ import java.util.List;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping(APIConstant.INGREDIENT)
-@PreAuthorize("hasRole('OWNER')")
 public class IngredientController {
     private final IngredientService ingredientService;
 
     @GetMapping()
-    @PreAuthorize("hasRole('OWNER') or hasRole('MANAGER')")
     public ResponseEntity<APIResponse<List<Ingredient>>> getAllIngredients() {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new APIResponse<>(

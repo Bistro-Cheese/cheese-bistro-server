@@ -5,6 +5,7 @@ import com.ooadprojectserver.restaurantmanagement.constant.DateTimeConstant;
 import com.ooadprojectserver.restaurantmanagement.dto.request.UserRegisterRequest;
 import com.ooadprojectserver.restaurantmanagement.exception.CustomException;
 import com.ooadprojectserver.restaurantmanagement.model.user.baseUser.Address;
+import com.ooadprojectserver.restaurantmanagement.model.user.baseUser.Status;
 import com.ooadprojectserver.restaurantmanagement.model.user.baseUser.User;
 import com.ooadprojectserver.restaurantmanagement.repository.user.AddressRepository;
 import lombok.RequiredArgsConstructor;
@@ -43,6 +44,7 @@ public abstract class UserFactory {
                 .lastName(userRequest.getLastName())
                 .role(userRequest.getRole())
                 .status(userRequest.getStatus())
+                .enabled(userRequest.getStatus() == Status.ACTIVE.ordinal())
                 .password(passwordEncoder.encode(userRequest.getPassword()))
                 .phoneNumber(userRequest.getPhoneNumber())
                 .address(address)
@@ -69,6 +71,7 @@ public abstract class UserFactory {
         user.setLastName(userRequest.getLastName());
         user.setRole(userRequest.getRole());
         user.setStatus(userRequest.getStatus());
+        user.setEnabled(userRequest.getStatus() == Status.ACTIVE.ordinal());
         user.setPassword(userRequest.getPassword());
         user.setPhoneNumber(userRequest.getPhoneNumber());
         user.setDateOfBirth(dob);

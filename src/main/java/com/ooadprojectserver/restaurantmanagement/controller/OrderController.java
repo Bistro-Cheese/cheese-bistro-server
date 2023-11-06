@@ -19,11 +19,11 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/orders")
+@RequestMapping(APIConstant.ORDERS)
 public class OrderController {
     private final OrderService orderService;
 
-    @GetMapping(APIConstant.ORDER)
+    @GetMapping()
     public ResponseEntity<APIResponse<List<OrderResponse>>> getOrders(
             HttpServletRequest request
     ) {
@@ -35,7 +35,7 @@ public class OrderController {
         );
     }
 
-    @PostMapping(APIConstant.ORDER)
+    @PostMapping()
     public ResponseEntity<MessageResponse> createOrder(
             HttpServletRequest request,
             @RequestBody OrderRequest orderRequest

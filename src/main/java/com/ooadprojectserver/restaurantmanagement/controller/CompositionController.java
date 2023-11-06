@@ -10,7 +10,6 @@ import com.ooadprojectserver.restaurantmanagement.service.food.CompositionServic
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,12 +19,10 @@ import java.util.UUID;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping(APIConstant.COMPOSITION)
-@PreAuthorize("hasRole('OWNER')")
 public class CompositionController {
     private final CompositionService compositionService;
 
     @GetMapping()
-    @PreAuthorize("hasRole('OWNER') or hasRole('MANAGER')")
     public ResponseEntity<APIResponse<List<CompositionResponse>>> getAllCompositions() {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new APIResponse<>(

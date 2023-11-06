@@ -1,7 +1,6 @@
 package com.ooadprojectserver.restaurantmanagement.model.user.baseUser;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ooadprojectserver.restaurantmanagement.constant.DateTimeConstant;
 import jakarta.persistence.*;
 import jakarta.persistence.CascadeType;
@@ -62,7 +61,6 @@ public class User implements UserDetails, Serializable {
     @JdbcTypeCode(SqlTypes.DATE)
     private Date dateOfBirth;
 
-    @JsonIgnore
     @Column(name = "password", nullable = false)
     @JdbcTypeCode(SqlTypes.NVARCHAR)
     private String password;
@@ -95,7 +93,6 @@ public class User implements UserDetails, Serializable {
     @JoinColumn(name = "address_id")
     private Address address;
 
-    @JsonIgnore
     private boolean enabled;
 
     public User(User user) {
@@ -115,7 +112,6 @@ public class User implements UserDetails, Serializable {
         this.lastModifiedDate = user.getLastModifiedDate();
     }
 
-    @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return switch (role) {
@@ -136,19 +132,16 @@ public class User implements UserDetails, Serializable {
         return username;
     }
 
-    @JsonIgnore
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
-    @JsonIgnore
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
-    @JsonIgnore
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
