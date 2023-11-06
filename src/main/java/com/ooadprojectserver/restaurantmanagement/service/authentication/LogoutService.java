@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ooadprojectserver.restaurantmanagement.constant.MessageConstant;
 import com.ooadprojectserver.restaurantmanagement.dto.response.MessageResponse;
 import com.ooadprojectserver.restaurantmanagement.model.user.token.Token;
-import com.ooadprojectserver.restaurantmanagement.model.user.type.User;
+import com.ooadprojectserver.restaurantmanagement.model.user.baseUser.User;
 import com.ooadprojectserver.restaurantmanagement.repository.user.TokenRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.user.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;

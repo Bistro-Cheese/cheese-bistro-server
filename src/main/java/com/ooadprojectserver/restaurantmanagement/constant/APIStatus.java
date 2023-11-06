@@ -15,6 +15,10 @@ public enum APIStatus {
 
     //User
     USER_NOT_FOUND(404, "User Not Found"),
+    INVALID_ROLE_ID(400, "Invalid role id"),
+    INVALID_DATE_OF_BIRTH(400, "Invalid date of birth"),
+    EMAIL_ALREADY_EXISTED(400, "Email already existed"),
+
 
     //Food status
     CATEGORY_NOT_FOUND(404, "Category Not Found"),
@@ -49,6 +53,7 @@ public enum APIStatus {
 
     //    Payment
     ORDER_COMPLETED(400, "Order already completed");
+
     private final int status;
     private final String message;
 }

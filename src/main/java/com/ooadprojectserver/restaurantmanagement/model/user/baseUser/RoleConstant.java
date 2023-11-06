@@ -1,4 +1,4 @@
-package com.ooadprojectserver.restaurantmanagement.model.user;
+package com.ooadprojectserver.restaurantmanagement.model.user.baseUser;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

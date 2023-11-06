@@ -1,6 +1,6 @@
 package com.ooadprojectserver.restaurantmanagement.repository.user;
 
-import com.ooadprojectserver.restaurantmanagement.model.user.Address;
+import com.ooadprojectserver.restaurantmanagement.model.user.baseUser.Address;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

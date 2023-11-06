@@ -2,8 +2,8 @@ package com.ooadprojectserver.restaurantmanagement.model.schedule;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ooadprojectserver.restaurantmanagement.constant.DateTimeConstant;
-import com.ooadprojectserver.restaurantmanagement.model.user.type.Manager;
-import com.ooadprojectserver.restaurantmanagement.model.user.type.Staff;
+import com.ooadprojectserver.restaurantmanagement.model.user.Manager;
+import com.ooadprojectserver.restaurantmanagement.model.user.Staff;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;

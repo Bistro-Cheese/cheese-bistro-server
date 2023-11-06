@@ -6,10 +6,9 @@ import com.ooadprojectserver.restaurantmanagement.dto.request.UserRegisterReques
 import com.ooadprojectserver.restaurantmanagement.dto.response.AuthenticationResponse;
 import com.ooadprojectserver.restaurantmanagement.model.user.token.Token;
 import com.ooadprojectserver.restaurantmanagement.model.user.token.TokenType;
-import com.ooadprojectserver.restaurantmanagement.model.user.type.User;
+import com.ooadprojectserver.restaurantmanagement.model.user.baseUser.User;
 import com.ooadprojectserver.restaurantmanagement.repository.user.TokenRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.user.UserRepository;
-import com.ooadprojectserver.restaurantmanagement.model.user.factory.UserFactory;
 import com.ooadprojectserver.restaurantmanagement.service.email.EmailService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,7 +26,6 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
-    private final UserFactory userFactory;
     private final JwtService jwtService;
     private final UserRepository userRepository;
     private final TokenRepository tokenRepository;
@@ -37,8 +35,6 @@ public class AuthenticationService {
     private String CookieName;
 
     public void register(UserRegisterRequest request) {
-        userFactory.createUser(request);
-
         ConfirmationRequest confirm = ConfirmationRequest.builder()
                 .fullName(request.getFirstName() + " " + request.getLastName())
                 .username(request.getUsername())
