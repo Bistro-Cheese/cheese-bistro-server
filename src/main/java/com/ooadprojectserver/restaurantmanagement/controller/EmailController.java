@@ -1,25 +1,25 @@
-package com.ooadprojectserver.restaurantmanagement.controller.user;
+package com.ooadprojectserver.restaurantmanagement.controller;
 
-import com.ooadprojectserver.restaurantmanagement.constant.APIConstant;
 import com.ooadprojectserver.restaurantmanagement.constant.MessageConstant;
 import com.ooadprojectserver.restaurantmanagement.dto.request.EmailRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.response.MessageResponse;
 import com.ooadprojectserver.restaurantmanagement.service.email.EmailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(APIConstant.OWNER)
-@PreAuthorize("hasRole('OWNER')")
-public class OwnerController {
+@RequestMapping("api/v1/email")
+public class EmailController {
     private final EmailService emailService;
 
-    @PostMapping(APIConstant.EMAIL_SEND)
+    @PostMapping("/send")
     public ResponseEntity<MessageResponse> sendEmail(
             @RequestBody EmailRequest request
     ) {
@@ -28,7 +28,7 @@ public class OwnerController {
                 new MessageResponse(MessageConstant.EMAIL_SEND_SUCCESS)
         );
     }
-    @PostMapping(APIConstant.EMAIL_SEND_FILE)
+    @PostMapping("/send-file")
     public ResponseEntity<MessageResponse> sendEmailFile(
             @RequestBody EmailRequest request
     ) {

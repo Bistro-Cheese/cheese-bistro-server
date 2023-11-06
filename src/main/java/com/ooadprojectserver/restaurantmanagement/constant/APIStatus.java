@@ -18,7 +18,7 @@ public enum APIStatus {
     INVALID_ROLE_ID(400, "Invalid role id"),
     INVALID_DATE_OF_BIRTH(400, "Invalid date of birth"),
     EMAIL_ALREADY_EXISTED(400, "Email already existed"),
-
+    ROLE_CANNOT_UPDATE(400, "Role cannot update"),
 
     //Food status
     CATEGORY_NOT_FOUND(404, "Category Not Found"),
