@@ -23,5 +23,5 @@ public class UserResponse {
     private String role;
     private Date dateOfBirth;
     private Address address;
-    private String status;
+    private Integer status;
 }

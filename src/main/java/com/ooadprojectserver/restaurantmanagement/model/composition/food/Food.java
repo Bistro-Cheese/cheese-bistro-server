@@ -68,5 +68,4 @@ public class Food implements Serializable {
     @JsonFormat(pattern = DateTimeConstant.FORMAT_DATE_TIME, timezone = DateTimeConstant.TIMEZONE)
     @JdbcTypeCode(SqlTypes.TIMESTAMP)
     private Date lastModifiedDate;
-
 }

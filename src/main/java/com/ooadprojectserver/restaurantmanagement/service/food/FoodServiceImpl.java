@@ -2,7 +2,8 @@ package com.ooadprojectserver.restaurantmanagement.service.food;
 
 import com.ooadprojectserver.restaurantmanagement.dto.request.FoodRequest;
 import com.ooadprojectserver.restaurantmanagement.constant.APIStatus;
-import com.ooadprojectserver.restaurantmanagement.dto.response.PagingResponseModel;
+import com.ooadprojectserver.restaurantmanagement.dto.request.SearchRequest;
+import com.ooadprojectserver.restaurantmanagement.dto.response.PagingResponse;
 import com.ooadprojectserver.restaurantmanagement.exception.CustomException;
 import com.ooadprojectserver.restaurantmanagement.model.composition.Composition;
 import com.ooadprojectserver.restaurantmanagement.model.composition.food.Category;
@@ -12,14 +13,11 @@ import com.ooadprojectserver.restaurantmanagement.repository.food.CategoryReposi
 import com.ooadprojectserver.restaurantmanagement.repository.food.CompositionRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.food.FoodRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.inventory.InventoryRepository;
-import com.ooadprojectserver.restaurantmanagement.repository.specification.FoodSpecification;
+import com.ooadprojectserver.restaurantmanagement.service.specification.FoodSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.*;
 
 @RequiredArgsConstructor
@@ -104,25 +102,11 @@ public class FoodServiceImpl implements FoodService {
     }
 
     @Override
-    public PagingResponseModel searchFood(
-            String category, String searchKey, BigDecimal minPrice,
-            BigDecimal maxPrice, Integer sortCase, Boolean isAscSort,
-            Integer pageNumber, Integer pageSize
-    ) {
-        if (pageSize < 1 || pageNumber < 1) {
-            throw new CustomException(APIStatus.ERR_PAGINATION);
-        }
-        Pageable pageable = PageRequest.of(pageNumber - 1, pageSize);
+    public PagingResponse searchFood(SearchRequest searchRequest) {
+        searchRequest.getPagingRequest().checkValidPaging();
         Page<Food> foodPage = foodRepository.findAll(
-                new FoodSpecification(
-                        category,
-                        searchKey,
-                        minPrice,
-                        maxPrice,
-                        sortCase,
-                        isAscSort
-                ), pageable);
-        return new PagingResponseModel(
+                new FoodSpecification(searchRequest.getParams()), searchRequest.getPagingRequest().toPageRequest());
+        return new PagingResponse(
                 foodPage.getContent(),
                 foodPage.getTotalElements(),
                 foodPage.getTotalPages(),

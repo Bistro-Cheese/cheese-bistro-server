@@ -1,12 +1,21 @@
 package com.ooadprojectserver.restaurantmanagement.controller;
 
 import com.ooadprojectserver.restaurantmanagement.constant.MessageConstant;
+import com.ooadprojectserver.restaurantmanagement.dto.request.PagingRequest;
+import com.ooadprojectserver.restaurantmanagement.dto.request.SearchRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.request.UserRegisterRequest;
+import com.ooadprojectserver.restaurantmanagement.dto.response.APIResponse;
 import com.ooadprojectserver.restaurantmanagement.dto.response.MessageResponse;
+import com.ooadprojectserver.restaurantmanagement.dto.response.PagingResponse;
+import com.ooadprojectserver.restaurantmanagement.dto.response.UserResponse;
 import com.ooadprojectserver.restaurantmanagement.service.user.OwnerService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,26 +25,63 @@ public class UserController {
     @PostMapping()
     public ResponseEntity<MessageResponse> createUser(@RequestBody UserRegisterRequest userRegisterRequest) {
         ownerService.createUser(userRegisterRequest);
-        return ResponseEntity.ok(new MessageResponse(MessageConstant.CREATE_USER_SUCCESS));
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                new MessageResponse(MessageConstant.CREATE_USER_SUCCESS));
     }
 
     @GetMapping()
-    public void getAllUsers() {
-
+    public ResponseEntity<APIResponse<List<UserResponse>>> getAllUsers() {
+        return ResponseEntity.ok().body(
+                new APIResponse<>(
+                        MessageConstant.GET_USERS_SUCCESS,
+                        ownerService.getAllUsers()
+                )
+        );
     }
 
     @GetMapping("/{userId}")
-    public void getUserDetail(@PathVariable String userId) {
-
+    public ResponseEntity<APIResponse<UserResponse>> getUserDetail(@PathVariable UUID userId) {
+        return ResponseEntity.ok().body(
+                new APIResponse<>(
+                        MessageConstant.GET_USER_DETAIL_SUCCESS,
+                        ownerService.getUserDetail(userId)
+                )
+        );
     }
 
     @DeleteMapping("/{userId}")
-    public void deleteUser(@PathVariable String userId) {
-
+    public ResponseEntity<MessageResponse> deleteUser(@PathVariable UUID userId) {
+        ownerService.deleteUser(userId);
+        return ResponseEntity.ok().body(
+                new MessageResponse(MessageConstant.DELETE_USER_SUCCESS)
+        );
     }
 
     @PutMapping("/{userId}")
-    public void updateUser(@PathVariable String userId, @RequestBody UserRegisterRequest userRegisterRequest) {
+    public ResponseEntity<MessageResponse> updateUser(@PathVariable UUID userId, @RequestBody UserRegisterRequest userRegisterRequest) {
+        ownerService.updateUser(userId, userRegisterRequest);
+        return ResponseEntity.ok().body(
+                new MessageResponse(MessageConstant.UPDATE_USER_SUCCESS)
+        );
+    }
 
+    @GetMapping("/search")
+    public ResponseEntity<APIResponse<PagingResponse>> searchUser(
+            @RequestParam(defaultValue = "") String name,
+            @RequestParam(defaultValue = "") String role,
+            @RequestParam(defaultValue = "") String sort,
+            @RequestParam(defaultValue = "1", value = "page_number") int pageNumber,
+            @RequestParam(defaultValue = "10", value = "page_size") int pageSize
+    ) {
+        SearchRequest searchRequest = SearchRequest.builder()
+                .params(List.of(name, role, sort))
+                .pagingRequest(new PagingRequest(pageNumber, pageSize))
+                .build();
+        return ResponseEntity.ok().body(
+                new APIResponse<>(
+                        MessageConstant.SEARCH_USER_SUCCESS,
+                        ownerService.searchUser(searchRequest)
+                )
+        );
     }
 }

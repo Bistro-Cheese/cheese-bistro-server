@@ -54,16 +54,6 @@ public abstract class UserFactory {
     }
 
     public User update(User user, UserRegisterRequest userRequest) {
-        // Update Role
-        if (!userRequest.getRole().equals(user.getRole())) {
-            UUID userId = user.getId();
-            Date createdDate = user.getCreatedDate();
-            user = this.create(userRequest);
-            user.setCreatedDate(createdDate);
-            user.setId(userId);
-            return user;
-        }
-
         Date date = new Date();
         String dateOfBirth = userRequest.getDateOfBirth();
         DateFormat dateFormat = new SimpleDateFormat(DateTimeConstant.FORMAT_DATE);
@@ -73,6 +63,7 @@ public abstract class UserFactory {
         } catch (Exception e) {
             throw new CustomException(APIStatus.INVALID_DATE_OF_BIRTH);
         }
+        user.setUsername(userRequest.getUsername());
         user.setEmail(userRequest.getEmail());
         user.setFirstName(userRequest.getFirstName());
         user.setLastName(userRequest.getLastName());

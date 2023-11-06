@@ -3,12 +3,13 @@ package com.ooadprojectserver.restaurantmanagement.controller;
 import com.ooadprojectserver.restaurantmanagement.constant.APIConstant;
 import com.ooadprojectserver.restaurantmanagement.constant.MessageConstant;
 import com.ooadprojectserver.restaurantmanagement.dto.request.FoodRequest;
+import com.ooadprojectserver.restaurantmanagement.dto.request.PagingRequest;
+import com.ooadprojectserver.restaurantmanagement.dto.request.SearchRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.response.APIResponse;
 import com.ooadprojectserver.restaurantmanagement.dto.response.MessageResponse;
-import com.ooadprojectserver.restaurantmanagement.dto.response.PagingResponseModel;
+import com.ooadprojectserver.restaurantmanagement.dto.response.PagingResponse;
 import com.ooadprojectserver.restaurantmanagement.model.composition.food.Food;
 import com.ooadprojectserver.restaurantmanagement.service.food.FoodService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -79,21 +80,24 @@ public class FoodController {
 
     //search food
     @GetMapping(APIConstant.SEARCH)
-    public ResponseEntity<APIResponse<PagingResponseModel>> searchFood(
-            @RequestParam(name = "category", required = false) String category,
-            @RequestParam(name = "search_key", required = false) String searchKey,
-            @RequestParam(name = "min_price", required = false) BigDecimal minPrice,
-            @RequestParam(name = "max_price", required = false) BigDecimal maxPrice,
-            @RequestParam(name = "sort_case", defaultValue = "1") Integer sortCase,
-            @RequestParam(name = "is_asc_sort", required = false) boolean isAscSort,
+    public ResponseEntity<APIResponse<PagingResponse>> searchFood(
+            @RequestParam(name = "category", defaultValue = "") String category,
+            @RequestParam(name = "search_key", defaultValue = "") String searchKey,
+            @RequestParam(name = "min_price", defaultValue = "0") String minPrice,
+            @RequestParam(name = "max_price", defaultValue = "") String maxPrice,
+            @RequestParam(name = "sort_case", defaultValue = "1") String sortCase,
+            @RequestParam(name = "is_asc_sort", defaultValue = "") String isAscSort,
             @RequestParam(name = "page_number", defaultValue = "1") Integer pageNumber,
             @RequestParam(name = "page_size", defaultValue = "10") Integer pageSize
     ) {
+        SearchRequest searchRequest = SearchRequest.builder()
+                .params(List.of(category, searchKey, minPrice, maxPrice, sortCase, isAscSort))
+                .pagingRequest(new PagingRequest(pageNumber, pageSize))
+                .build();
         return ResponseEntity.status(OK).body(
                 new APIResponse<>(
                         MessageConstant.SEARCH_FOOD_SUCCESS,
-                        foodService.searchFood(category, searchKey,
-                                minPrice, maxPrice, sortCase, isAscSort, pageNumber, pageSize)
+                        foodService.searchFood(searchRequest)
                 )
         );
     }

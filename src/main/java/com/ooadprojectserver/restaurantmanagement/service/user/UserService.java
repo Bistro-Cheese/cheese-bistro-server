@@ -8,4 +8,5 @@ import java.util.Optional;
 
 public interface UserService {
     void saveUser(UserRegisterRequest userRequest);
+    void updateUserById(User user, UserRegisterRequest userRequest);
 }

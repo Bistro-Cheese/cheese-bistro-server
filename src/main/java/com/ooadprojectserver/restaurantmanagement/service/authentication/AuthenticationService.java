@@ -1,15 +1,12 @@
 package com.ooadprojectserver.restaurantmanagement.service.authentication;
 
-import com.ooadprojectserver.restaurantmanagement.dto.request.ConfirmationRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.request.UserLoginRequest;
-import com.ooadprojectserver.restaurantmanagement.dto.request.UserRegisterRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.response.AuthenticationResponse;
 import com.ooadprojectserver.restaurantmanagement.model.user.token.Token;
 import com.ooadprojectserver.restaurantmanagement.model.user.token.TokenType;
 import com.ooadprojectserver.restaurantmanagement.model.user.baseUser.User;
 import com.ooadprojectserver.restaurantmanagement.repository.user.TokenRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.user.UserRepository;
-import com.ooadprojectserver.restaurantmanagement.service.email.EmailService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -29,20 +26,9 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final UserRepository userRepository;
     private final TokenRepository tokenRepository;
-    private final EmailService emailService;
 
     @Value("${application.security.jwt.refresh-cookie-name}")
     private String CookieName;
-
-    public void register(UserRegisterRequest request) {
-        ConfirmationRequest confirm = ConfirmationRequest.builder()
-                .fullName(request.getFirstName() + " " + request.getLastName())
-                .username(request.getUsername())
-                .password(request.getPassword())
-                .emailTo(request.getEmail())
-                .build();
-        emailService.sendMailWithInline(confirm, Locale.ENGLISH);
-    }
 
     public AuthenticationResponse login(UserLoginRequest request) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));

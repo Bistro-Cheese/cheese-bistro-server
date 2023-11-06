@@ -11,7 +11,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PagingResponseModel {
+public class PagingResponse {
     private List<?> data;
     private long totalResult;
     private int totalPage;
