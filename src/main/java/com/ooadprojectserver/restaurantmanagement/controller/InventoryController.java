@@ -10,7 +10,6 @@ import com.ooadprojectserver.restaurantmanagement.service.inventory.InventorySer
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,7 +31,6 @@ public class InventoryController {
     }
 
     @PutMapping(APIConstant.INGREDIENT_ID)
-    @PreAuthorize("hasRole('OWNER') or hasRole('MANAGER')")
     public ResponseEntity<MessageResponse> importIngredient(
             @PathVariable("ingredient_id") Long ingredientId,
             @RequestBody InventoryRequest request

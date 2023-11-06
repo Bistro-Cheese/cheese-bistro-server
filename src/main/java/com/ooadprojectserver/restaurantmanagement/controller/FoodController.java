@@ -12,10 +12,8 @@ import com.ooadprojectserver.restaurantmanagement.model.composition.food.Food;
 import com.ooadprojectserver.restaurantmanagement.service.food.FoodService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,7 +22,7 @@ import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(APIConstant.FOOD)
+@RequestMapping(APIConstant.FOODS)
 public class FoodController {
     private final FoodService foodService;
 
@@ -40,7 +38,6 @@ public class FoodController {
     }
 
     //create food
-    @PreAuthorize("hasRole('OWNER')")
     @PostMapping()
     public ResponseEntity<MessageResponse> createFood(
             @RequestBody FoodRequest request
@@ -54,7 +51,6 @@ public class FoodController {
     }
 
     //delete food
-    @PreAuthorize("hasRole('OWNER')")
     @DeleteMapping(APIConstant.FOOD_ID)
     public ResponseEntity<MessageResponse> deleteFood(
             @PathVariable("food_id") UUID foodId
@@ -66,7 +62,6 @@ public class FoodController {
     }
 
     //update food
-    @PreAuthorize("hasRole('OWNER')")
     @PutMapping(APIConstant.FOOD_ID)
     public ResponseEntity<MessageResponse> updateFood(
             @PathVariable("food_id") UUID foodId,

@@ -22,9 +22,7 @@ public class AuthenticationController {
 
     @PostMapping(APIConstant.LOGIN)
     public ResponseEntity<APIResponse<AuthenticationResponse>> loginController(@RequestBody UserLoginRequest request) {
-
         AuthenticationResponse authResponse = authenticationService.login(request);
-
         return ResponseEntity.status(OK).header(HttpHeaders.SET_COOKIE, authResponse.getRefreshTokenCookie().toString()).body(new APIResponse<>(MessageConstant.LOGIN_SUCCESS, authResponse));
     }
 

@@ -14,26 +14,6 @@ import java.util.UUID;
 @Transactional
 public interface UserRepository extends JpaRepository<User, UUID>, JpaSpecificationExecutor<User> {
     Optional<User> findByUsername(String username);
-
     Optional<User> findByEmail(String email);
-
-    @Modifying
-    @Query("""
-            update User u set
-            u.firstName = ?1,
-            u.lastName = ?2,
-            u.lastModifiedDate = ?3,
-            u.dateOfBirth = ?4,
-            u.phoneNumber = ?5
-            where u.id = ?6
-    """)
-    void updateUserById(
-            String firstName,
-            String lastName,
-            Date lastModifiedDate,
-            Date dateOfBirth,
-            String phoneNumber,
-            UUID id
-    );
-
+    Optional<User> findByPhoneNumber(String phoneNumber);
 }

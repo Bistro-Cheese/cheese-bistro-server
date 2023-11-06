@@ -15,11 +15,11 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/payments")
+@RequestMapping(APIConstant.PAYMENTS)
 public class PaymentController {
     private final PaymentService paymentService;
 
-    @PostMapping(APIConstant.ORDER_ID + APIConstant.PAY)
+    @PostMapping(APIConstant.ORDER_ID)
     public ResponseEntity<APIResponse<Payment>> createBill(
             @PathVariable("order_id") UUID orderId,
             @RequestBody PaymentRequest request

@@ -1,5 +1,6 @@
 package com.ooadprojectserver.restaurantmanagement.controller;
 
+import com.ooadprojectserver.restaurantmanagement.constant.APIConstant;
 import com.ooadprojectserver.restaurantmanagement.constant.MessageConstant;
 import com.ooadprojectserver.restaurantmanagement.dto.request.EmailRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.response.MessageResponse;
@@ -15,11 +16,11 @@ import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/v1/email")
+@RequestMapping(APIConstant.EMAIL)
 public class EmailController {
     private final EmailService emailService;
 
-    @PostMapping("/send")
+    @PostMapping(APIConstant.EMAIL_SEND)
     public ResponseEntity<MessageResponse> sendEmail(
             @RequestBody EmailRequest request
     ) {
@@ -28,7 +29,7 @@ public class EmailController {
                 new MessageResponse(MessageConstant.EMAIL_SEND_SUCCESS)
         );
     }
-    @PostMapping("/send-file")
+    @PostMapping(APIConstant.EMAIL_SEND_FILE)
     public ResponseEntity<MessageResponse> sendEmailFile(
             @RequestBody EmailRequest request
     ) {

@@ -43,7 +43,7 @@ public class SecurityConfiguration {
                 .csrf(cors -> cors.disable())
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/api/v1/auth/**").permitAll()
-                        .anyRequest().permitAll()
+                        .anyRequest().authenticated()
                 )
 //                .oauth2Login(oauth -> oauth.defaultSuccessUrl("/user"))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

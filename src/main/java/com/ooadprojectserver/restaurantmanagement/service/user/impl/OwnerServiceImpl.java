@@ -10,6 +10,7 @@ import com.ooadprojectserver.restaurantmanagement.exception.CustomException;
 import com.ooadprojectserver.restaurantmanagement.model.user.baseUser.RoleConstant;
 import com.ooadprojectserver.restaurantmanagement.model.user.baseUser.Status;
 import com.ooadprojectserver.restaurantmanagement.model.user.baseUser.User;
+import com.ooadprojectserver.restaurantmanagement.service.authentication.JwtService;
 import com.ooadprojectserver.restaurantmanagement.service.specification.UserSpecification;
 import com.ooadprojectserver.restaurantmanagement.repository.user.OwnerRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.user.UserRepository;
@@ -20,6 +21,7 @@ import com.ooadprojectserver.restaurantmanagement.service.user.StaffService;
 import com.ooadprojectserver.restaurantmanagement.service.user.UserService;
 import com.ooadprojectserver.restaurantmanagement.service.user.factory.OwnerFactory;
 import jakarta.annotation.PostConstruct;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
@@ -33,6 +35,7 @@ public class OwnerServiceImpl implements OwnerService {
     private final OwnerRepository ownerRepository;
     private final ManagerService managerService;
     private final StaffService staffService;
+    private final JwtService jwtService;
     private final EmailService emailService;
     private final Map<Integer, UserService> roleToServiceMap;
 
@@ -42,6 +45,7 @@ public class OwnerServiceImpl implements OwnerService {
             OwnerRepository ownerRepository,
             ManagerService managerService,
             StaffService staffService,
+            JwtService jwtService,
             EmailService emailService,
             Map<Integer, UserService> roleToServiceMap
     ) {
@@ -50,6 +54,7 @@ public class OwnerServiceImpl implements OwnerService {
         this.ownerRepository = ownerRepository;
         this.managerService = managerService;
         this.staffService = staffService;
+        this.jwtService = jwtService;
         this.emailService = emailService;
         this.roleToServiceMap = roleToServiceMap;
     }
@@ -71,6 +76,15 @@ public class OwnerServiceImpl implements OwnerService {
     public void updateUserById(User user, UserRegisterRequest userRegisterRequest) {
         ownerRepository.save(ownerFactory.update(user, userRegisterRequest));
     }
+
+    @Override
+    public UserResponse getProfile(HttpServletRequest request) {
+        String username = jwtService.getUsernameFromHeader(request);
+        User owner = ownerRepository.findByUsername(username).orElseThrow(
+                () -> new CustomException(APIStatus.USER_NOT_FOUND)
+        );
+        return covertUserToUserResponse(owner);
+    }
     // Implement User Service End
 
     // Implement Owner Service Start
@@ -79,6 +93,16 @@ public class OwnerServiceImpl implements OwnerService {
         // Check if email already existed
         userRepository.findByEmail(userRegisterRequest.getEmail()).ifPresent(user -> {
             throw new CustomException(APIStatus.EMAIL_ALREADY_EXISTED);
+        });
+
+        // Check if username already existed
+        userRepository.findByUsername(userRegisterRequest.getUsername()).ifPresent(user -> {
+            throw new CustomException(APIStatus.USERNAME_ALREADY_EXISTED);
+        });
+
+        // Check if phone number already existed
+        userRepository.findByPhoneNumber(userRegisterRequest.getPhoneNumber()).ifPresent(user -> {
+            throw new CustomException(APIStatus.PHONE_NUMBER_ALREADY_EXISTED);
         });
 
         // Send confirmation email

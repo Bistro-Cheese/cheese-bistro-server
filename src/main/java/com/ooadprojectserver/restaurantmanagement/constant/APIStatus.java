@@ -18,6 +18,8 @@ public enum APIStatus {
     INVALID_ROLE_ID(400, "Invalid role id"),
     INVALID_DATE_OF_BIRTH(400, "Invalid date of birth"),
     EMAIL_ALREADY_EXISTED(400, "Email already existed"),
+    USERNAME_ALREADY_EXISTED(400, "Username already existed"),
+    PHONE_NUMBER_ALREADY_EXISTED(400, "Phone number already existed"),
     ROLE_CANNOT_UPDATE(400, "Role cannot update"),
 
     //Food status
