@@ -1,10 +1,8 @@
-package com.ooadprojectserver.restaurantmanagement.model.user.type;
+package com.ooadprojectserver.restaurantmanagement.model.user.baseUser;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ooadprojectserver.restaurantmanagement.constant.DateTimeConstant;
-import com.ooadprojectserver.restaurantmanagement.model.user.RoleConstant;
-import com.ooadprojectserver.restaurantmanagement.model.user.Address;
 import jakarta.persistence.*;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Table;
@@ -25,12 +23,14 @@ import java.util.UUID;
 
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 @DynamicInsert
 @DynamicUpdate
 @Entity
 @Table(name = "user")
-@RequiredArgsConstructor
 @Inheritance(strategy = InheritanceType.JOINED)
 public class User implements UserDetails, Serializable {
     @Serial
@@ -41,10 +41,6 @@ public class User implements UserDetails, Serializable {
     @Column(name = "id", nullable = false)
     private UUID id;
 
-    @Column(name = "username", nullable = false, unique = true)
-    @JdbcTypeCode(SqlTypes.NVARCHAR)
-    private String username;
-
     @Column(name = "first_name", nullable = false)
     @JdbcTypeCode(SqlTypes.NVARCHAR)
     private String firstName;
@@ -52,6 +48,10 @@ public class User implements UserDetails, Serializable {
     @Column(name = "last_name", nullable = false)
     @JdbcTypeCode(SqlTypes.NVARCHAR)
     private String lastName;
+
+    @Column(name = "username", nullable = false, unique = true)
+    @JdbcTypeCode(SqlTypes.NVARCHAR)
+    private String username;
 
     @Column(name = "mail", nullable = false, unique = true)
     @JdbcTypeCode(SqlTypes.NVARCHAR)
@@ -98,34 +98,21 @@ public class User implements UserDetails, Serializable {
     @JsonIgnore
     private boolean enabled;
 
-    public User(
-            String username,
-            String firstName,
-            String lastName,
-            String email,
-            Date dateOfBirth,
-            String password,
-            String phoneNumber,
-            Integer role,
-            Address address,
-            Integer status,
-            Date createdDate,
-            Date lastModifiedDate,
-            boolean enabled
-    ) {
-        this.username = username;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.dateOfBirth = dateOfBirth;
-        this.password = password;
-        this.phoneNumber = phoneNumber;
-        this.role = role;
-        this.status = status;
-        this.createdDate = createdDate;
-        this.lastModifiedDate = lastModifiedDate;
-        this.address = address;
-        this.enabled = enabled;
+    public User(User user) {
+        this.id = user.getId();
+        this.firstName = user.getFirstName();
+        this.lastName = user.getLastName();
+        this.username = user.getUsername();
+        this.email = user.getEmail();
+        this.dateOfBirth = user.getDateOfBirth();
+        this.password = user.getPassword();
+        this.phoneNumber = user.getPhoneNumber();
+        this.role = user.getRole();
+        this.status = user.getStatus();
+        this.address = user.getAddress();
+        this.enabled = user.isEnabled();
+        this.createdDate = user.getCreatedDate();
+        this.lastModifiedDate = user.getLastModifiedDate();
     }
 
     @JsonIgnore

@@ -2,9 +2,8 @@ package com.ooadprojectserver.restaurantmanagement.repository.schedule;
 
 import com.ooadprojectserver.restaurantmanagement.model.schedule.Shift;
 import com.ooadprojectserver.restaurantmanagement.model.schedule.Timekeeping;
-import com.ooadprojectserver.restaurantmanagement.model.schedule.TimekeepingStatus;
-import com.ooadprojectserver.restaurantmanagement.model.user.type.Manager;
-import com.ooadprojectserver.restaurantmanagement.model.user.type.Staff;
+import com.ooadprojectserver.restaurantmanagement.model.user.Manager;
+import com.ooadprojectserver.restaurantmanagement.model.user.Staff;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

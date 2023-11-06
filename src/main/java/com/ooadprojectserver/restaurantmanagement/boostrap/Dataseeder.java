@@ -7,17 +7,17 @@ import com.ooadprojectserver.restaurantmanagement.model.composition.ingredient.I
 import com.ooadprojectserver.restaurantmanagement.model.inventory.Inventory;
 import com.ooadprojectserver.restaurantmanagement.model.order.OrderTable;
 import com.ooadprojectserver.restaurantmanagement.model.order.TableStatus;
-import com.ooadprojectserver.restaurantmanagement.model.user.AccountStatus;
+import com.ooadprojectserver.restaurantmanagement.model.user.baseUser.Status;
 import com.ooadprojectserver.restaurantmanagement.constant.DateTimeConstant;
 import com.ooadprojectserver.restaurantmanagement.model.schedule.Schedule;
 import com.ooadprojectserver.restaurantmanagement.model.schedule.Shift;
-import com.ooadprojectserver.restaurantmanagement.model.user.Address;
+import com.ooadprojectserver.restaurantmanagement.model.user.baseUser.Address;
 import com.ooadprojectserver.restaurantmanagement.model.composition.food.Category;
-import com.ooadprojectserver.restaurantmanagement.model.user.Role;
+import com.ooadprojectserver.restaurantmanagement.model.user.baseUser.Role;
 import com.ooadprojectserver.restaurantmanagement.model.composition.food.Food;
-import com.ooadprojectserver.restaurantmanagement.model.user.type.Manager;
-import com.ooadprojectserver.restaurantmanagement.model.user.type.Owner;
-import com.ooadprojectserver.restaurantmanagement.model.user.type.Staff;
+import com.ooadprojectserver.restaurantmanagement.model.user.Manager;
+import com.ooadprojectserver.restaurantmanagement.model.user.Owner;
+import com.ooadprojectserver.restaurantmanagement.model.user.Staff;
 import com.ooadprojectserver.restaurantmanagement.repository.food.CompositionRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.food.IngredientRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.inventory.InventoryRepository;
@@ -91,14 +91,14 @@ public class Dataseeder implements ApplicationListener<ContextRefreshedEvent>, C
             throw new RuntimeException(e);
         }
 
-        logger.info("Loading Owner");
-        this.createListOwner();
-
-        logger.info("Loading Manager");
-        this.createListManager();
-
-        logger.info("Loading Staff");
-        this.createListStaff();
+//        logger.info("Loading Owner");
+//        this.createListOwner();
+//
+//        logger.info("Loading Manager");
+//        this.createListManager();
+//
+//        logger.info("Loading Staff");
+//        this.createListStaff();
     }
 
     private void loadRoles() {
@@ -286,268 +286,268 @@ public class Dataseeder implements ApplicationListener<ContextRefreshedEvent>, C
         );
     }
 
-    private void createListOwner() throws ParseException {
-        JSONParser parser = new JSONParser();
-        JSONArray jsonArray;
-        try {
-            jsonArray = (JSONArray) parser.parse(
-                    new FileReader("./src/main/resources/data/owner.json")
-            );
-        } catch (FileNotFoundException | net.minidev.json.parser.ParseException e) {
-            throw new RuntimeException(e);
-        }
-
-        List<Owner> ownerList = new ArrayList<>();
-
-        for (Object owner : jsonArray) {
-            JSONObject ownerObject = (JSONObject) owner;
-            String username = (String) ownerObject.get("username");
-            String firstName = (String) ownerObject.get("firstname");
-            String lastName = (String) ownerObject.get("lastname");
-            String email = (String) ownerObject.get("email");
-            String dob = (String) ownerObject.get("date_of_birth");
-            String password = (String) ownerObject.get("password");
-            String phoneNumber = (String) ownerObject.get("phone_number");
-            Integer status = (Integer) ownerObject.get("status");
-            String addressLine = (String) ownerObject.get("address_line");
-            String city = (String) ownerObject.get("city");
-            String region = (String) ownerObject.get("region");
-            String licenseBusiness = (String) ownerObject.get("license_business");
-            String branch = (String) ownerObject.get("branch");
-            ownerList.add(createOwner(
-                    username,
-                    firstName,
-                    lastName,
-                    email,
-                    dob,
-                    password,
-                    phoneNumber,
-                    status,
-                    addressLine,
-                    city,
-                    region,
-                    licenseBusiness,
-                    branch
-            ));
-        }
-
-        ownerRepository.saveAll(ownerList);
-    }
-
-    private Owner createOwner(
-            String username,
-            String firstName,
-            String lastName,
-            String email,
-            String dob,
-            String password,
-            String phoneNumber,
-            Integer status,
-            String addressLine,
-            String city,
-            String region,
-            String licenseBusiness,
-            String branch
-    ) throws ParseException {
-        Date dateOfBirth = new SimpleDateFormat(DateTimeConstant.FORMAT_DATE).parse(dob);
-        Address address = addressRepository.save(
-                Address.builder()
-                        .addressLine(addressLine)
-                        .city(city)
-                        .region(region)
-                        .build()
-        );
-        return Owner.ownerBuilder()
-                .username(username)
-                .firstName(firstName)
-                .lastName(lastName)
-                .email(email)
-                .dateOfBirth(dateOfBirth)
-                .password(passwordEncoder.encode(password))
-                .phoneNumber(phoneNumber)
-                .role(3)
-                .status(status)
-                .address(address)
-                .licenseBusiness(licenseBusiness)
-                .branch(branch)
-                .createdDate(new Date())
-                .lastModifiedDate(new Date())
-                .enabled(Objects.equals(status, AccountStatus.ACTIVE.getValue()))
-                .build();
-    }
-
-    private void createListManager() throws ParseException {
-        JSONParser parser = new JSONParser();
-        JSONArray jsonArray;
-        try {
-            jsonArray = (JSONArray) parser.parse(
-                    new FileReader("./src/main/resources/data/manager.json")
-            );
-        } catch (FileNotFoundException | net.minidev.json.parser.ParseException e) {
-            throw new RuntimeException(e);
-        }
-
-        List<Manager> managerList = new ArrayList<>();
-
-        for (Object manager : jsonArray) {
-            JSONObject managerObject = (JSONObject) manager;
-            String username = (String) managerObject.get("username");
-            String firstName = (String) managerObject.get("firstname");
-            String lastName = (String) managerObject.get("lastname");
-            String email = (String) managerObject.get("email");
-            String dob = (String) managerObject.get("date_of_birth");
-            String password = (String) managerObject.get("password");
-            String phoneNumber = (String) managerObject.get("phone_number");
-            Integer status = (Integer) managerObject.get("status");
-            String addressLine = (String) managerObject.get("address_line");
-            String city = (String) managerObject.get("city");
-            String region = (String) managerObject.get("region");
-            String certificationManagement = (String) managerObject.get("certification_management");
-            managerList.add(createManager(
-                    username,
-                    firstName,
-                    lastName,
-                    email,
-                    dob,
-                    password,
-                    phoneNumber,
-                    status,
-                    addressLine,
-                    city,
-                    region,
-                    certificationManagement
-            ));
-        }
-        managerRepository.saveAll(managerList);
-    }
-    private Manager createManager(
-            String username,
-            String firstName,
-            String lastName,
-            String email,
-            String dob,
-            String password,
-            String phoneNumber,
-            Integer status,
-            String addressLine,
-            String city,
-            String region,
-            String certificationManagement
-    ) throws ParseException {
-        Date dateOfBirth = new SimpleDateFormat(DateTimeConstant.FORMAT_DATE).parse(dob);
-        Address address = addressRepository.save(
-                Address.builder()
-                        .addressLine(addressLine)
-                        .city(city)
-                        .region(region)
-                        .build()
-        );
-        return Manager.managerBuilder()
-                .username(username)
-                .firstName(firstName)
-                .lastName(lastName)
-                .email(email)
-                .dateOfBirth(dateOfBirth)
-                .password(passwordEncoder.encode(password))
-                .phoneNumber(phoneNumber)
-                .role(2)
-                .status(status)
-                .address(address)
-                .certificationManagement(certificationManagement)
-                .experiencedYear(String.valueOf(faker.number().numberBetween(1, 5)))
-                .foreignLanguage(faker.nation().language())
-                .createdDate(new Date())
-                .lastModifiedDate(new Date())
-                .enabled(Objects.equals(status, AccountStatus.ACTIVE.getValue()))
-                .build();
-    }
-
-    private void createListStaff() throws ParseException {
-        JSONParser parser = new JSONParser();
-        JSONArray jsonArray;
-        try {
-            jsonArray = (JSONArray) parser.parse(
-                    new FileReader("./src/main/resources/data/staff.json")
-            );
-        } catch (FileNotFoundException | net.minidev.json.parser.ParseException e) {
-            throw new RuntimeException(e);
-        }
-
-        List<Staff> staffList = new ArrayList<>();
-
-        for (Object staff : jsonArray) {
-            JSONObject staffObject = (JSONObject) staff;
-            String username = (String) staffObject.get("username");
-            String firstName = (String) staffObject.get("firstname");
-            String lastName = (String) staffObject.get("lastname");
-            String email = (String) staffObject.get("email");
-            String dob = (String) staffObject.get("date_of_birth");
-            String password = (String) staffObject.get("password");
-            String phoneNumber = (String) staffObject.get("phone_number");
-            Integer status = (Integer) staffObject.get("status");
-            String addressLine = (String) staffObject.get("address_line");
-            String city = (String) staffObject.get("city");
-            String region = (String) staffObject.get("region");
-            String academicLevel = (String) staffObject.get("academic_level");
-            staffList.add(createStaff(
-                    username,
-                    firstName,
-                    lastName,
-                    email,
-                    dob,
-                    password,
-                    phoneNumber,
-                    status,
-                    addressLine,
-                    city,
-                    region,
-                    academicLevel
-            ));
-        }
-        staffRepository.saveAll(staffList);
-    }
-                                  
-private Staff createStaff(
-            String username,
-            String firstName,
-            String lastName,
-            String email,
-            String dob,
-            String password,
-            String phoneNumber,
-            Integer status,
-            String addressLine,
-            String city,
-            String region,
-            String academicLevel
-    ) throws ParseException {
-        Date dateOfBirth = new SimpleDateFormat(DateTimeConstant.FORMAT_DATE).parse(dob);
-        Address address = addressRepository.save(
-                Address.builder()
-                        .addressLine(addressLine)
-                        .city(city)
-                        .region(region)
-                        .build()
-        );
-        return Staff.staffBuilder()
-                .username(username)
-                .firstName(firstName)
-                .lastName(lastName)
-                .email(email)
-                .dateOfBirth(dateOfBirth)
-                .password(passwordEncoder.encode(password))
-                .phoneNumber(phoneNumber)
-                .role(1)
-                .status(status)
-                .address(address)
-                .foreignLanguage(faker.nation().language())
-                .academicLevel(academicLevel)
-                .createdDate(new Date())
-                .lastModifiedDate(new Date())
-                .enabled(Objects.equals(status, AccountStatus.ACTIVE.getValue()))
-                .build();
-    }
-
+//    private void createListOwner() throws ParseException {
+//        JSONParser parser = new JSONParser();
+//        JSONArray jsonArray;
+//        try {
+//            jsonArray = (JSONArray) parser.parse(
+//                    new FileReader("./src/main/resources/data/owner.json")
+//            );
+//        } catch (FileNotFoundException | net.minidev.json.parser.ParseException e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//        List<Owner> ownerList = new ArrayList<>();
+//
+//        for (Object owner : jsonArray) {
+//            JSONObject ownerObject = (JSONObject) owner;
+//            String username = (String) ownerObject.get("username");
+//            String firstName = (String) ownerObject.get("firstname");
+//            String lastName = (String) ownerObject.get("lastname");
+//            String email = (String) ownerObject.get("email");
+//            String dob = (String) ownerObject.get("date_of_birth");
+//            String password = (String) ownerObject.get("password");
+//            String phoneNumber = (String) ownerObject.get("phone_number");
+//            Integer status = (Integer) ownerObject.get("status");
+//            String addressLine = (String) ownerObject.get("address_line");
+//            String city = (String) ownerObject.get("city");
+//            String region = (String) ownerObject.get("region");
+//            String licenseBusiness = (String) ownerObject.get("license_business");
+//            String branch = (String) ownerObject.get("branch");
+//            ownerList.add(createOwner(
+//                    username,
+//                    firstName,
+//                    lastName,
+//                    email,
+//                    dob,
+//                    password,
+//                    phoneNumber,
+//                    status,
+//                    addressLine,
+//                    city,
+//                    region,
+//                    licenseBusiness,
+//                    branch
+//            ));
+//        }
+//
+//        ownerRepository.saveAll(ownerList);
+//    }
+//
+//    private Owner createOwner(
+//            String username,
+//            String firstName,
+//            String lastName,
+//            String email,
+//            String dob,
+//            String password,
+//            String phoneNumber,
+//            Integer status,
+//            String addressLine,
+//            String city,
+//            String region,
+//            String licenseBusiness,
+//            String branch
+//    ) throws ParseException {
+//        Date dateOfBirth = new SimpleDateFormat(DateTimeConstant.FORMAT_DATE).parse(dob);
+//        Address address = addressRepository.save(
+//                Address.builder()
+//                        .addressLine(addressLine)
+//                        .city(city)
+//                        .region(region)
+//                        .build()
+//        );
+//        return Owner.ownerBuilder()
+//                .username(username)
+//                .firstName(firstName)
+//                .lastName(lastName)
+//                .email(email)
+//                .dateOfBirth(dateOfBirth)
+//                .password(passwordEncoder.encode(password))
+//                .phoneNumber(phoneNumber)
+//                .role(3)
+//                .status(status)
+//                .address(address)
+//                .licenseBusiness(licenseBusiness)
+//                .branch(branch)
+//                .createdDate(new Date())
+//                .lastModifiedDate(new Date())
+//                .enabled(Objects.equals(status, Status.ACTIVE.getValue()))
+//                .build();
+//    }
+//
+//    private void createListManager() throws ParseException {
+//        JSONParser parser = new JSONParser();
+//        JSONArray jsonArray;
+//        try {
+//            jsonArray = (JSONArray) parser.parse(
+//                    new FileReader("./src/main/resources/data/manager.json")
+//            );
+//        } catch (FileNotFoundException | net.minidev.json.parser.ParseException e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//        List<Manager> managerList = new ArrayList<>();
+//
+//        for (Object manager : jsonArray) {
+//            JSONObject managerObject = (JSONObject) manager;
+//            String username = (String) managerObject.get("username");
+//            String firstName = (String) managerObject.get("firstname");
+//            String lastName = (String) managerObject.get("lastname");
+//            String email = (String) managerObject.get("email");
+//            String dob = (String) managerObject.get("date_of_birth");
+//            String password = (String) managerObject.get("password");
+//            String phoneNumber = (String) managerObject.get("phone_number");
+//            Integer status = (Integer) managerObject.get("status");
+//            String addressLine = (String) managerObject.get("address_line");
+//            String city = (String) managerObject.get("city");
+//            String region = (String) managerObject.get("region");
+//            String certificationManagement = (String) managerObject.get("certification_management");
+//            managerList.add(createManager(
+//                    username,
+//                    firstName,
+//                    lastName,
+//                    email,
+//                    dob,
+//                    password,
+//                    phoneNumber,
+//                    status,
+//                    addressLine,
+//                    city,
+//                    region,
+//                    certificationManagement
+//            ));
+//        }
+//        managerRepository.saveAll(managerList);
+//    }
+//    private Manager createManager(
+//            String username,
+//            String firstName,
+//            String lastName,
+//            String email,
+//            String dob,
+//            String password,
+//            String phoneNumber,
+//            Integer status,
+//            String addressLine,
+//            String city,
+//            String region,
+//            String certificationManagement
+//    ) throws ParseException {
+//        Date dateOfBirth = new SimpleDateFormat(DateTimeConstant.FORMAT_DATE).parse(dob);
+//        Address address = addressRepository.save(
+//                Address.builder()
+//                        .addressLine(addressLine)
+//                        .city(city)
+//                        .region(region)
+//                        .build()
+//        );
+//        return Manager.managerBuilder()
+//                .username(username)
+//                .firstName(firstName)
+//                .lastName(lastName)
+//                .email(email)
+//                .dateOfBirth(dateOfBirth)
+//                .password(passwordEncoder.encode(password))
+//                .phoneNumber(phoneNumber)
+//                .role(2)
+//                .status(status)
+//                .address(address)
+//                .certificationManagement(certificationManagement)
+//                .experiencedYear(String.valueOf(faker.number().numberBetween(1, 5)))
+//                .foreignLanguage(faker.nation().language())
+//                .createdDate(new Date())
+//                .lastModifiedDate(new Date())
+//                .enabled(Objects.equals(status, Status.ACTIVE.getValue()))
+//                .build();
+//    }
+//
+//    private void createListStaff() throws ParseException {
+//        JSONParser parser = new JSONParser();
+//        JSONArray jsonArray;
+//        try {
+//            jsonArray = (JSONArray) parser.parse(
+//                    new FileReader("./src/main/resources/data/staff.json")
+//            );
+//        } catch (FileNotFoundException | net.minidev.json.parser.ParseException e) {
+//            throw new RuntimeException(e);
+//        }
+//
+//        List<Staff> staffList = new ArrayList<>();
+//
+//        for (Object staff : jsonArray) {
+//            JSONObject staffObject = (JSONObject) staff;
+//            String username = (String) staffObject.get("username");
+//            String firstName = (String) staffObject.get("firstname");
+//            String lastName = (String) staffObject.get("lastname");
+//            String email = (String) staffObject.get("email");
+//            String dob = (String) staffObject.get("date_of_birth");
+//            String password = (String) staffObject.get("password");
+//            String phoneNumber = (String) staffObject.get("phone_number");
+//            Integer status = (Integer) staffObject.get("status");
+//            String addressLine = (String) staffObject.get("address_line");
+//            String city = (String) staffObject.get("city");
+//            String region = (String) staffObject.get("region");
+//            String academicLevel = (String) staffObject.get("academic_level");
+//            staffList.add(createStaff(
+//                    username,
+//                    firstName,
+//                    lastName,
+//                    email,
+//                    dob,
+//                    password,
+//                    phoneNumber,
+//                    status,
+//                    addressLine,
+//                    city,
+//                    region,
+//                    academicLevel
+//            ));
+//        }
+//        staffRepository.saveAll(staffList);
+//    }
+//
+//private Staff createStaff(
+//            String username,
+//            String firstName,
+//            String lastName,
+//            String email,
+//            String dob,
+//            String password,
+//            String phoneNumber,
+//            Integer status,
+//            String addressLine,
+//            String city,
+//            String region,
+//            String academicLevel
+//    ) throws ParseException {
+//        Date dateOfBirth = new SimpleDateFormat(DateTimeConstant.FORMAT_DATE).parse(dob);
+//        Address address = addressRepository.save(
+//                Address.builder()
+//                        .addressLine(addressLine)
+//                        .city(city)
+//                        .region(region)
+//                        .build()
+//        );
+//        return Staff.staffBuilder()
+//                .username(username)
+//                .firstName(firstName)
+//                .lastName(lastName)
+//                .email(email)
+//                .dateOfBirth(dateOfBirth)
+//                .password(passwordEncoder.encode(password))
+//                .phoneNumber(phoneNumber)
+//                .role(1)
+//                .status(status)
+//                .address(address)
+//                .foreignLanguage(faker.nation().language())
+//                .academicLevel(academicLevel)
+//                .createdDate(new Date())
+//                .lastModifiedDate(new Date())
+//                .enabled(Objects.equals(status, Status.ACTIVE.getValue()))
+//                .build();
+//    }
+//
     private void updateFoodStatus(List<Food> foodList) {
         for (Food food : foodList) {
             boolean isOutOfStock = false;

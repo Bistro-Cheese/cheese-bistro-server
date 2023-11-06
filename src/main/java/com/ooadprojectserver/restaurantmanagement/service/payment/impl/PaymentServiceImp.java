@@ -1,4 +1,4 @@
-package com.ooadprojectserver.restaurantmanagement.service.payment;
+package com.ooadprojectserver.restaurantmanagement.service.payment.impl;
 
 import com.ooadprojectserver.restaurantmanagement.constant.APIStatus;
 import com.ooadprojectserver.restaurantmanagement.dto.request.order.PaymentRequest;
@@ -13,6 +13,7 @@ import com.ooadprojectserver.restaurantmanagement.repository.order.OrderLineRepo
 import com.ooadprojectserver.restaurantmanagement.repository.order.OrderRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.order.OrderTableRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.order.PaymentRepository;
+import com.ooadprojectserver.restaurantmanagement.service.payment.PaymentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +22,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class PaymentServiceImp implements PaymentService{
+public class PaymentServiceImp implements PaymentService {
     private final PaymentRepository paymentRepository;
     private final OrderRepository orderRepository;
     private final OrderLineRepository orderLineRepository;
