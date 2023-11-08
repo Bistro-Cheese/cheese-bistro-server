@@ -14,12 +14,14 @@ public class APIConstant {
     // Users Routes
     public static final String USERS = VERSION + "/users";
     public static final String USER_ID = "/{userId}";
-    public static final String STAFF_USERNAME = "/{staff_username}";
     public static final String PROFILE = "/profile";
 
     // Timekeeping Routes
-    public static final String SCHEDULE = "/schedule";
+    public static final String SCHEDULES = VERSION + "/schedules";
     public static final String TIMEKEEPING_ID = "/{timekeeping_id}";
+    public static final String MANAGER = "/manager";
+    public static final String STAFF = "/staff";
+    public static final String STAFF_ID = "/{staffId}";
 
     // Order Routes
     public static final String ORDERS = VERSION + "/orders";

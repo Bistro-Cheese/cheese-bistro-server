@@ -14,13 +14,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/schedules")
+@RequestMapping(APIConstant.SCHEDULES)
 class ScheduleController {
     private final ScheduleService scheduleService;
 
-    @GetMapping(APIConstant.SCHEDULE)
+    @GetMapping(APIConstant.STAFF)
     public ResponseEntity<APIResponse<StaffScheduleResponse>> getSchedule(
             HttpServletRequest request
     ) {
@@ -32,7 +34,7 @@ class ScheduleController {
         );
     }
 
-    @GetMapping(APIConstant.SCHEDULE + "1")
+    @GetMapping(APIConstant.MANAGER)
     public ResponseEntity<APIResponse<ManagerScheduleRespone>> getWeekSchedule(HttpServletRequest request) {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new APIResponse<>(
@@ -42,19 +44,19 @@ class ScheduleController {
         );
     }
 
-    @PostMapping(APIConstant.SCHEDULE + APIConstant.STAFF_USERNAME)
+    @PostMapping(APIConstant.STAFF_ID)
     public ResponseEntity<MessageResponse> assignSchedule(
-            @PathVariable String staff_username,
+            @PathVariable UUID staffId,
             @RequestBody AssignScheduleRequest request,
             HttpServletRequest httpServletRequest
     ) {
-        scheduleService.assignSchedule(staff_username, request, httpServletRequest);
+        scheduleService.assignSchedule(staffId, request, httpServletRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 new MessageResponse(MessageConstant.ASSIGN_SCHEDULE_SUCCESS)
         );
     }
 
-    @DeleteMapping(APIConstant.SCHEDULE + APIConstant.TIMEKEEPING_ID)
+    @DeleteMapping(APIConstant.TIMEKEEPING_ID)
     public ResponseEntity<MessageResponse> deleteSchedule(
             @PathVariable Long timekeeping_id
     ) {
@@ -64,7 +66,7 @@ class ScheduleController {
         );
     }
 
-    @PatchMapping(APIConstant.SCHEDULE + APIConstant.TIMEKEEPING_ID)
+    @PatchMapping(APIConstant.TIMEKEEPING_ID)
     public ResponseEntity<MessageResponse> timekeepingStaff(
             @PathVariable Long timekeeping_id
     ) {

@@ -69,10 +69,8 @@ public abstract class UserFactory {
         user.setEmail(userRequest.getEmail());
         user.setFirstName(userRequest.getFirstName());
         user.setLastName(userRequest.getLastName());
-        user.setRole(userRequest.getRole());
         user.setStatus(userRequest.getStatus());
         user.setEnabled(userRequest.getStatus() == Status.ACTIVE.ordinal());
-        user.setPassword(userRequest.getPassword());
         user.setPhoneNumber(userRequest.getPhoneNumber());
         user.setDateOfBirth(dob);
         user.setLastModifiedDate(date);

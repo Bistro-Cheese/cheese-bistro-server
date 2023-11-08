@@ -13,6 +13,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface TimekeepingRepository extends JpaRepository<Timekeeping, Long> {
     @Query("select t from Timekeeping t where t.manager.username = ?1 and t.schedule.day = ?2 and t.schedule.shift = ?3")
@@ -21,8 +22,8 @@ public interface TimekeepingRepository extends JpaRepository<Timekeeping, Long> 
     @Query("select t from Timekeeping t where t.staff.username = ?1")
     List<Timekeeping> findStaffSchedule(String username);
 
-    @Query("select t from Timekeeping t where t.staff.username = ?1 and t.schedule.day = ?2 and t.schedule.shift = ?3")
-    Optional<Timekeeping> findStaffSchedule(String username, DayOfWeek day, Shift shift);
+    @Query("select t from Timekeeping t where t.staff.id = ?1 and t.schedule.day = ?2 and t.schedule.shift = ?3")
+    Optional<Timekeeping> findStaffSchedule(UUID id, DayOfWeek day, Shift shift);
 
     @Transactional
     @Modifying

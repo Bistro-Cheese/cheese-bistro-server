@@ -5,10 +5,12 @@ import com.ooadprojectserver.restaurantmanagement.dto.response.schedule.ManagerS
 import com.ooadprojectserver.restaurantmanagement.dto.response.schedule.StaffScheduleResponse;
 import jakarta.servlet.http.HttpServletRequest;
 
+import java.util.UUID;
+
 public interface ScheduleService {
     StaffScheduleResponse getSchedule(HttpServletRequest request);
     ManagerScheduleRespone getManagerSchedule(HttpServletRequest request);
-    void assignSchedule(String staff_username, AssignScheduleRequest request, HttpServletRequest httpServletRequest);
+    void assignSchedule(UUID staffId, AssignScheduleRequest request, HttpServletRequest httpServletRequest);
     void deleteSchedule(Long timekeeping_id);
     public void timekeepingStaff(Long timekeeping_id);
 }
