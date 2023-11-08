@@ -1,4 +1,4 @@
-package com.ooadprojectserver.restaurantmanagement.service.specification;
+package com.ooadprojectserver.restaurantmanagement.repository.specification;
 
 import com.ooadprojectserver.restaurantmanagement.constant.SortCase;
 import com.ooadprojectserver.restaurantmanagement.model.composition.food.Category;

@@ -24,10 +24,7 @@ import org.springframework.stereotype.Service;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -45,16 +42,16 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public void assignSchedule(String staff_username, AssignScheduleRequest request, HttpServletRequest httpServletRequest) {
+    public void assignSchedule(UUID staffId, AssignScheduleRequest request, HttpServletRequest httpServletRequest) {
         String username = jwtService.getUsernameFromHeader(httpServletRequest);
         Optional<Timekeeping> existedTimekeeping = timekeepingRepository.findStaffSchedule(
-                staff_username,
+                staffId,
                 request.getDayOfWeek(),
                 request.getShift()
         );
         if (existedTimekeeping.isEmpty()) {
             Manager manager = (Manager) managerRepository.findByUsername(username).orElseThrow();
-            Staff staff = (Staff) staffRepository.findByUsername(staff_username).orElseThrow();
+            Staff staff = (Staff) staffRepository.findById(staffId).orElseThrow();
             Schedule schedule = scheduleRepository.findByDayAndShift(request.getDayOfWeek(), request.getShift());
 
             Timekeeping timeKeeping = Timekeeping.builder()

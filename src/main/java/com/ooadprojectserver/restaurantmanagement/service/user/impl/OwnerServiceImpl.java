@@ -7,11 +7,9 @@ import com.ooadprojectserver.restaurantmanagement.dto.request.UserRegisterReques
 import com.ooadprojectserver.restaurantmanagement.dto.response.PagingResponse;
 import com.ooadprojectserver.restaurantmanagement.dto.response.UserResponse;
 import com.ooadprojectserver.restaurantmanagement.exception.CustomException;
-import com.ooadprojectserver.restaurantmanagement.model.user.baseUser.RoleConstant;
-import com.ooadprojectserver.restaurantmanagement.model.user.baseUser.Status;
 import com.ooadprojectserver.restaurantmanagement.model.user.baseUser.User;
 import com.ooadprojectserver.restaurantmanagement.service.authentication.JwtService;
-import com.ooadprojectserver.restaurantmanagement.service.specification.UserSpecification;
+import com.ooadprojectserver.restaurantmanagement.repository.specification.UserSpecification;
 import com.ooadprojectserver.restaurantmanagement.repository.user.OwnerRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.user.UserRepository;
 import com.ooadprojectserver.restaurantmanagement.service.email.EmailService;
@@ -83,7 +81,7 @@ public class OwnerServiceImpl implements OwnerService {
         User owner = ownerRepository.findByUsername(username).orElseThrow(
                 () -> new CustomException(APIStatus.USER_NOT_FOUND)
         );
-        return covertUserToUserResponse(owner);
+        return UserResponse.covertUserToUserResponse(owner);
     }
     // Implement User Service End
 
@@ -128,7 +126,7 @@ public class OwnerServiceImpl implements OwnerService {
         List<User> users = userRepository.findAll();
         List<UserResponse> userResponses = new ArrayList<>();
         for (User user : users) {
-            userResponses.add(covertUserToUserResponse(user));
+            userResponses.add(UserResponse.covertUserToUserResponse(user));
         }
         return userResponses;
     }
@@ -138,7 +136,7 @@ public class OwnerServiceImpl implements OwnerService {
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new CustomException(APIStatus.USER_NOT_FOUND)
         );
-        return covertUserToUserResponse(user);
+        return UserResponse.covertUserToUserResponse(user);
     }
 
     @Override
@@ -155,11 +153,6 @@ public class OwnerServiceImpl implements OwnerService {
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new CustomException(APIStatus.USER_NOT_FOUND)
         );
-
-        // Check if role is changed
-        if (!Objects.equals(userRegisterRequest.getRole(), user.getRole())) {
-            throw new CustomException(APIStatus.ROLE_CANNOT_UPDATE);
-        }
 
         // Check if email already existed
         if (!Objects.equals(userRegisterRequest.getEmail(), user.getEmail())) {
@@ -186,7 +179,7 @@ public class OwnerServiceImpl implements OwnerService {
         List<UserResponse> userResponseList = new ArrayList<>();
         if (!userPage.isEmpty()) {
             for (User user : userPage) {
-                userResponseList.add(this.covertUserToUserResponse(user));
+                userResponseList.add(UserResponse.covertUserToUserResponse(user));
             }
         }
         Page<UserResponse> userResponsePage = new PageImpl<>(userResponseList);
@@ -198,30 +191,4 @@ public class OwnerServiceImpl implements OwnerService {
         );
     }
     // Implement Owner Service End
-
-    private UserResponse covertUserToUserResponse(User user) {
-        String sRole = switch (user.getRole()) {
-            case 1 -> RoleConstant.ROLE.OWNER.name().toLowerCase();
-            case 2 -> RoleConstant.ROLE.MANAGER.name().toLowerCase();
-            case 3 -> RoleConstant.ROLE.STAFF.name().toLowerCase();
-            default -> throw new IllegalStateException("Unexpected value: " + user.getRole());
-        };
-        Integer status = switch (user.getStatus()) {
-            case 0 -> Status.ACTIVE.ordinal();
-            case 1 -> Status.INACTIVE.ordinal();
-            default -> throw new IllegalStateException("Unexpected value: " + user.getStatus());
-        };
-        return UserResponse.builder()
-                .id(user.getId())
-                .username(user.getUsername())
-                .firstName(user.getFirstName())
-                .lastName(user.getLastName())
-                .email(user.getEmail())
-                .phoneNumber(user.getPhoneNumber())
-                .dateOfBirth(user.getDateOfBirth())
-                .address(user.getAddress())
-                .status(status)
-                .role(sRole)
-                .build();
-    }
 }

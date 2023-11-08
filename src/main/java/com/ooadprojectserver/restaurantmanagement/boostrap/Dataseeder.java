@@ -51,7 +51,6 @@ public class Dataseeder implements ApplicationListener<ContextRefreshedEvent>, C
 
     @Override
     public void onApplicationEvent(@NonNull ContextRefreshedEvent event) {
-//        logger.info("Loading...");
 //        this.loadRoles();
 //        this.loadCategory();
 //        this.loadSchedules();
@@ -62,22 +61,12 @@ public class Dataseeder implements ApplicationListener<ContextRefreshedEvent>, C
 
     @Override
     public void run(String... args) throws ParseException {
-//        logger.info("Loading Food");
 //        try {
 //            this.createListFood();
 //            this.updateFoodStatus(foodRepository.findAll());
 //        } catch (FileNotFoundException e) {
 //            throw new RuntimeException(e);
 //        }
-
-//        logger.info("Loading Owner");
-//        this.createListOwner();
-//
-//        logger.info("Loading Manager");
-//        this.createListManager();
-//
-//        logger.info("Loading Staff");
-//        this.createListStaff();
     }
 
     private void loadRoles() {

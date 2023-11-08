@@ -13,7 +13,7 @@ import com.ooadprojectserver.restaurantmanagement.repository.food.CategoryReposi
 import com.ooadprojectserver.restaurantmanagement.repository.food.CompositionRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.food.FoodRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.inventory.InventoryRepository;
-import com.ooadprojectserver.restaurantmanagement.service.specification.FoodSpecification;
+import com.ooadprojectserver.restaurantmanagement.repository.specification.FoodSpecification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
