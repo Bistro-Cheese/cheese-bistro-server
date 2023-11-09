@@ -46,7 +46,7 @@ public class Food implements Serializable {
     private String productImage;
 
     @Column(name = "price", nullable = false)
-    @JdbcTypeCode(SqlTypes.INTEGER)
+    @JdbcTypeCode(SqlTypes.DECIMAL)
     private Long price;
 
 
@@ -55,11 +55,13 @@ public class Food implements Serializable {
 
     @CreatedDate
     @Column(name = "crt_at")
+    @JdbcTypeCode(SqlTypes.TIMESTAMP)
     @JsonFormat(pattern = DateTimeConstant.FORMAT_DATE_TIME, timezone = DateTimeConstant.TIMEZONE)
     private Date createdDate;
 
     @LastModifiedDate
-    @Column(name = "udpt_at")
+    @Column(name = "updt_at")
+    @JdbcTypeCode(SqlTypes.TIMESTAMP)
     @JsonFormat(pattern = DateTimeConstant.FORMAT_DATE_TIME, timezone = DateTimeConstant.TIMEZONE)
     private Date lastModifiedDate;
 }

@@ -12,14 +12,12 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -55,13 +53,14 @@ public class User implements UserDetails, Serializable {
     private String email;
 
     @Column(name = "dob")
+    @JdbcTypeCode(SqlTypes.TIMESTAMP)
     @JsonFormat(pattern = DateTimeConstant.FORMAT_DATE, timezone = DateTimeConstant.TIMEZONE)
     private Date dateOfBirth;
 
     @Column(name = "password")
     private String password;
 
-    @Column(name = "phone_number")
+    @Column(name = "phone_num")
     private String phoneNumber;
 
     @Column(name = "role", nullable = false)
@@ -74,11 +73,13 @@ public class User implements UserDetails, Serializable {
 
     @CreatedDate
     @Column(name = "crt_at")
+    @JdbcTypeCode(SqlTypes.TIMESTAMP)
     @JsonFormat(pattern = DateTimeConstant.FORMAT_DATE_TIME, timezone = DateTimeConstant.TIMEZONE)
     private Date createdDate;
 
     @LastModifiedDate
-    @Column(name = "udpt_at")
+    @Column(name = "updt_at")
+    @JdbcTypeCode(SqlTypes.TIMESTAMP)
     @JsonFormat(pattern = DateTimeConstant.FORMAT_DATE_TIME, timezone = DateTimeConstant.TIMEZONE)
     private Date lastModifiedDate;
 

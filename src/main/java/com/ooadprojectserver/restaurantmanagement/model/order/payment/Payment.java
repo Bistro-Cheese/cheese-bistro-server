@@ -27,7 +27,7 @@ public class Payment {
     @Column(name = "id", nullable = false)
     private UUID id;
 
-    @Column(name = "payment_type", nullable = false)
+    @Column(name = "type", nullable = false)
     @Enumerated(EnumType.ORDINAL)
     @JdbcTypeCode(SqlTypes.INTEGER)
     private PaymentType paymentType;
