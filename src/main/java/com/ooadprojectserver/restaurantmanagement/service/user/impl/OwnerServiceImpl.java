@@ -59,9 +59,9 @@ public class OwnerServiceImpl implements OwnerService {
 
     @PostConstruct
     private void initRoleToServiceMap() {
-        roleToServiceMap.put(1, this);
-        roleToServiceMap.put(2, managerService);
-        roleToServiceMap.put(3, staffService);
+        roleToServiceMap.put(0, this);
+        roleToServiceMap.put(1, managerService);
+        roleToServiceMap.put(2, staffService);
     }
 
     // Implement User Service Start
@@ -104,13 +104,13 @@ public class OwnerServiceImpl implements OwnerService {
         });
 
         // Send confirmation email
-        ConfirmationRequest confirm = ConfirmationRequest.builder()
-                .fullName(userRegisterRequest.getFirstName() + " " + userRegisterRequest.getLastName())
-                .username(userRegisterRequest.getUsername())
-                .password(userRegisterRequest.getPassword())
-                .emailTo(userRegisterRequest.getEmail())
-                .build();
-        emailService.sendMailWithInline(confirm, Locale.ENGLISH);
+//        ConfirmationRequest confirm = ConfirmationRequest.builder()
+//                .fullName(userRegisterRequest.getFirstName() + " " + userRegisterRequest.getLastName())
+//                .username(userRegisterRequest.getUsername())
+//                .password(userRegisterRequest.getPassword())
+//                .emailTo(userRegisterRequest.getEmail())
+//                .build();
+//        emailService.sendMailWithInline(confirm, Locale.ENGLISH);
 
         // Save user
         UserService userService = roleToServiceMap.get(userRegisterRequest.getRole());
