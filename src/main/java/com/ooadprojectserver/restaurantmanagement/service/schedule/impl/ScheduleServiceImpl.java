@@ -13,11 +13,9 @@ import com.ooadprojectserver.restaurantmanagement.model.user.Manager;
 import com.ooadprojectserver.restaurantmanagement.model.user.Staff;
 import com.ooadprojectserver.restaurantmanagement.repository.schedule.ScheduleRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.schedule.TimekeepingRepository;
-import com.ooadprojectserver.restaurantmanagement.repository.user.ManagerRepository;
-import com.ooadprojectserver.restaurantmanagement.repository.user.StaffRepository;
-import com.ooadprojectserver.restaurantmanagement.service.authentication.JwtService;
+import com.ooadprojectserver.restaurantmanagement.repository.user.UserRepository;
 import com.ooadprojectserver.restaurantmanagement.service.schedule.ScheduleService;
-import jakarta.servlet.http.HttpServletRequest;
+import com.ooadprojectserver.restaurantmanagement.service.user.UserDetailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -29,29 +27,28 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 public class ScheduleServiceImpl implements ScheduleService {
-    private final JwtService jwtService;
-    private final ManagerRepository managerRepository;
-    private final StaffRepository staffRepository;
+    private final UserDetailService userDetailService;
+    private final UserRepository userRepository;
     private final ScheduleRepository scheduleRepository;
     private final TimekeepingRepository timekeepingRepository;
 
     @Override
-    public ManagerScheduleRespone getManagerSchedule(HttpServletRequest request) {
-        String username = jwtService.getUsernameFromHeader(request);
+    public ManagerScheduleRespone getManagerSchedule() {
+        String username = userDetailService.getUsernameLogin();
         return getManagerScheduleRespone(username);
     }
 
     @Override
-    public void assignSchedule(UUID staffId, AssignScheduleRequest request, HttpServletRequest httpServletRequest) {
-        String username = jwtService.getUsernameFromHeader(httpServletRequest);
+    public void assignSchedule(UUID staffId, AssignScheduleRequest request) {
+        UUID managerId = userDetailService.getIdLogin();
         Optional<Timekeeping> existedTimekeeping = timekeepingRepository.findStaffSchedule(
                 staffId,
                 request.getDayOfWeek(),
                 request.getShift()
         );
         if (existedTimekeeping.isEmpty()) {
-            Manager manager = (Manager) managerRepository.findByUsername(username).orElseThrow();
-            Staff staff = (Staff) staffRepository.findById(staffId).orElseThrow();
+            Manager manager = (Manager) userRepository.findById(managerId).orElseThrow();
+            Staff staff = (Staff) userRepository.findById(staffId).orElseThrow();
             Schedule schedule = scheduleRepository.findByDayAndShift(request.getDayOfWeek(), request.getShift());
 
             Timekeeping timeKeeping = Timekeeping.builder()
@@ -101,8 +98,8 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public StaffScheduleResponse getSchedule(HttpServletRequest request) {
-        String username = jwtService.getUsernameFromHeader(request);
+    public StaffScheduleResponse getSchedule() {
+        String username = userDetailService.getUsernameLogin();
         List<Timekeeping> timekeepingList = timekeepingRepository.findStaffSchedule(username);
         List<Schedule> scheduleList = new ArrayList<>();
         for (Timekeeping timekeeping : timekeepingList) {

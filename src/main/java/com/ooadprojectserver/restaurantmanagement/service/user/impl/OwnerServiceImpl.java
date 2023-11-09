@@ -1,25 +1,20 @@
 package com.ooadprojectserver.restaurantmanagement.service.user.impl;
 
 import com.ooadprojectserver.restaurantmanagement.constant.APIStatus;
-import com.ooadprojectserver.restaurantmanagement.dto.request.ConfirmationRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.request.SearchRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.request.UserRegisterRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.response.PagingResponse;
 import com.ooadprojectserver.restaurantmanagement.dto.response.UserResponse;
 import com.ooadprojectserver.restaurantmanagement.exception.CustomException;
+import com.ooadprojectserver.restaurantmanagement.model.user.Owner;
+import com.ooadprojectserver.restaurantmanagement.model.user.baseUser.Role;
 import com.ooadprojectserver.restaurantmanagement.model.user.baseUser.User;
-import com.ooadprojectserver.restaurantmanagement.service.authentication.JwtService;
 import com.ooadprojectserver.restaurantmanagement.repository.specification.UserSpecification;
-import com.ooadprojectserver.restaurantmanagement.repository.user.OwnerRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.user.UserRepository;
 import com.ooadprojectserver.restaurantmanagement.service.email.EmailService;
-import com.ooadprojectserver.restaurantmanagement.service.user.ManagerService;
-import com.ooadprojectserver.restaurantmanagement.service.user.OwnerService;
-import com.ooadprojectserver.restaurantmanagement.service.user.StaffService;
-import com.ooadprojectserver.restaurantmanagement.service.user.UserService;
+import com.ooadprojectserver.restaurantmanagement.service.user.*;
 import com.ooadprojectserver.restaurantmanagement.service.user.factory.OwnerFactory;
 import jakarta.annotation.PostConstruct;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
@@ -30,30 +25,27 @@ import java.util.*;
 public class OwnerServiceImpl implements OwnerService {
     private final OwnerFactory ownerFactory;
     private final UserRepository userRepository;
-    private final OwnerRepository ownerRepository;
     private final ManagerService managerService;
     private final StaffService staffService;
-    private final JwtService jwtService;
+    private final UserDetailService userDetailService;
     private final EmailService emailService;
     private final Map<Integer, UserService> roleToServiceMap;
 
     public OwnerServiceImpl(
             OwnerFactory ownerFactory,
             UserRepository userRepository,
-            OwnerRepository ownerRepository,
             ManagerService managerService,
             StaffService staffService,
-            JwtService jwtService,
             EmailService emailService,
+            UserDetailService userDetailService,
             Map<Integer, UserService> roleToServiceMap
     ) {
         this.ownerFactory = ownerFactory;
         this.userRepository = userRepository;
-        this.ownerRepository = ownerRepository;
         this.managerService = managerService;
         this.staffService = staffService;
-        this.jwtService = jwtService;
         this.emailService = emailService;
+        this.userDetailService = userDetailService;
         this.roleToServiceMap = roleToServiceMap;
     }
 
@@ -67,18 +59,18 @@ public class OwnerServiceImpl implements OwnerService {
     // Implement User Service Start
     @Override
     public void saveUser(UserRegisterRequest userRegisterRequest) {
-        ownerRepository.save(ownerFactory.create(userRegisterRequest));
+        userRepository.save(ownerFactory.create(userRegisterRequest));
     }
 
     @Override
     public void updateUserById(User user, UserRegisterRequest userRegisterRequest) {
-        ownerRepository.save(ownerFactory.update(user, userRegisterRequest));
+        userRepository.save(ownerFactory.update(user, userRegisterRequest));
     }
 
     @Override
-    public UserResponse getProfile(HttpServletRequest request) {
-        String username = jwtService.getUsernameFromHeader(request);
-        User owner = ownerRepository.findByUsername(username).orElseThrow(
+    public UserResponse getProfile() {
+        String username = userDetailService.getUsernameLogin();
+        Owner owner = (Owner) userRepository.findByUsername(username).orElseThrow(
                 () -> new CustomException(APIStatus.USER_NOT_FOUND)
         );
         return UserResponse.covertUserToUserResponse(owner);
@@ -123,6 +115,13 @@ public class OwnerServiceImpl implements OwnerService {
 
     @Override
     public List<UserResponse> getAllUsers() {
+        UUID userId = userDetailService.getIdLogin();
+        User loginUser = userRepository.findById(userId).orElseThrow(
+                () -> new CustomException(APIStatus.USER_NOT_FOUND)
+        );
+        if (loginUser.getRole().ordinal() == Role.MANAGER.ordinal()) {
+            return managerService.getAllStaffs();
+        }
         List<User> users = userRepository.findAll();
         List<UserResponse> userResponses = new ArrayList<>();
         for (User user : users) {

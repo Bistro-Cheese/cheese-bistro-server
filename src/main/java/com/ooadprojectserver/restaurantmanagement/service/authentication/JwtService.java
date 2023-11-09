@@ -1,8 +1,6 @@
 package com.ooadprojectserver.restaurantmanagement.service.authentication;
 
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -35,14 +33,6 @@ public class JwtService {
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
-    }
-
-    public String getUsernameFromHeader (HttpServletRequest request) {
-        final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (authHeader == null || !authHeader.contains("Bearer ")) {
-            throw new RuntimeException("No Authorization Header");
-        }
-        return this.extractUsername(authHeader.substring(7));
     }
 
     public <T> T extractClaim (String token, Function<Claims, T> claimsResolver) {

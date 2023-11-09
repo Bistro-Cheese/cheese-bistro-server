@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.UUID;
 
 public interface OrderService {
-    List<OrderResponse> getOrders(HttpServletRequest request);
-    void createOrder(HttpServletRequest request, OrderRequest orderRequest);
+    List<OrderResponse> getOrders();
+    void createOrder(OrderRequest orderRequest);
     void deleteOrder(UUID orderId);
     void createOrderLine(UUID orderId, OrderLineRequest orderLineRequest);
     void updateOrderLine(UUID orderLineId, OrderLineRequest orderLineRequest);
