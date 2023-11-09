@@ -33,19 +33,16 @@ public class Food implements Serializable {
     private UUID id;
 
     @Column(name = "name", nullable = false, unique = true)
-    @JdbcTypeCode(SqlTypes.NVARCHAR)
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "category_id", nullable = false)
+    @JoinColumn(name = "category_id")
     private Category category;
 
     @Column(name = "description", nullable = false)
-    @JdbcTypeCode(SqlTypes.NVARCHAR)
     private String description;
 
-    @Column(name = "product_image", nullable = false)
-    @JdbcTypeCode(SqlTypes.NVARCHAR)
+    @Column(name = "image", nullable = false)
     private String productImage;
 
     @Column(name = "price", nullable = false)
@@ -54,18 +51,15 @@ public class Food implements Serializable {
 
 
     @Column(name = "status", nullable = false)
-    @JdbcTypeCode(SqlTypes.INTEGER)
     private Integer status;
 
     @CreatedDate
-    @Column(name = "created_date")
+    @Column(name = "crt_at")
     @JsonFormat(pattern = DateTimeConstant.FORMAT_DATE_TIME, timezone = DateTimeConstant.TIMEZONE)
-    @JdbcTypeCode(SqlTypes.TIMESTAMP)
     private Date createdDate;
 
     @LastModifiedDate
-    @Column(name = "last_modified_date")
+    @Column(name = "udpt_at")
     @JsonFormat(pattern = DateTimeConstant.FORMAT_DATE_TIME, timezone = DateTimeConstant.TIMEZONE)
-    @JdbcTypeCode(SqlTypes.TIMESTAMP)
     private Date lastModifiedDate;
 }

@@ -27,7 +27,7 @@ public class Composition {
     private Food food;
 
     @ManyToOne
-    @JoinColumn(name = "ingredient_id")
+    @JoinColumn(name = "ingre_id")
     private Ingredient ingredient;
 
     @Column(name = "portion", nullable = false)

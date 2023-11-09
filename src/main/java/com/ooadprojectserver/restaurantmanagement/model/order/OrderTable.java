@@ -28,7 +28,7 @@ public class OrderTable implements Serializable {
     @Column(name = "tab_num")
     private Integer tableNumber;
 
-    @Column(name = "table_status", nullable = false)
+    @Column(name = "status", nullable = false)
     @JdbcTypeCode(SqlTypes.INTEGER)
     private TableStatus tableStatus;
 

@@ -43,6 +43,12 @@ public class SecurityConfiguration {
                 .csrf(cors -> cors.disable())
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/api/v1/auth/**").permitAll()
+
+//                        .requestMatchers(HttpMethod.GET, "/api/v1/users/**").hasAnyAuthority(
+//                                Permission.OWNER_READ.name(),
+//                                Permission.MANAGER_READ.name()
+//                        )
+
                         .anyRequest().authenticated()
                 )
 //                .oauth2Login(oauth -> oauth.defaultSuccessUrl("/user"))
