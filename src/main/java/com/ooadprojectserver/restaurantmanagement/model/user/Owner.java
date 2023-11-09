@@ -23,11 +23,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Table(name = "owner")
 public class Owner extends User {
     @Column(name = "branch", nullable = false)
-    @JdbcTypeCode(SqlTypes.NVARCHAR)
     private String branch;
 
     @Column(name = "licen_business", nullable = false)
-    @JdbcTypeCode(SqlTypes.NVARCHAR)
     private String licenseBusiness;
 
     public Owner (User user, String branch, String licenseBusiness){

@@ -30,6 +30,5 @@ public class Inventory implements Serializable {
     private Ingredient ingredient;
 
     @Column(name = "quantity")
-    @JdbcTypeCode(SqlTypes.DOUBLE)
     private Double quantity;
 }
