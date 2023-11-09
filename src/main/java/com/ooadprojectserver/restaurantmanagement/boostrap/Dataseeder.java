@@ -174,7 +174,6 @@ public class Dataseeder implements ApplicationListener<ContextRefreshedEvent>, C
                             .tableNumber(tableNumber)
                             .seatNumber(seatNumber)
                             .tableStatus(TableStatus.EMPTY)
-                            .nameCustomer(null)
                             .build()
             );
         }

@@ -32,7 +32,7 @@ public class Category implements Serializable {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name = "name", nullable = false, unique = true)
+    @Column(name = "name")
     @JdbcTypeCode(SqlTypes.NVARCHAR)
     private String name;
 

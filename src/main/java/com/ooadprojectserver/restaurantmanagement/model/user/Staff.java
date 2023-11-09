@@ -22,11 +22,10 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Entity
 @Table(name = "staff")
 public class Staff extends User {
-    @Column(name = "foreign_language", nullable = false)
-    @JdbcTypeCode(SqlTypes.NVARCHAR)
+    @Column(name = "frg_lg")
     private String foreignLanguage;
 
-    @Column(name = "academic_level", nullable = false)
+    @Column(name = "acdmic_lv")
     private String academicLevel;
 
     public Staff(User user, String foreignLanguage, String academicLevel){

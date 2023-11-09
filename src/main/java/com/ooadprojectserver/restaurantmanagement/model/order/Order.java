@@ -23,7 +23,7 @@ import java.util.UUID;
 @EntityListeners(AuditingEntityListener.class)
 @DynamicInsert
 @DynamicUpdate
-@jakarta.persistence.Table(name = "restaurant_order")
+@Table(name = "order")
 public class Order implements Serializable {
 
     @Serial
@@ -31,23 +31,21 @@ public class Order implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     private UUID id;
 
     @ManyToOne
-    @JoinColumn(name = "staff_id", nullable = false)
+    @JoinColumn(name = "staff_id")
     private Staff staff;
 
     @ManyToOne
-    @JoinColumn(name = "table_id", nullable = false)
+    @JoinColumn(name = "table_id")
     private OrderTable orderTable;
 
-    @Column(name = "order_date", nullable = false)
-    @JdbcTypeCode(SqlTypes.TIMESTAMP)
+    @Column(name = "crt_at")
     private Date orderDate;
 
-    @Column(name = "status", nullable = false)
+    @Column(name = "status")
     @Enumerated(EnumType.ORDINAL)
-    @JdbcTypeCode(SqlTypes.INTEGER)
     private OrderStatus status;
 }

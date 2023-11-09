@@ -14,7 +14,7 @@ import java.io.Serializable;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "order_table")
+@Table(name = "res_table")
 public class OrderTable implements Serializable {
 
     @Serial
@@ -25,19 +25,14 @@ public class OrderTable implements Serializable {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "table_number", nullable = false, unique = true)
-    @JdbcTypeCode(SqlTypes.INTEGER)
+    @Column(name = "tab_num")
     private Integer tableNumber;
 
-    @Column(name = "table_status", nullable = false)
+    @Column(name = "status", nullable = false)
     @JdbcTypeCode(SqlTypes.INTEGER)
     private TableStatus tableStatus;
 
-    @Column(name = "seat_number", nullable = false)
+    @Column(name = "seat_num", nullable = false)
     @JdbcTypeCode(SqlTypes.INTEGER)
     private Integer seatNumber;
-
-    @Column(name = "name_customer")
-    @JdbcTypeCode(SqlTypes.NVARCHAR)
-    private String nameCustomer;
 }

@@ -31,18 +31,15 @@ public class Address implements Serializable {
     @Id
     @JsonIgnore
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     private UUID id;
 
-    @Column(name = "address_line", nullable = false)
-    @JdbcTypeCode(SqlTypes.NVARCHAR)
+    @Column(name = "addr_line")
     private String addressLine;
 
-    @Column(name = "city", nullable = false)
-    @JdbcTypeCode(SqlTypes.NVARCHAR)
+    @Column(name = "city")
     private String city;
 
-    @Column(name = "region", nullable = false)
-    @JdbcTypeCode(SqlTypes.NVARCHAR)
+    @Column(name = "region")
     private String region;
 }

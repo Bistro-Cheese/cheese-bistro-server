@@ -10,11 +10,15 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -25,7 +29,7 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "time_keeping")
+@Table(name = "timekeeping")
 public class Timekeeping implements Serializable {
 
     @Serial
@@ -37,23 +41,34 @@ public class Timekeeping implements Serializable {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "manager_id", nullable = false)
+    @JoinColumn(name = "manager_id")
     private Manager manager;
 
     @ManyToOne
-    @JoinColumn(name = "staff_id", nullable = false)
+    @JoinColumn(name = "staff_id")
     private Staff staff;
 
     @ManyToOne
-    @JoinColumn(name = "schedule_id", nullable = false)
+    @JoinColumn(name = "schd_id")
     private Schedule schedule;
 
-    @Column(name = "work_date")
+    @Column(name = "work_at")
     @JsonFormat(pattern = DateTimeConstant.FORMAT_DATE_TIME, timezone = DateTimeConstant.TIMEZONE)
-    @JdbcTypeCode(SqlTypes.TIMESTAMP)
-    private LocalDateTime workDate;
+    private Date workDate;
+
+    @CreatedDate
+    @Column(name = "crt_at")
+    @JsonFormat(pattern = DateTimeConstant.FORMAT_DATE_TIME, timezone = DateTimeConstant.TIMEZONE)
+    private Date createdDate;
+
+    @LastModifiedDate
+    @Column(name = "updt_at")
+    @JsonFormat(pattern = DateTimeConstant.FORMAT_DATE_TIME, timezone = DateTimeConstant.TIMEZONE)
+    private Date lastModifiedDate;
+
+    @Column(name = "updt_by")
+    private UUID updatedBy;
 
     @Column(name = "status")
-    @JdbcTypeCode(SqlTypes.INTEGER)
     private Integer status;
 }

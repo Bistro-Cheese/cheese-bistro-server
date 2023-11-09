@@ -26,10 +26,10 @@ public class Inventory implements Serializable {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "ingredient_id", nullable = false)
+    @JoinColumn(name = "ingredient_id")
     private Ingredient ingredient;
 
-    @Column(name = "quantity", nullable = false)
+    @Column(name = "quantity")
     @JdbcTypeCode(SqlTypes.DOUBLE)
     private Double quantity;
 }

@@ -51,9 +51,7 @@ public class PaymentServiceImp implements PaymentService {
         }
         return paymentRepository.save(
                 Payment.builder()
-                        .order(order)
                         .paymentType(PaymentType.covertIntToPaymentType(request.getPaymentType()))
-                        .total(total)
                         .build()
         );
     }

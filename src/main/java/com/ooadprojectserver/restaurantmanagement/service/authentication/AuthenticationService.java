@@ -69,7 +69,13 @@ public class AuthenticationService {
     }
 
     private void saveUserToken(User user, String accessToken) {
-        Token token = Token.builder().user(user).token(accessToken).tokenType(TokenType.BEARER).expired(false).revoked(false).build();
+        Token token = Token.builder()
+                .user(user)
+                .token(accessToken)
+                .tokenType(TokenType.BEARER)
+                .expired(false)
+                .revoked(false)
+                .build();
 
         tokenRepository.save(token);
     }

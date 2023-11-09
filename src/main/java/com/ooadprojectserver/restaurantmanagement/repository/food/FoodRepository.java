@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -15,6 +16,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Transactional
+@Repository
 public interface FoodRepository extends JpaRepository<Food, UUID>, JpaSpecificationExecutor<Food> {
     @Modifying
     @Query("""
