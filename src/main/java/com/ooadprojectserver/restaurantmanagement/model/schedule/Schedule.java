@@ -22,7 +22,7 @@ import java.time.DayOfWeek;
 @EntityListeners(AuditingEntityListener.class)
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "work_schedule")
+@Table(name = "schedule")
 public class Schedule implements Serializable {
 
     @Serial
@@ -36,11 +36,9 @@ public class Schedule implements Serializable {
 
     @Column(name = "day", nullable = false)
     @Enumerated(EnumType.STRING)
-    @JdbcTypeCode(SqlTypes.NVARCHAR)
     private DayOfWeek day;
 
     @Column(name = "shift", nullable = false)
     @Enumerated(EnumType.STRING)
-    @JdbcTypeCode(SqlTypes.NVARCHAR)
     private Shift shift;
 }

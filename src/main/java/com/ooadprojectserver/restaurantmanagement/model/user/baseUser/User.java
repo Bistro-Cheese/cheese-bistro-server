@@ -37,60 +37,49 @@ public class User implements UserDetails, Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     private UUID id;
 
-    @Column(name = "first_name", nullable = false)
-    @JdbcTypeCode(SqlTypes.NVARCHAR)
+    @Column(name = "fst_name")
     private String firstName;
 
-    @Column(name = "last_name", nullable = false)
-    @JdbcTypeCode(SqlTypes.NVARCHAR)
+    @Column(name = "lst_name", nullable = false)
     private String lastName;
 
-    @Column(name = "username", nullable = false, unique = true)
-    @JdbcTypeCode(SqlTypes.NVARCHAR)
+    @Column(name = "username")
     private String username;
 
-    @Column(name = "mail", nullable = false, unique = true)
-    @JdbcTypeCode(SqlTypes.NVARCHAR)
+    @Column(name = "email")
     private String email;
 
-    @Column(name = "date_of_birth", nullable = false)
+    @Column(name = "dob")
     @JsonFormat(pattern = DateTimeConstant.FORMAT_DATE, timezone = DateTimeConstant.TIMEZONE)
-    @JdbcTypeCode(SqlTypes.DATE)
     private Date dateOfBirth;
 
-    @Column(name = "password", nullable = false)
-    @JdbcTypeCode(SqlTypes.NVARCHAR)
+    @Column(name = "password")
     private String password;
 
-    @Column(name = "phone_number", nullable = false, unique = true, length = 30)
-    @JdbcTypeCode(SqlTypes.NVARCHAR)
+    @Column(name = "phone_number")
     private String phoneNumber;
 
-    @Column(name = "role_id", nullable = false)
-    @JdbcTypeCode(SqlTypes.INTEGER)
+    @Column(name = "role")
     private Integer role;
 
-    @Column(name = "status", nullable = false)
-    @JdbcTypeCode(SqlTypes.INTEGER)
+    @Column(name = "status")
     private Integer status;
 
     @CreatedDate
-    @Column(name = "created_date")
+    @Column(name = "crt_at")
     @JsonFormat(pattern = DateTimeConstant.FORMAT_DATE_TIME, timezone = DateTimeConstant.TIMEZONE)
-    @JdbcTypeCode(SqlTypes.TIMESTAMP)
     private Date createdDate;
 
     @LastModifiedDate
-    @Column(name = "last_modified_date")
+    @Column(name = "udpt_at")
     @JsonFormat(pattern = DateTimeConstant.FORMAT_DATE_TIME, timezone = DateTimeConstant.TIMEZONE)
-    @JdbcTypeCode(SqlTypes.TIMESTAMP)
     private Date lastModifiedDate;
 
     @OneToOne(cascade = CascadeType.REMOVE, orphanRemoval = true)
-    @JoinColumn(name = "address_id")
+    @JoinColumn(name = "addr_id")
     private Address address;
 
     private boolean enabled;

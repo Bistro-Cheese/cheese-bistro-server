@@ -22,15 +22,13 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Entity
 @Table(name = "manager")
 public class Manager extends User {
-    @Column(name = "certification_management", nullable = false)
+    @Column(name = "certi_management", nullable = false)
     private String certificationManagement;
 
-    @Column(name = "foreign_language", nullable = false)
-    @JdbcTypeCode(SqlTypes.NVARCHAR)
+    @Column(name = "frg_lg", nullable = false)
     private String foreignLanguage;
 
-    @Column(name = "experienced_year", nullable = false)
-    @JdbcTypeCode(SqlTypes.NVARCHAR)
+    @Column(name = "ex_y", nullable = false)
     private String experiencedYear;
 
     public Manager(User user, String certificationManagement, String foreignLanguage, String experiencedYear) {

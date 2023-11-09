@@ -42,6 +42,5 @@ public class OrderLine implements Serializable {
     private Order order;
 
     @Column(name = "quantity")
-    @JdbcTypeCode(SqlTypes.INTEGER)
     private Integer quantity;
 }

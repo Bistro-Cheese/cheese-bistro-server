@@ -21,14 +21,12 @@ public class Ingredient implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     private Long id;
 
-    @Column(name = "name", nullable = false)
-    @JdbcTypeCode(SqlTypes.NVARCHAR)
+    @Column(name = "name")
     private String name;
 
-    @Column(name = "type", nullable = false)
-    @JdbcTypeCode(SqlTypes.INTEGER)
+    @Column(name = "type")
     private Integer ingredientType;
 }

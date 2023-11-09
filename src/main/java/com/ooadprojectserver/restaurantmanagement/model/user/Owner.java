@@ -26,7 +26,7 @@ public class Owner extends User {
     @JdbcTypeCode(SqlTypes.NVARCHAR)
     private String branch;
 
-    @Column(name = "license_business", nullable = false)
+    @Column(name = "licen_business", nullable = false)
     @JdbcTypeCode(SqlTypes.NVARCHAR)
     private String licenseBusiness;
 

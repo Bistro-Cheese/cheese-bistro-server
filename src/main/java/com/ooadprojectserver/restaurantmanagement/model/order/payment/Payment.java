@@ -27,16 +27,9 @@ public class Payment {
     @Column(name = "id", nullable = false)
     private UUID id;
 
-    @ManyToOne
-    @JoinColumn(name = "order_id")
-    private Order order;
-
     @Column(name = "payment_type", nullable = false)
     @Enumerated(EnumType.ORDINAL)
     @JdbcTypeCode(SqlTypes.INTEGER)
     private PaymentType paymentType;
 
-    @Column(name = "total", nullable = false)
-    @JdbcTypeCode(SqlTypes.BIGINT)
-    private Long total;
 }

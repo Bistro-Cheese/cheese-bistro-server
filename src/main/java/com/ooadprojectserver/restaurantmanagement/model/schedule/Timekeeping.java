@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "time_keeping")
+@Table(name = "timekeeping")
 public class Timekeeping implements Serializable {
 
     @Serial
@@ -37,23 +37,21 @@ public class Timekeeping implements Serializable {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "manager_id", nullable = false)
+    @JoinColumn(name = "manager_id")
     private Manager manager;
 
     @ManyToOne
-    @JoinColumn(name = "staff_id", nullable = false)
+    @JoinColumn(name = "staff_id")
     private Staff staff;
 
     @ManyToOne
-    @JoinColumn(name = "schedule_id", nullable = false)
+    @JoinColumn(name = "sche_id")
     private Schedule schedule;
 
-    @Column(name = "work_date")
+    @Column(name = "crt_at")
     @JsonFormat(pattern = DateTimeConstant.FORMAT_DATE_TIME, timezone = DateTimeConstant.TIMEZONE)
-    @JdbcTypeCode(SqlTypes.TIMESTAMP)
     private LocalDateTime workDate;
 
     @Column(name = "status")
-    @JdbcTypeCode(SqlTypes.INTEGER)
     private Integer status;
 }

@@ -31,6 +31,5 @@ public class Composition {
     private Ingredient ingredient;
 
     @Column(name = "portion", nullable = false)
-    @JdbcTypeCode(SqlTypes.INTEGER)
     private Integer portion;
 }
