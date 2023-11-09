@@ -23,23 +23,21 @@ class ScheduleController {
     private final ScheduleService scheduleService;
 
     @GetMapping(APIConstant.STAFF)
-    public ResponseEntity<APIResponse<StaffScheduleResponse>> getSchedule(
-            HttpServletRequest request
-    ) {
+    public ResponseEntity<APIResponse<StaffScheduleResponse>> getSchedule() {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new APIResponse<>(
                         MessageConstant.GET_SCHEDULE_SUCCESS,
-                        scheduleService.getSchedule(request)
+                        scheduleService.getSchedule()
                 )
         );
     }
 
     @GetMapping(APIConstant.MANAGER)
-    public ResponseEntity<APIResponse<ManagerScheduleRespone>> getWeekSchedule(HttpServletRequest request) {
+    public ResponseEntity<APIResponse<ManagerScheduleRespone>> getWeekSchedule() {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new APIResponse<>(
                         MessageConstant.GET_ALL_SCHEDULE_SUCCESS,
-                        scheduleService.getManagerSchedule(request)
+                        scheduleService.getManagerSchedule()
                 )
         );
     }
@@ -47,10 +45,9 @@ class ScheduleController {
     @PostMapping(APIConstant.STAFF_ID)
     public ResponseEntity<MessageResponse> assignSchedule(
             @PathVariable UUID staffId,
-            @RequestBody AssignScheduleRequest request,
-            HttpServletRequest httpServletRequest
+            @RequestBody AssignScheduleRequest request
     ) {
-        scheduleService.assignSchedule(staffId, request, httpServletRequest);
+        scheduleService.assignSchedule(staffId, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 new MessageResponse(MessageConstant.ASSIGN_SCHEDULE_SUCCESS)
         );

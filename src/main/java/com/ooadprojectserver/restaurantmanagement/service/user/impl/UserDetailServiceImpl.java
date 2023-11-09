@@ -4,9 +4,11 @@ import com.ooadprojectserver.restaurantmanagement.model.user.baseUser.User;
 import com.ooadprojectserver.restaurantmanagement.service.user.UserDetailService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
+@Service
 public class UserDetailServiceImpl implements UserDetailService {
     public UserDetails userDetails() {
         if (SecurityContextHolder.getContext().getAuthentication() == null) {

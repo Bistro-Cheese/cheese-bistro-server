@@ -8,7 +8,6 @@ import com.ooadprojectserver.restaurantmanagement.dto.response.APIResponse;
 import com.ooadprojectserver.restaurantmanagement.dto.response.MessageResponse;
 import com.ooadprojectserver.restaurantmanagement.dto.response.order.OrderResponse;
 import com.ooadprojectserver.restaurantmanagement.service.order.OrderService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,23 +23,20 @@ public class OrderController {
     private final OrderService orderService;
 
     @GetMapping()
-    public ResponseEntity<APIResponse<List<OrderResponse>>> getOrders(
-            HttpServletRequest request
-    ) {
+    public ResponseEntity<APIResponse<List<OrderResponse>>> getOrders() {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new APIResponse<>(
                         MessageConstant.GET_ORDER_SUCCESS,
-                        orderService.getOrders(request)
+                        orderService.getOrders()
                 )
         );
     }
 
     @PostMapping()
     public ResponseEntity<MessageResponse> createOrder(
-            HttpServletRequest request,
             @RequestBody OrderRequest orderRequest
     ) {
-        orderService.createOrder(request, orderRequest);
+        orderService.createOrder(orderRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 new MessageResponse(
                         MessageConstant.CREATE_ORDER_SUCCESS

@@ -47,10 +47,18 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/api/v1/auth/**").permitAll()
 
-//                        .requestMatchers(HttpMethod.GET, "/api/v1/users/**").hasAnyAuthority(
-//                                Permission.OWNER_READ.name(),
-//                                Permission.MANAGER_READ.name()
-//                        )
+                        .requestMatchers(HttpMethod.POST, "/api/v1/users/**").hasAuthority(Permission.OWNER_WRITE.getPermission())
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/users/**").hasAuthority(Permission.OWNER_UPDATE.getPermission())
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/users/**").hasAuthority(Permission.OWNER_DELETE.getPermission())
+                        .requestMatchers(HttpMethod.GET, "/api/v1/users/profile").hasAnyAuthority(
+                                Permission.OWNER_READ.getPermission(),
+                                Permission.MANAGER_READ.getPermission(),
+                                Permission.STAFF_READ.getPermission()
+                        )
+                        .requestMatchers(HttpMethod.GET, "/api/v1/users/**").hasAnyAuthority(
+                                Permission.OWNER_READ.getPermission(),
+                                Permission.MANAGER_READ.getPermission()
+                        )
 
                         .anyRequest().authenticated()
                 )

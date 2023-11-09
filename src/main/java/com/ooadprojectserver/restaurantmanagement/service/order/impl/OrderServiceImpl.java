@@ -16,11 +16,10 @@ import com.ooadprojectserver.restaurantmanagement.repository.food.FoodRepository
 import com.ooadprojectserver.restaurantmanagement.repository.order.OrderLineRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.order.OrderRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.order.OrderTableRepository;
-import com.ooadprojectserver.restaurantmanagement.repository.user.StaffRepository;
-import com.ooadprojectserver.restaurantmanagement.service.authentication.JwtService;
+import com.ooadprojectserver.restaurantmanagement.repository.user.UserRepository;
 import com.ooadprojectserver.restaurantmanagement.service.inventory.InventoryService;
 import com.ooadprojectserver.restaurantmanagement.service.order.OrderService;
-import jakarta.servlet.http.HttpServletRequest;
+import com.ooadprojectserver.restaurantmanagement.service.user.UserDetailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -32,10 +31,10 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
-    private final JwtService jwtService;
+    private final UserDetailService userDetailService;
     private final InventoryService inventoryService;
 
-    private final StaffRepository staffRepository;
+    private final UserRepository userRepository;
     private final FoodRepository foodRepository;
     private final OrderRepository orderRepository;
     private final OrderTableRepository orderTableRepository;
@@ -43,9 +42,9 @@ public class OrderServiceImpl implements OrderService {
     private final CompositionRepository compositionRepository;
 
     @Override
-    public List<OrderResponse> getOrders(HttpServletRequest request) {
-        String username = jwtService.getUsernameFromHeader(request);
-        Staff staff = (Staff) staffRepository.findByUsername(username).orElseThrow(
+    public List<OrderResponse> getOrders() {
+        UUID staffId = userDetailService.getIdLogin();
+        Staff staff = (Staff) userRepository.findById(staffId).orElseThrow(
                 () -> new CustomException(APIStatus.USER_NOT_FOUND)
         );
 
@@ -99,9 +98,9 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void createOrder(HttpServletRequest request, OrderRequest orderRequest) {
-        String username = jwtService.getUsernameFromHeader(request);
-        Staff staff = (Staff) staffRepository.findByUsername(username).orElseThrow(
+    public void createOrder(OrderRequest orderRequest) {
+        UUID staffId = userDetailService.getIdLogin();
+        Staff staff = (Staff) userRepository.findById(staffId).orElseThrow(
                 () -> new CustomException(APIStatus.USER_NOT_FOUND)
         );
         OrderTable orderTable = orderTableRepository.findById(orderRequest.getTableId()).orElseThrow(

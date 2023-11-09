@@ -3,12 +3,8 @@ package com.ooadprojectserver.restaurantmanagement.config;
 import com.github.javafaker.Faker;
 import com.ooadprojectserver.restaurantmanagement.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -23,16 +19,11 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Properties;
 
 @Configuration
 @RequiredArgsConstructor
 public class ApplicationConfiguration {
     private final UserRepository userRepository;
-    @Value("${spring.mail.username}")
-    private String mailUsername;
-    @Value("${spring.mail.password}")
-    private String mailPassword;
 
     //Set up CORS
     @Bean

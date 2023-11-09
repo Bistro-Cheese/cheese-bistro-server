@@ -10,7 +10,6 @@ import com.ooadprojectserver.restaurantmanagement.dto.response.MessageResponse;
 import com.ooadprojectserver.restaurantmanagement.dto.response.PagingResponse;
 import com.ooadprojectserver.restaurantmanagement.dto.response.UserResponse;
 import com.ooadprojectserver.restaurantmanagement.service.user.OwnerService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +23,7 @@ import java.util.UUID;
 @RequestMapping(APIConstant.USERS)
 public class UserController {
     private final OwnerService ownerService;
+
     @PostMapping()
     public ResponseEntity<MessageResponse> createUser(@RequestBody UserRegisterRequest userRegisterRequest) {
         ownerService.createUser(userRegisterRequest);
@@ -52,11 +52,11 @@ public class UserController {
     }
 
     @GetMapping(APIConstant.PROFILE)
-    public ResponseEntity<APIResponse<UserResponse>> getProfile(HttpServletRequest request) {
+    public ResponseEntity<APIResponse<UserResponse>> getProfile() {
         return ResponseEntity.ok().body(
                 new APIResponse<>(
                         MessageConstant.GET_PROFILE_SUCCESS,
-                        ownerService.getProfile(request)
+                        ownerService.getProfile()
                 )
         );
     }

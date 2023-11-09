@@ -8,5 +8,5 @@ import jakarta.servlet.http.HttpServletRequest;
 public interface UserService {
     void saveUser(UserRegisterRequest userRequest);
     void updateUserById(User user, UserRegisterRequest userRequest);
-    UserResponse getProfile(HttpServletRequest request);
+    UserResponse getProfile();
 }
