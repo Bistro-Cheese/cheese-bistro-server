@@ -5,6 +5,7 @@ import com.ooadprojectserver.restaurantmanagement.constant.DateTimeConstant;
 import com.ooadprojectserver.restaurantmanagement.dto.request.UserRegisterRequest;
 import com.ooadprojectserver.restaurantmanagement.exception.CustomException;
 import com.ooadprojectserver.restaurantmanagement.model.user.baseUser.Address;
+import com.ooadprojectserver.restaurantmanagement.model.user.baseUser.Role;
 import com.ooadprojectserver.restaurantmanagement.model.user.baseUser.Status;
 import com.ooadprojectserver.restaurantmanagement.model.user.baseUser.User;
 import com.ooadprojectserver.restaurantmanagement.repository.user.AddressRepository;
@@ -14,7 +15,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.UUID;
 
 @RequiredArgsConstructor
 public abstract class UserFactory {
@@ -42,7 +42,7 @@ public abstract class UserFactory {
                 .email(userRequest.getEmail())
                 .firstName(userRequest.getFirstName())
                 .lastName(userRequest.getLastName())
-                .role(userRequest.getRole())
+                .role(Role.convertIntegerToRole(userRequest.getRole()))
                 .status(userRequest.getStatus())
                 .enabled(userRequest.getStatus() == Status.ACTIVE.ordinal())
                 .password(passwordEncoder.encode(userRequest.getPassword()))

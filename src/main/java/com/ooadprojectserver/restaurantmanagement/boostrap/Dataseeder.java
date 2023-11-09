@@ -10,7 +10,6 @@ import com.ooadprojectserver.restaurantmanagement.model.order.TableStatus;
 import com.ooadprojectserver.restaurantmanagement.model.schedule.Schedule;
 import com.ooadprojectserver.restaurantmanagement.model.schedule.Shift;
 import com.ooadprojectserver.restaurantmanagement.model.composition.food.Category;
-import com.ooadprojectserver.restaurantmanagement.model.user.baseUser.Role;
 import com.ooadprojectserver.restaurantmanagement.model.composition.food.Food;
 import com.ooadprojectserver.restaurantmanagement.repository.food.CompositionRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.food.IngredientRepository;
@@ -19,7 +18,6 @@ import com.ooadprojectserver.restaurantmanagement.repository.order.OrderTableRep
 import com.ooadprojectserver.restaurantmanagement.repository.schedule.ScheduleRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.food.CategoryRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.food.FoodRepository;
-import com.ooadprojectserver.restaurantmanagement.repository.user.RoleRepository;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import net.minidev.json.JSONArray;
@@ -40,7 +38,6 @@ import java.util.*;
 @RequiredArgsConstructor
 public class Dataseeder implements ApplicationListener<ContextRefreshedEvent>, CommandLineRunner {
     private final Faker faker;
-    private final RoleRepository roleRepository;
     private final ScheduleRepository scheduleRepository;
     private final FoodRepository foodRepository;
     private final CategoryRepository categoryRepository;
@@ -51,7 +48,6 @@ public class Dataseeder implements ApplicationListener<ContextRefreshedEvent>, C
 
     @Override
     public void onApplicationEvent(@NonNull ContextRefreshedEvent event) {
-//        this.loadRoles();
 //        this.loadCategory();
 //        this.loadSchedules();
 //        this.loadIngredient();
@@ -67,20 +63,6 @@ public class Dataseeder implements ApplicationListener<ContextRefreshedEvent>, C
 //        } catch (FileNotFoundException e) {
 //            throw new RuntimeException(e);
 //        }
-    }
-
-    private void loadRoles() {
-        List<Role> roles = new ArrayList<>(
-                List.of(
-                        new Role(1, "STAFF"),
-                        new Role(2, "MANAGER"),
-                        new Role(3, "OWNER")
-                )
-        );
-        roles.forEach(role -> {
-            Optional<Role> optionalRole = roleRepository.findById(role.getId());
-            optionalRole.ifPresentOrElse(System.out::println, () -> roleRepository.save(role));
-        });
     }
 
     private void loadSchedules() {
