@@ -4,7 +4,7 @@ Cheese Bistro can now elevate its business operations, providing an unparalleled
 
 Below is an overview of the main functionalities of the system:
 
-## 1. Roles
+## 1. System's Roles
 
 - Owner
 - Manager
@@ -13,7 +13,9 @@ Below is an overview of the main functionalities of the system:
 ## 2. Key Features
 ### Authentication and authorization
 - Login
-- Refresh token
+- Send Email Cofirmation
+- Authorization based on role
+- Access system by token
 ### User management
 - Create user and assign permissions by roles
 - Get all users, user detail and search users
