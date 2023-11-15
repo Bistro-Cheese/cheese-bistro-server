@@ -2,8 +2,6 @@ package com.ooadprojectserver.restaurantmanagement.model.order;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -29,10 +27,9 @@ public class OrderTable implements Serializable {
     private Integer tableNumber;
 
     @Column(name = "status", nullable = false)
-    @JdbcTypeCode(SqlTypes.INTEGER)
+    @Enumerated(EnumType.ORDINAL)
     private TableStatus tableStatus;
 
     @Column(name = "seat_num", nullable = false)
-    @JdbcTypeCode(SqlTypes.INTEGER)
     private Integer seatNumber;
 }

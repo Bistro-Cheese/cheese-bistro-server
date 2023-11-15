@@ -23,7 +23,7 @@ import java.util.UUID;
 @EntityListeners(AuditingEntityListener.class)
 @DynamicInsert
 @DynamicUpdate
-@Table(name = "order")
+@Table(name = "orders")
 public class Order implements Serializable {
 
     @Serial

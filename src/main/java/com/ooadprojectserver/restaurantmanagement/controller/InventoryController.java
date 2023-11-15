@@ -35,7 +35,7 @@ public class InventoryController {
             @PathVariable("ingredient_id") Long ingredientId,
             @RequestBody InventoryRequest request
             ) {
-        inventoryService.importIngredient(request.getQuantity(), ingredientId);
+        inventoryService.addIngredientToInventory(request, ingredientId);
         return ResponseEntity.status(HttpStatus.OK).body(
                 new MessageResponse(MessageConstant.IMPORT_INGREDIENT_SUCCESS)
         );

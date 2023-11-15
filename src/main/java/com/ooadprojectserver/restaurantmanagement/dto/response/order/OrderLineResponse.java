@@ -13,6 +13,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderLineResponse {
+    @JsonProperty("id")
     private UUID id;
     @JsonProperty("food_id")
     private UUID foodId;
@@ -20,5 +21,6 @@ public class OrderLineResponse {
     private String foodName;
     @JsonProperty("food_price")
     private Long foodPrice;
+    @JsonProperty("quantity")
     private Integer quantity;
 }
