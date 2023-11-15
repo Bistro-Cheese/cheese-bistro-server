@@ -1,9 +1,12 @@
 package com.ooadprojectserver.restaurantmanagement.service.inventory;
 
 import com.ooadprojectserver.restaurantmanagement.constant.APIStatus;
+import com.ooadprojectserver.restaurantmanagement.dto.request.InventoryRequest;
 import com.ooadprojectserver.restaurantmanagement.exception.CustomException;
+import com.ooadprojectserver.restaurantmanagement.model.composition.Composition;
 import com.ooadprojectserver.restaurantmanagement.model.composition.ingredient.Ingredient;
 import com.ooadprojectserver.restaurantmanagement.model.inventory.Inventory;
+import com.ooadprojectserver.restaurantmanagement.model.order.OrderLine;
 import com.ooadprojectserver.restaurantmanagement.repository.food.IngredientRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.inventory.InventoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,28 +24,24 @@ public class InventoryService {
         return inventoryRepository.findAll();
     }
 
-    public void importIngredient(
-            Double quantity,
-            Long ingredientId
-    ) {
-        Ingredient ingredient = ingredientRepository.findById(ingredientId).orElseThrow(
-                () -> new CustomException(APIStatus.INGREDIENT_NOT_FOUND)
-        );
-        Inventory inventory = inventoryRepository.findByIngredient_Id(ingredientId);
-        if (inventory != null) {
-            inventory.setQuantity(inventory.getQuantity() + quantity);
-            inventoryRepository.save(inventory);
-            return;
-        }
-        inventoryRepository.save(
-                Inventory.builder()
-                        .ingredient(ingredient)
-                        .quantity(Double.valueOf(quantity))
-                        .build()
-        );
+    public void addIngredientToInventory(InventoryRequest request, Long ingredientId) {
+        var quantity = request.getQuantity();
+        var ingredient = getIngredient(ingredientId);
+        updateIngredient(ingredient, quantity);
     }
 
-    public void useIngredient(Long ingredientId, Integer quantity) {
+    public void returnIngredientToInventory(
+           Composition composition, OrderLine orderLine
+    ) {
+        var quantity = (double) (composition.getPortion() * orderLine.getQuantity());
+        var ingredientId = composition.getIngredient().getId();
+        var ingredient = getIngredient(ingredientId);
+        updateIngredient(ingredient, quantity);
+    }
+
+    public void getIngredientFromInventory(Composition composition, OrderLine orderLine) {
+        var quantity = (double) (composition.getPortion() * orderLine.getQuantity());
+        var ingredientId = composition.getIngredient().getId();
         Inventory inventory = inventoryRepository.findByIngredient_Id(ingredientId);
         if (inventory == null) {
             throw new CustomException(APIStatus.INGREDIENT_NOT_FOUND);
@@ -53,4 +52,25 @@ public class InventoryService {
         inventory.setQuantity(inventory.getQuantity() - quantity);
         inventoryRepository.save(inventory);
     }
+
+    private Ingredient getIngredient(Long ingredientId){
+        return ingredientRepository.findById(ingredientId).orElseThrow(
+                () -> new CustomException(APIStatus.INGREDIENT_NOT_FOUND)
+        );
+    }
+
+    private void updateIngredient(Ingredient ingredient, double quantity){
+        Inventory inventory = inventoryRepository.findByIngredient_Id(ingredient.getId());
+        if (inventory != null) {
+            inventory.setQuantity(inventory.getQuantity() + quantity);
+            inventoryRepository.save(inventory);
+            return;
+        }
+        var newInventory = Inventory.builder()
+                .ingredient(ingredient)
+                .quantity(quantity)
+                .build();
+        inventoryRepository.save(newInventory);
+    }
+
 }
