@@ -7,7 +7,6 @@ import com.ooadprojectserver.restaurantmanagement.dto.response.PagingResponse;
 import com.ooadprojectserver.restaurantmanagement.dto.response.UserResponse;
 import com.ooadprojectserver.restaurantmanagement.exception.CustomException;
 import com.ooadprojectserver.restaurantmanagement.model.user.Owner;
-import com.ooadprojectserver.restaurantmanagement.model.user.baseUser.Role;
 import com.ooadprojectserver.restaurantmanagement.model.user.baseUser.User;
 import com.ooadprojectserver.restaurantmanagement.repository.specification.UserSpecification;
 import com.ooadprojectserver.restaurantmanagement.repository.user.UserRepository;
@@ -114,14 +113,7 @@ public class OwnerServiceImpl implements OwnerService {
     }
 
     @Override
-    public List<UserResponse> getAllUsers() {
-        UUID userId = userDetailService.getIdLogin();
-        User loginUser = userRepository.findById(userId).orElseThrow(
-                () -> new CustomException(APIStatus.USER_NOT_FOUND)
-        );
-        if (loginUser.getRole().ordinal() == Role.MANAGER.ordinal()) {
-            return managerService.getAllStaffs();
-        }
+    public List<UserResponse> getUsers() {
         List<User> users = userRepository.findAll();
         List<UserResponse> userResponses = new ArrayList<>();
         for (User user : users) {

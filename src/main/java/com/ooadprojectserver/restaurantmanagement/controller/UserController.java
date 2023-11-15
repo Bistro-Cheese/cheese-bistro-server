@@ -9,13 +9,15 @@ import com.ooadprojectserver.restaurantmanagement.dto.response.APIResponse;
 import com.ooadprojectserver.restaurantmanagement.dto.response.MessageResponse;
 import com.ooadprojectserver.restaurantmanagement.dto.response.PagingResponse;
 import com.ooadprojectserver.restaurantmanagement.dto.response.UserResponse;
-import com.ooadprojectserver.restaurantmanagement.service.user.OwnerService;
+import com.ooadprojectserver.restaurantmanagement.service.user.*;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -23,6 +25,17 @@ import java.util.UUID;
 @RequestMapping(APIConstant.USERS)
 public class UserController {
     private final OwnerService ownerService;
+    private final ManagerService managerService;
+    private final StaffService staffService;
+    private final UserDetailService userDetailService;
+    private final Map<Integer, UserService> roleToServiceMap;
+
+    @PostConstruct
+    private void initRoleToServiceMap() {
+        roleToServiceMap.put(0, ownerService);
+        roleToServiceMap.put(1, managerService);
+        roleToServiceMap.put(2, staffService);
+    }
 
     @PostMapping()
     public ResponseEntity<MessageResponse> createUser(@RequestBody UserRegisterRequest userRegisterRequest) {
@@ -32,11 +45,16 @@ public class UserController {
     }
 
     @GetMapping()
-    public ResponseEntity<APIResponse<List<UserResponse>>> getAllUsers() {
+    public ResponseEntity<APIResponse<List<UserResponse>>> getUsers() {
+        Integer role = userDetailService.getRoleLogin();
         return ResponseEntity.ok().body(
                 new APIResponse<>(
                         MessageConstant.GET_USERS_SUCCESS,
-                        ownerService.getAllUsers()
+                        switch (role) {
+                            case 0 -> ownerService.getUsers();
+                            case 1 -> managerService.getUsers();
+                            default -> throw new IllegalStateException("Unexpected value: " + role);
+                        }
                 )
         );
     }
@@ -53,10 +71,11 @@ public class UserController {
 
     @GetMapping(APIConstant.PROFILE)
     public ResponseEntity<APIResponse<UserResponse>> getProfile() {
+        Integer role = userDetailService.getRoleLogin();
         return ResponseEntity.ok().body(
                 new APIResponse<>(
                         MessageConstant.GET_PROFILE_SUCCESS,
-                        ownerService.getProfile()
+                        roleToServiceMap.get(role).getProfile()
                 )
         );
     }

@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public interface OwnerService extends UserService {
     void createUser(UserRegisterRequest userRequest);
-    List<UserResponse> getAllUsers();
+    List<UserResponse> getUsers();
     UserResponse getUserDetail(UUID userId);
     void deleteUser(UUID userId);
     void updateUser(UUID userId, UserRegisterRequest userRequest);

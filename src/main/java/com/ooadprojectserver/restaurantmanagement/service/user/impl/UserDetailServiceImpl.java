@@ -37,4 +37,12 @@ public class UserDetailServiceImpl implements UserDetailService {
         }
         return userDetails.getUsername();
     }
+
+    public Integer getRoleLogin() {
+        User userDetails = (User) userDetails();
+        if (userDetails == null) {
+            return null;
+        }
+        return userDetails.getRole().ordinal();
+    }
 }
