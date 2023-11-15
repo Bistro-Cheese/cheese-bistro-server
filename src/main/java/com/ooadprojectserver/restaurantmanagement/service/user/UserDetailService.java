@@ -10,4 +10,6 @@ public interface UserDetailService {
     UUID getIdLogin();
 
     String getUsernameLogin();
+
+    Integer getRoleLogin();
 }

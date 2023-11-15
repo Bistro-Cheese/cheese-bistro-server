@@ -47,7 +47,7 @@ public class ManagerServiceImpl implements ManagerService {
 
     // ManagerService implementation Start
     @Override
-    public List<UserResponse> getAllStaffs() {
+    public List<UserResponse> getUsers() {
         List<User> staffs = userRepository.findByRole(Role.STAFF);
         List<UserResponse> userResponses = new ArrayList<>();
         for (User staff : staffs) {
