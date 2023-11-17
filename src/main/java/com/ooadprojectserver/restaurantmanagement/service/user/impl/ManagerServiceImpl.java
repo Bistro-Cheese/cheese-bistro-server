@@ -1,7 +1,7 @@
 package com.ooadprojectserver.restaurantmanagement.service.user.impl;
 
 import com.ooadprojectserver.restaurantmanagement.constant.APIStatus;
-import com.ooadprojectserver.restaurantmanagement.dto.request.UserRegisterRequest;
+import com.ooadprojectserver.restaurantmanagement.dto.request.UserCreateRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.response.UserResponse;
 import com.ooadprojectserver.restaurantmanagement.exception.CustomException;
 import com.ooadprojectserver.restaurantmanagement.model.user.Manager;
@@ -26,13 +26,13 @@ public class ManagerServiceImpl implements ManagerService {
 
     // UserService implementation Start
     @Override
-    public void saveUser(UserRegisterRequest userRegisterRequest) {
-        userRepository.save(managerFactory.create(userRegisterRequest));
+    public void saveUser(UserCreateRequest userCreateRequest) {
+        userRepository.save(managerFactory.create(userCreateRequest));
     }
 
     @Override
-    public void updateUserById(User user, UserRegisterRequest userRegisterRequest) {
-        userRepository.save(managerFactory.update(user, userRegisterRequest));
+    public void updateUserById(User user, UserCreateRequest userCreateRequest) {
+        userRepository.save(managerFactory.update(user, userCreateRequest));
     }
 
     @Override

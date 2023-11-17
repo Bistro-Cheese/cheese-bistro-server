@@ -57,6 +57,9 @@ public class User implements UserDetails, Serializable {
     @JsonFormat(pattern = DateTimeConstant.FORMAT_DATE, timezone = DateTimeConstant.TIMEZONE)
     private Date dateOfBirth;
 
+    @Column(name = "avt")
+    private String avatar;
+
     @Column(name = "password")
     private String password;
 
@@ -73,13 +76,11 @@ public class User implements UserDetails, Serializable {
 
     @CreatedDate
     @Column(name = "crt_at")
-    @JdbcTypeCode(SqlTypes.TIMESTAMP)
     @JsonFormat(pattern = DateTimeConstant.FORMAT_DATE_TIME, timezone = DateTimeConstant.TIMEZONE)
     private Date createdDate;
 
     @LastModifiedDate
     @Column(name = "updt_at")
-    @JdbcTypeCode(SqlTypes.TIMESTAMP)
     @JsonFormat(pattern = DateTimeConstant.FORMAT_DATE_TIME, timezone = DateTimeConstant.TIMEZONE)
     private Date lastModifiedDate;
 
@@ -96,6 +97,7 @@ public class User implements UserDetails, Serializable {
         this.username = user.getUsername();
         this.email = user.getEmail();
         this.dateOfBirth = user.getDateOfBirth();
+        this.avatar = user.getAvatar();
         this.password = user.getPassword();
         this.phoneNumber = user.getPhoneNumber();
         this.role = user.getRole();

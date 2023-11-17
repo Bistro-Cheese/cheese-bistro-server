@@ -2,7 +2,7 @@ package com.ooadprojectserver.restaurantmanagement.service.user.factory;
 
 import com.ooadprojectserver.restaurantmanagement.constant.APIStatus;
 import com.ooadprojectserver.restaurantmanagement.constant.DateTimeConstant;
-import com.ooadprojectserver.restaurantmanagement.dto.request.UserRegisterRequest;
+import com.ooadprojectserver.restaurantmanagement.dto.request.UserCreateRequest;
 import com.ooadprojectserver.restaurantmanagement.exception.CustomException;
 import com.ooadprojectserver.restaurantmanagement.model.user.baseUser.Address;
 import com.ooadprojectserver.restaurantmanagement.model.user.baseUser.Role;
@@ -21,16 +21,9 @@ public abstract class UserFactory {
     private final PasswordEncoder passwordEncoder;
     private final AddressRepository addressRepository;
 
-    public User create(UserRegisterRequest userRequest) {
-        Date date = new Date();
-        String dateOfBirth = userRequest.getDateOfBirth();
-        DateFormat dateFormat = new SimpleDateFormat(DateTimeConstant.FORMAT_DATE);
-        Date dob;
-        try {
-            dob = dateFormat.parse(dateOfBirth);
-        } catch (Exception e) {
-            throw new CustomException(APIStatus.INVALID_DATE_OF_BIRTH);
-        }
+    public User create(UserCreateRequest userRequest) {
+        Date dob = getDate(userRequest.getDateOfBirth());
+
         Address address = Address.builder()
                 .addressLine(userRequest.getAddressLine())
                 .city(userRequest.getCity())
@@ -49,22 +42,16 @@ public abstract class UserFactory {
                 .phoneNumber(userRequest.getPhoneNumber())
                 .address(address)
                 .dateOfBirth(dob)
-                .createdDate(date)
-                .lastModifiedDate(date)
+                .avatar(userRequest.getAvatar())
+                .createdDate(new Date())
+                .lastModifiedDate(new Date())
                 .build();
         return createUser(user, userRequest);
     }
 
-    public User update(User user, UserRegisterRequest userRequest) {
-        Date date = new Date();
-        String dateOfBirth = userRequest.getDateOfBirth();
-        DateFormat dateFormat = new SimpleDateFormat(DateTimeConstant.FORMAT_DATE);
-        Date dob;
-        try {
-            dob = dateFormat.parse(dateOfBirth);
-        } catch (Exception e) {
-            throw new CustomException(APIStatus.INVALID_DATE_OF_BIRTH);
-        }
+    public User update(User user, UserCreateRequest userRequest) {
+        Date dob = getDate(userRequest.getDateOfBirth());
+
         user.setUsername(userRequest.getUsername());
         user.setEmail(userRequest.getEmail());
         user.setFirstName(userRequest.getFirstName());
@@ -73,11 +60,21 @@ public abstract class UserFactory {
         user.setEnabled(userRequest.getStatus() == Status.ACTIVE.ordinal());
         user.setPhoneNumber(userRequest.getPhoneNumber());
         user.setDateOfBirth(dob);
-        user.setLastModifiedDate(date);
+        user.setAvatar(userRequest.getAvatar());
+        user.setLastModifiedDate(new Date());
         return updateUser(user, userRequest);
     }
 
-    protected abstract User createUser(User user, UserRegisterRequest userRequest);
+    protected abstract User createUser(User user, UserCreateRequest userRequest);
 
-    protected abstract User updateUser(User user, UserRegisterRequest userRequest);
+    protected abstract User updateUser(User user, UserCreateRequest userRequest);
+
+    private Date getDate(String dateOfBirth ){
+        DateFormat dateFormat = new SimpleDateFormat(DateTimeConstant.FORMAT_DATE);
+        try {
+            return dateFormat.parse(dateOfBirth);
+        } catch (Exception e) {
+            throw new CustomException(APIStatus.INVALID_DATE_OF_BIRTH);
+        }
+    }
 }

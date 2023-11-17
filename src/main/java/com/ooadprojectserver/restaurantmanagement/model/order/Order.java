@@ -42,6 +42,9 @@ public class Order implements Serializable {
     @JoinColumn(name = "table_id")
     private OrderTable orderTable;
 
+    @Column(name = "phone_cus")
+    private String phoneNumber;
+
     @Column(name = "crt_at")
     private Date orderDate;
 
