@@ -1,7 +1,7 @@
 package com.ooadprojectserver.restaurantmanagement.service.user.impl;
 
 import com.ooadprojectserver.restaurantmanagement.constant.APIStatus;
-import com.ooadprojectserver.restaurantmanagement.dto.request.UserRegisterRequest;
+import com.ooadprojectserver.restaurantmanagement.dto.request.UserCreateRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.response.UserResponse;
 import com.ooadprojectserver.restaurantmanagement.exception.CustomException;
 import com.ooadprojectserver.restaurantmanagement.model.user.Staff;
@@ -22,13 +22,13 @@ public class StaffServiceImpl implements StaffService {
 
     // UserService implementation Start
     @Override
-    public void saveUser(UserRegisterRequest userRegisterRequest) {
-        userRepository.save(staffFactory.create(userRegisterRequest));
+    public void saveUser(UserCreateRequest userCreateRequest) {
+        userRepository.save(staffFactory.create(userCreateRequest));
     }
 
     @Override
-    public void updateUserById(User user, UserRegisterRequest userRegisterRequest) {
-        userRepository.save(staffFactory.update(user, userRegisterRequest));
+    public void updateUserById(User user, UserCreateRequest userCreateRequest) {
+        userRepository.save(staffFactory.update(user, userCreateRequest));
     }
 
     @Override

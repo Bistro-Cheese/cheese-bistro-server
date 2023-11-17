@@ -1,12 +1,11 @@
 package com.ooadprojectserver.restaurantmanagement.service.user;
 
-import com.ooadprojectserver.restaurantmanagement.dto.request.UserRegisterRequest;
+import com.ooadprojectserver.restaurantmanagement.dto.request.UserCreateRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.response.UserResponse;
 import com.ooadprojectserver.restaurantmanagement.model.user.baseUser.User;
-import jakarta.servlet.http.HttpServletRequest;
 
 public interface UserService {
-    void saveUser(UserRegisterRequest userRequest);
-    void updateUserById(User user, UserRegisterRequest userRequest);
+    void saveUser(UserCreateRequest userRequest);
+    void updateUserById(User user, UserCreateRequest userRequest);
     UserResponse getProfile();
 }

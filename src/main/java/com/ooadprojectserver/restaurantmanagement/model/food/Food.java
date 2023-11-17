@@ -1,4 +1,4 @@
-package com.ooadprojectserver.restaurantmanagement.model.composition.food;
+package com.ooadprojectserver.restaurantmanagement.model.food;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ooadprojectserver.restaurantmanagement.constant.DateTimeConstant;
@@ -11,7 +11,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.UUID;
 

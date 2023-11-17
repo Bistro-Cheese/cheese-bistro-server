@@ -39,23 +39,37 @@ public class Bill {
     private Order order;
 
     @ManyToOne
+    @JoinColumn(name = "discount_id")
+    private Discount discount;
+
+    @ManyToOne
     @JoinColumn(name = "pay_id")
     private Payment payment;
-
-    @CreatedDate
-    @Column(name = "cus_in")
-    @JsonFormat(pattern = DateTimeConstant.FORMAT_DATE_TIME, timezone = DateTimeConstant.TIMEZONE)
-    private Date customerIn;
-
-    @LastModifiedDate
-    @Column(name = "cus_out")
-    @JsonFormat(pattern = DateTimeConstant.FORMAT_DATE_TIME, timezone = DateTimeConstant.TIMEZONE)
-    private Date customerOut;
-
-    @Column(name = "fax")
-    private Double fax;
 
     @Column(name = "total")
     @JdbcTypeCode(SqlTypes.DECIMAL)
     private BigDecimal total;
+
+    @Column(name = "sub_total")
+    @JdbcTypeCode(SqlTypes.DECIMAL)
+    private BigDecimal subTotal;
+
+    @Column(name = "paid")
+    @JdbcTypeCode(SqlTypes.DECIMAL)
+    private BigDecimal paid;
+
+    @Column(name = "change_paid")
+    @JdbcTypeCode(SqlTypes.DECIMAL)
+    private BigDecimal change;
+
+    @CreatedDate
+    @Column(name = "cus_in")
+    @JsonFormat(pattern = DateTimeConstant.FORMAT_DATE_TIME, timezone = DateTimeConstant.TIMEZONE)
+    private Date checkIn;
+
+    @LastModifiedDate
+    @Column(name = "cus_out")
+    @JsonFormat(pattern = DateTimeConstant.FORMAT_DATE_TIME, timezone = DateTimeConstant.TIMEZONE)
+    private Date checkOut;
+
 }

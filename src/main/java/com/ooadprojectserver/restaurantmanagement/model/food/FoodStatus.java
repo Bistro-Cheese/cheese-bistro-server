@@ -1,4 +1,4 @@
-package com.ooadprojectserver.restaurantmanagement.model.composition.food;
+package com.ooadprojectserver.restaurantmanagement.model.food;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

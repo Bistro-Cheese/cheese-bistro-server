@@ -8,7 +8,7 @@ import com.ooadprojectserver.restaurantmanagement.dto.request.SearchRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.response.APIResponse;
 import com.ooadprojectserver.restaurantmanagement.dto.response.MessageResponse;
 import com.ooadprojectserver.restaurantmanagement.dto.response.PagingResponse;
-import com.ooadprojectserver.restaurantmanagement.model.composition.food.Food;
+import com.ooadprojectserver.restaurantmanagement.model.food.Food;
 import com.ooadprojectserver.restaurantmanagement.service.food.FoodService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserRegisterRequest {
+public class UserCreateRequest {
     @JsonProperty("username")
     private String username;
     @JsonProperty("first_name")
@@ -19,6 +19,8 @@ public class UserRegisterRequest {
     private String lastName;
     @JsonProperty("date_of_birth")
     private String dateOfBirth;
+    @JsonProperty("avatar")
+    private String avatar;
     @JsonProperty("password")
     private String password;
     @JsonProperty("phone_number")

@@ -2,7 +2,7 @@ package com.ooadprojectserver.restaurantmanagement.service.user.impl;
 
 import com.ooadprojectserver.restaurantmanagement.constant.APIStatus;
 import com.ooadprojectserver.restaurantmanagement.dto.request.SearchRequest;
-import com.ooadprojectserver.restaurantmanagement.dto.request.UserRegisterRequest;
+import com.ooadprojectserver.restaurantmanagement.dto.request.UserCreateRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.response.PagingResponse;
 import com.ooadprojectserver.restaurantmanagement.dto.response.UserResponse;
 import com.ooadprojectserver.restaurantmanagement.exception.CustomException;
@@ -14,6 +14,7 @@ import com.ooadprojectserver.restaurantmanagement.service.email.EmailService;
 import com.ooadprojectserver.restaurantmanagement.service.user.*;
 import com.ooadprojectserver.restaurantmanagement.service.user.factory.OwnerFactory;
 import jakarta.annotation.PostConstruct;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,7 @@ public class OwnerServiceImpl implements OwnerService {
     private final StaffService staffService;
     private final UserDetailService userDetailService;
     private final EmailService emailService;
+
     private final Map<Integer, UserService> roleToServiceMap;
 
     public OwnerServiceImpl(
@@ -57,12 +59,12 @@ public class OwnerServiceImpl implements OwnerService {
 
     // Implement User Service Start
     @Override
-    public void saveUser(UserRegisterRequest userRegisterRequest) {
+    public void saveUser(UserCreateRequest userRegisterRequest) {
         userRepository.save(ownerFactory.create(userRegisterRequest));
     }
 
     @Override
-    public void updateUserById(User user, UserRegisterRequest userRegisterRequest) {
+    public void updateUserById(User user, UserCreateRequest userRegisterRequest) {
         userRepository.save(ownerFactory.update(user, userRegisterRequest));
     }
 
@@ -78,7 +80,7 @@ public class OwnerServiceImpl implements OwnerService {
 
     // Implement Owner Service Start
     @Override
-    public void createUser(UserRegisterRequest userRegisterRequest) {
+    public void createUser(UserCreateRequest userRegisterRequest) {
         // Check if email already existed
         userRepository.findByEmail(userRegisterRequest.getEmail()).ifPresent(user -> {
             throw new CustomException(APIStatus.EMAIL_ALREADY_EXISTED);
@@ -139,7 +141,7 @@ public class OwnerServiceImpl implements OwnerService {
     }
 
     @Override
-    public void updateUser(UUID userId, UserRegisterRequest userRegisterRequest) {
+    public void updateUser(UUID userId, UserCreateRequest userRegisterRequest) {
         // Check User Id
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new CustomException(APIStatus.USER_NOT_FOUND)

@@ -1,12 +1,10 @@
 package com.ooadprojectserver.restaurantmanagement.model.order;
 
-import com.ooadprojectserver.restaurantmanagement.model.composition.food.Food;
+import com.ooadprojectserver.restaurantmanagement.model.food.Food;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.io.Serial;

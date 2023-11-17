@@ -4,7 +4,7 @@ import com.ooadprojectserver.restaurantmanagement.constant.APIConstant;
 import com.ooadprojectserver.restaurantmanagement.constant.MessageConstant;
 import com.ooadprojectserver.restaurantmanagement.dto.request.PagingRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.request.SearchRequest;
-import com.ooadprojectserver.restaurantmanagement.dto.request.UserRegisterRequest;
+import com.ooadprojectserver.restaurantmanagement.dto.request.UserCreateRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.response.APIResponse;
 import com.ooadprojectserver.restaurantmanagement.dto.response.MessageResponse;
 import com.ooadprojectserver.restaurantmanagement.dto.response.PagingResponse;
@@ -12,6 +12,7 @@ import com.ooadprojectserver.restaurantmanagement.dto.response.UserResponse;
 import com.ooadprojectserver.restaurantmanagement.service.user.*;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +29,7 @@ public class UserController {
     private final ManagerService managerService;
     private final StaffService staffService;
     private final UserDetailService userDetailService;
+
     private final Map<Integer, UserService> roleToServiceMap;
 
     @PostConstruct
@@ -38,7 +40,7 @@ public class UserController {
     }
 
     @PostMapping()
-    public ResponseEntity<MessageResponse> createUser(@RequestBody UserRegisterRequest userRegisterRequest) {
+    public ResponseEntity<MessageResponse> createUser(@RequestBody UserCreateRequest userRegisterRequest) {
         ownerService.createUser(userRegisterRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 new MessageResponse(MessageConstant.CREATE_USER_SUCCESS));
@@ -89,8 +91,8 @@ public class UserController {
     }
 
     @PutMapping(APIConstant.USER_ID)
-    public ResponseEntity<MessageResponse> updateUser(@PathVariable UUID userId, @RequestBody UserRegisterRequest userRegisterRequest) {
-        ownerService.updateUser(userId, userRegisterRequest);
+    public ResponseEntity<MessageResponse> updateUser(@PathVariable UUID userId, @RequestBody UserCreateRequest userCreateRequest) {
+        ownerService.updateUser(userId, userCreateRequest);
         return ResponseEntity.ok().body(
                 new MessageResponse(MessageConstant.UPDATE_USER_SUCCESS)
         );
