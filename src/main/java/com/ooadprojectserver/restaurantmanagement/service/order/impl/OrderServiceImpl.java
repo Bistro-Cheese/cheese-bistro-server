@@ -14,7 +14,6 @@ import com.ooadprojectserver.restaurantmanagement.repository.order.OrderLineRepo
 import com.ooadprojectserver.restaurantmanagement.repository.order.OrderRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.order.OrderTableRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.user.UserRepository;
-import com.ooadprojectserver.restaurantmanagement.service.inventory.InventoryService;
 import com.ooadprojectserver.restaurantmanagement.service.order.OrderService;
 import com.ooadprojectserver.restaurantmanagement.service.user.UserDetailService;
 import lombok.RequiredArgsConstructor;
@@ -31,10 +30,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
     private final UserDetailService userDetailService;
-    private final InventoryService inventoryService;
 
     private final UserRepository userRepository;
-    private final FoodRepository foodRepository;
     private final OrderRepository orderRepository;
     private final OrderTableRepository orderTableRepository;
     private final OrderLineRepository orderLineRepository;

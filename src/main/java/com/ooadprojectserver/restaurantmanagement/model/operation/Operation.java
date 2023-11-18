@@ -1,4 +1,4 @@
-package com.ooadprojectserver.restaurantmanagement.model.inventory.operation;
+package com.ooadprojectserver.restaurantmanagement.model.operation;
 
 import com.ooadprojectserver.restaurantmanagement.model.inventory.Inventory;
 import com.ooadprojectserver.restaurantmanagement.model.user.Manager;

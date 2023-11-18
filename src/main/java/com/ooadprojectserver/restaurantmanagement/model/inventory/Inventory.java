@@ -1,6 +1,6 @@
 package com.ooadprojectserver.restaurantmanagement.model.inventory;
 
-import com.ooadprojectserver.restaurantmanagement.model.inventory.ingredient.Ingredient;
+import com.ooadprojectserver.restaurantmanagement.model.ingredient.Ingredient;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
