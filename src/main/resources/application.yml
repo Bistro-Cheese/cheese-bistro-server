@@ -4,6 +4,8 @@ server:
   url: http://${SERVER_HOST}
 ---
 spring:
+  main:
+    allow-bean-definition-overriding: true
   profiles:
     active: ${ACTIVE_PROFILE:dev}
   jpa:

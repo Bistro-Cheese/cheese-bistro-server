@@ -1,17 +1,20 @@
-package com.ooadprojectserver.restaurantmanagement.model.inventory.ingredient;
+package com.ooadprojectserver.restaurantmanagement.model.ingredient;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "ingredient")
 public class Ingredient {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     private Long id;
 
@@ -22,8 +25,7 @@ public class Ingredient {
 
     @NotNull
     @Column(name = "ingredient_type", nullable = false)
-    @Enumerated(EnumType.ORDINAL)
-    private IngredientType ingredientType;
+    private Integer ingredientType;
 
     @Size(max = 45)
     @NotNull
