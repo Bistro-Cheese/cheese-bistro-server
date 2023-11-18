@@ -1,5 +1,6 @@
 package com.ooadprojectserver.restaurantmanagement.model.bill;
 
+import com.ooadprojectserver.restaurantmanagement.model.CommonEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -20,9 +21,10 @@ import java.util.Date;
 @DynamicInsert
 @DynamicUpdate
 @Table(name = "discount")
-public class Discount {
+public class Discount extends CommonEntity {
     @Id
     @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
     @Size(max = 45)

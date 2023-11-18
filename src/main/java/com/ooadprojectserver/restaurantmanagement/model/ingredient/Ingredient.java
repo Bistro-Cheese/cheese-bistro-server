@@ -1,5 +1,6 @@
 package com.ooadprojectserver.restaurantmanagement.model.ingredient;
 
+import com.ooadprojectserver.restaurantmanagement.model.CommonEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -12,7 +13,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "ingredient")
-public class Ingredient {
+public class Ingredient extends CommonEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
@@ -25,7 +26,8 @@ public class Ingredient {
 
     @NotNull
     @Column(name = "ingredient_type", nullable = false)
-    private Integer ingredientType;
+    @Enumerated(EnumType.ORDINAL)
+    private IngredientType ingredientType;
 
     @Size(max = 45)
     @NotNull
@@ -36,5 +38,4 @@ public class Ingredient {
     @NotNull
     @Column(name = "supplier", nullable = false)
     private String supplier;
-
 }

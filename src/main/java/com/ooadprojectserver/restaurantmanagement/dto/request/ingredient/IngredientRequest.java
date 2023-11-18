@@ -1,6 +1,7 @@
 package com.ooadprojectserver.restaurantmanagement.dto.request.ingredient;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ooadprojectserver.restaurantmanagement.model.ingredient.IngredientType;
 import lombok.*;
 
 @Data
@@ -11,7 +12,7 @@ public class IngredientRequest {
     private String name;
 
     @JsonProperty("ingredient_type")
-    private Integer ingredientType;
+    private IngredientType ingredientType;
 
     @JsonProperty("unit")
     private String unit;

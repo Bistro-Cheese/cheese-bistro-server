@@ -4,13 +4,14 @@ import com.ooadprojectserver.restaurantmanagement.dto.request.UserCreateRequest;
 import com.ooadprojectserver.restaurantmanagement.model.user.Manager;
 import com.ooadprojectserver.restaurantmanagement.model.user.baseUser.User;
 import com.ooadprojectserver.restaurantmanagement.repository.user.AddressRepository;
+import com.ooadprojectserver.restaurantmanagement.service.user.UserDetailService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ManagerFactory extends UserFactory{
-    public ManagerFactory(PasswordEncoder passwordEncoder, AddressRepository addressRepository) {
-        super(passwordEncoder, addressRepository);
+    public ManagerFactory(PasswordEncoder passwordEncoder, AddressRepository addressRepository, UserDetailService userDetailService) {
+        super(passwordEncoder, addressRepository, userDetailService);
     }
 
     @Override

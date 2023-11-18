@@ -9,6 +9,7 @@ import com.ooadprojectserver.restaurantmanagement.model.user.baseUser.Role;
 import com.ooadprojectserver.restaurantmanagement.model.user.baseUser.Status;
 import com.ooadprojectserver.restaurantmanagement.model.user.baseUser.User;
 import com.ooadprojectserver.restaurantmanagement.repository.user.AddressRepository;
+import com.ooadprojectserver.restaurantmanagement.service.user.UserDetailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -20,6 +21,7 @@ import java.util.Date;
 public abstract class UserFactory {
     private final PasswordEncoder passwordEncoder;
     private final AddressRepository addressRepository;
+    private final UserDetailService userDetailService;
 
     public User create(UserCreateRequest userRequest) {
         Date dob = getDate(userRequest.getDateOfBirth());
@@ -43,9 +45,8 @@ public abstract class UserFactory {
                 .address(address)
                 .dateOfBirth(dob)
                 .avatar(userRequest.getAvatar())
-                .createdDate(new Date())
-                .lastModifiedDate(new Date())
                 .build();
+        user.setCommonCreate(userDetailService.getIdLogin());
         return createUser(user, userRequest);
     }
 
@@ -61,7 +62,9 @@ public abstract class UserFactory {
         user.setPhoneNumber(userRequest.getPhoneNumber());
         user.setDateOfBirth(dob);
         user.setAvatar(userRequest.getAvatar());
-        user.setLastModifiedDate(new Date());
+
+        user.setCommonUpdate(userDetailService.getIdLogin());
+
         return updateUser(user, userRequest);
     }
 

@@ -9,7 +9,6 @@ import com.ooadprojectserver.restaurantmanagement.dto.response.order.TableInfoRe
 import com.ooadprojectserver.restaurantmanagement.exception.CustomException;
 import com.ooadprojectserver.restaurantmanagement.model.order.*;
 import com.ooadprojectserver.restaurantmanagement.model.user.Staff;
-import com.ooadprojectserver.restaurantmanagement.repository.food.FoodRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.order.OrderLineRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.order.OrderRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.order.OrderTableRepository;
@@ -22,7 +21,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -66,10 +64,12 @@ public class OrderServiceImpl implements OrderService {
         Order newOrder = Order.builder()
                 .staff(staff)
                 .orderTable(orderTable)
-                .orderDate(new Date())
                 .status(OrderStatus.PENDING)
                 .build();
         logger.info("order: " + newOrder.getStatus());
+
+        newOrder.setCommonCreate(userDetailService.getIdLogin());
+
         orderRepository.save(newOrder);
     }
 
