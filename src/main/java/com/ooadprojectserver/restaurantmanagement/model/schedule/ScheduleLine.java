@@ -1,5 +1,6 @@
 package com.ooadprojectserver.restaurantmanagement.model.schedule;
 
+import com.ooadprojectserver.restaurantmanagement.model.CommonEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -15,9 +16,10 @@ import java.util.UUID;
 @Setter
 @Entity
 @Table(name = "schedule_line")
-public class ScheduleLine {
+public class ScheduleLine extends CommonEntity {
     @Id
     @Column(name = "id", nullable = false)
+
     private Long id;
 
     @NotNull

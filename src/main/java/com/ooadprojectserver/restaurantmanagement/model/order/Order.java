@@ -1,5 +1,6 @@
 package com.ooadprojectserver.restaurantmanagement.model.order;
 
+import com.ooadprojectserver.restaurantmanagement.model.CommonEntity;
 import com.ooadprojectserver.restaurantmanagement.model.user.Staff;
 import jakarta.persistence.*;
 import lombok.*;
@@ -24,7 +25,7 @@ import java.util.UUID;
 @DynamicInsert
 @DynamicUpdate
 @Table(name = "orders")
-public class Order implements Serializable {
+public class Order extends CommonEntity implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -44,9 +45,6 @@ public class Order implements Serializable {
 
     @Column(name = "phone_cus")
     private String phoneNumber;
-
-    @Column(name = "crt_at")
-    private Date orderDate;
 
     @Column(name = "status")
     @Enumerated(EnumType.ORDINAL)

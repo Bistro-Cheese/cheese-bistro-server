@@ -11,15 +11,21 @@ import com.ooadprojectserver.restaurantmanagement.repository.food.CategoryReposi
 import com.ooadprojectserver.restaurantmanagement.repository.food.FoodRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.inventory.InventoryRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.specification.FoodSpecification;
+import com.ooadprojectserver.restaurantmanagement.service.user.UserDetailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
+import static com.ooadprojectserver.restaurantmanagement.util.DataUtil.copyProperties;
+
 @RequiredArgsConstructor
 @Service
 public class FoodServiceImpl implements FoodService {
+
+    private final UserDetailService userDetailService;
+
     private final FoodRepository foodRepository;
     private final CategoryRepository categoryRepository;
     private final InventoryRepository inventoryRepository;
@@ -37,6 +43,7 @@ public class FoodServiceImpl implements FoodService {
     //create food
     @Override
     public void createFood(FoodRequest request) {
+        //TODO: refactor create food
         Category category = categoryRepository.findById(request.getCategory()).orElseThrow(
                 () -> new CustomException(APIStatus.CATEGORY_NOT_FOUND)
         );
@@ -44,18 +51,9 @@ public class FoodServiceImpl implements FoodService {
         if (optionalFood.isPresent()) {
             throw new CustomException(APIStatus.FOOD_ALREADY_EXISTED);
         } else {
-            foodRepository.save(
-                    Food.builder()
-                            .name(request.getName())
-                            .category(category)
-                            .description(request.getDescription())
-                            .price(request.getPrice())
-                            .productImage(request.getProductImage())
-                            .createdDate(new Date())
-                            .lastModifiedDate(new Date())
-                            .status(request.getStatus())
-                            .build()
-            );
+            Food newFood = copyProperties(request, Food.class);
+            newFood.setCommonCreate(userDetailService.getIdLogin());
+            foodRepository.save(newFood);
         }
     }
 
@@ -76,17 +74,10 @@ public class FoodServiceImpl implements FoodService {
         Category updateCategory = categoryRepository.findById(updatingFood.getCategory()).orElseThrow(
                 () -> new CustomException(APIStatus.CATEGORY_NOT_FOUND)
         );
-        Date lastModifiedDate = new Date();
-        foodRepository.updateFoodById(
-                updatingFood.getName(),
-                updateCategory,
-                updatingFood.getDescription(),
-                updatingFood.getProductImage(),
-                updatingFood.getPrice(),
-                lastModifiedDate,
-                updatingFood.getStatus(),
-                existingFood.getId()
-        );
+
+        //TODO: refactor update food
+        updatingFood = copyProperties(updatingFood, FoodRequest.class);
+        foodRepository.save(existingFood);
     }
 
     public Food getDetailFood(UUID foodId) {

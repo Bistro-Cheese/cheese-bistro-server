@@ -5,6 +5,7 @@ import com.ooadprojectserver.restaurantmanagement.dto.request.ingredient.Ingredi
 import com.ooadprojectserver.restaurantmanagement.exception.CustomException;
 import com.ooadprojectserver.restaurantmanagement.model.ingredient.Ingredient;
 import com.ooadprojectserver.restaurantmanagement.repository.inventory.IngredientRepository;
+import com.ooadprojectserver.restaurantmanagement.service.user.UserDetailService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +22,7 @@ public class IngredientServiceImpl implements IngredientService {
 
     private static final Logger logger = LoggerFactory.getLogger(IngredientServiceImpl.class);
     private final IngredientRepository ingredientRepository;
+    private final UserDetailService userDetailService;
 
 
 
@@ -31,6 +33,7 @@ public class IngredientServiceImpl implements IngredientService {
         });
 
         Ingredient newIngredient = copyProperties(req, Ingredient.class);
+        newIngredient.setCommonCreate(userDetailService.getIdLogin());
 
         ingredientRepository.save(newIngredient);
     }
@@ -44,6 +47,7 @@ public class IngredientServiceImpl implements IngredientService {
         }
 
         ingredient = copyProperties(req, Ingredient.class);
+        ingredient.setCommonUpdate(userDetailService.getIdLogin());
 
         ingredientRepository.save(ingredient);
     }

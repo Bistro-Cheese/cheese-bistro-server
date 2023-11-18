@@ -1,5 +1,6 @@
 package com.ooadprojectserver.restaurantmanagement.model.operation;
 
+import com.ooadprojectserver.restaurantmanagement.model.CommonEntity;
 import com.ooadprojectserver.restaurantmanagement.model.inventory.Inventory;
 import com.ooadprojectserver.restaurantmanagement.model.user.Manager;
 import jakarta.persistence.*;
@@ -15,10 +16,10 @@ import java.util.UUID;
 @Setter
 @Entity
 @Table(name = "operation")
-public class Operation {
+public class Operation extends CommonEntity {
     @Id
-    @Size(max = 16)
-    @Column(name = "id", nullable = false, length = 16)
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @NotNull
@@ -34,14 +35,5 @@ public class Operation {
     @NotNull
     @Column(name = "quantity", nullable = false)
     private Double quantity;
-
-    @NotNull
-    @Column(name = "crt_at", nullable = false)
-    private Date createAt;
-
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "crt_by", nullable = false)
-    private Manager createBy;
 
 }

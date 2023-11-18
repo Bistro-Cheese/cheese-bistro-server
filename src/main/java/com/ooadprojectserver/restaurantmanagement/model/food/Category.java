@@ -1,5 +1,6 @@
 package com.ooadprojectserver.restaurantmanagement.model.food;
 
+import com.ooadprojectserver.restaurantmanagement.model.CommonEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
@@ -22,7 +23,7 @@ import java.util.UUID;
 @DynamicInsert
 @DynamicUpdate
 @Table(name = "category")
-public class Category implements Serializable {
+public class Category extends CommonEntity implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;

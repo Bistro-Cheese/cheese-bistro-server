@@ -1,5 +1,6 @@
 package com.ooadprojectserver.restaurantmanagement.model.inventory;
 
+import com.ooadprojectserver.restaurantmanagement.model.CommonEntity;
 import com.ooadprojectserver.restaurantmanagement.model.ingredient.Ingredient;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -13,10 +14,10 @@ import java.util.UUID;
 @Setter
 @Entity
 @Table(name = "inventory")
-public class Inventory {
+public class Inventory extends CommonEntity {
     @Id
-    @Size(max = 16)
-    @Column(name = "id", nullable = false, length = 16)
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @NotNull
@@ -27,5 +28,4 @@ public class Inventory {
     @NotNull
     @Column(name = "total_quan", nullable = false, length = 45)
     private Double totalQuantity;
-
 }

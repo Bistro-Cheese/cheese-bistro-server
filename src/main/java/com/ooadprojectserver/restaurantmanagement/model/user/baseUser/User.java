@@ -2,6 +2,7 @@ package com.ooadprojectserver.restaurantmanagement.model.user.baseUser;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ooadprojectserver.restaurantmanagement.constant.DateTimeConstant;
+import com.ooadprojectserver.restaurantmanagement.model.CommonEntity;
 import jakarta.persistence.*;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Table;
@@ -31,7 +32,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "user")
 @Inheritance(strategy = InheritanceType.JOINED)
-public class User implements UserDetails, Serializable {
+public class User extends CommonEntity implements UserDetails, Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -74,15 +75,15 @@ public class User implements UserDetails, Serializable {
     @Column(name = "status")
     private Integer status;
 
-    @CreatedDate
-    @Column(name = "crt_at")
-    @JsonFormat(pattern = DateTimeConstant.FORMAT_DATE_TIME, timezone = DateTimeConstant.TIMEZONE)
-    private Date createdDate;
-
-    @LastModifiedDate
-    @Column(name = "updt_at")
-    @JsonFormat(pattern = DateTimeConstant.FORMAT_DATE_TIME, timezone = DateTimeConstant.TIMEZONE)
-    private Date lastModifiedDate;
+//    @CreatedDate
+//    @Column(name = "crt_at")
+//    @JsonFormat(pattern = DateTimeConstant.FORMAT_DATE_TIME, timezone = DateTimeConstant.TIMEZONE)
+//    private Date createdDate;
+//
+//    @LastModifiedDate
+//    @Column(name = "updt_at")
+//    @JsonFormat(pattern = DateTimeConstant.FORMAT_DATE_TIME, timezone = DateTimeConstant.TIMEZONE)
+//    private Date lastModifiedDate;
 
     @OneToOne(cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JoinColumn(name = "addr_id")
@@ -104,8 +105,6 @@ public class User implements UserDetails, Serializable {
         this.status = user.getStatus();
         this.address = user.getAddress();
         this.enabled = user.isEnabled();
-        this.createdDate = user.getCreatedDate();
-        this.lastModifiedDate = user.getLastModifiedDate();
     }
 
     @Override
