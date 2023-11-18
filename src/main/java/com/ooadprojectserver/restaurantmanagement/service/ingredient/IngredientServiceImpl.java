@@ -32,7 +32,10 @@ public class IngredientServiceImpl implements IngredientService {
             throw new CustomException(APIStatus.INGREDIENT_ALREADY_EXISTED);
         });
 
+        //TODO: Copy properties from req to newIngredient
         Ingredient newIngredient = copyProperties(req, Ingredient.class);
+
+        //TODO: setCommonCreate
         newIngredient.setCommonCreate(userDetailService.getIdLogin());
 
         ingredientRepository.save(newIngredient);
@@ -47,6 +50,8 @@ public class IngredientServiceImpl implements IngredientService {
         }
 
         ingredient = copyProperties(req, Ingredient.class);
+
+        //TODO: setCommonUpdate
         ingredient.setCommonUpdate(userDetailService.getIdLogin());
 
         ingredientRepository.save(ingredient);
