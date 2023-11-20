@@ -1,12 +1,19 @@
 package com.ooadprojectserver.restaurantmanagement.service.payment;
 
-import com.ooadprojectserver.restaurantmanagement.dto.request.order.PaymentRequest;
-import com.ooadprojectserver.restaurantmanagement.model.order.payment.Payment;
+import com.ooadprojectserver.restaurantmanagement.dto.request.TransferMethodRequest;
+import com.ooadprojectserver.restaurantmanagement.model.payment.Payment;
 
 import java.util.List;
 import java.util.UUID;
 
 public interface PaymentService {
-    List<Payment> getAllPayments();
-    Payment createBill(PaymentRequest request, UUID orderId);
+    List<Payment> getAll();
+
+    Payment getById(UUID id);
+
+    void create(TransferMethodRequest req);
+
+    void update(UUID id, TransferMethodRequest req);
+
+    void delete(UUID id);
 }

@@ -75,17 +75,7 @@ public class User extends CommonEntity implements UserDetails, Serializable {
     @Column(name = "status")
     private Integer status;
 
-//    @CreatedDate
-//    @Column(name = "crt_at")
-//    @JsonFormat(pattern = DateTimeConstant.FORMAT_DATE_TIME, timezone = DateTimeConstant.TIMEZONE)
-//    private Date createdDate;
-//
-//    @LastModifiedDate
-//    @Column(name = "updt_at")
-//    @JsonFormat(pattern = DateTimeConstant.FORMAT_DATE_TIME, timezone = DateTimeConstant.TIMEZONE)
-//    private Date lastModifiedDate;
-
-    @OneToOne(cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @ManyToOne
     @JoinColumn(name = "addr_id")
     private Address address;
 
