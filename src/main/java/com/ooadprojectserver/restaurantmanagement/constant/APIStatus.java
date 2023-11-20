@@ -52,6 +52,7 @@ public enum APIStatus {
     INGREDIENT_NOT_ENOUGH(400, "Ingredient not enough"),
     ORDER_LINE_NOT_FOUND(404, "Order line not found"),
     ORDER_TABLE_NOT_EMPTY(400, "Order table not empty"),
+    ORDER_TABLE_ALREADY_EXIST(400, "Order table already exist"),
     ORDER_COMPLETED(400, "Order already completed"),
 
     //    Payment
