@@ -1,5 +1,7 @@
 package com.ooadprojectserver.restaurantmanagement.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.ooadprojectserver.restaurantmanagement.constant.DateTimeConstant;
 import com.ooadprojectserver.restaurantmanagement.util.DateTimeUtils;
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
@@ -18,9 +20,11 @@ import java.util.UUID;
 @NoArgsConstructor
 public class CommonEntity  {
     @Column(name = "created_at", nullable = false, columnDefinition = "TIMESTAMP default NOW()")
+    @JsonFormat(timezone = DateTimeConstant.TIMEZONE)
     private Timestamp createdAt;
 
     @Column(name = "updated_at", nullable = false, columnDefinition = "TIMESTAMP default NOW()")
+    @JsonFormat(timezone = DateTimeConstant.TIMEZONE)
     private Timestamp updatedAt;
 
     @Column(name = "created_by", columnDefinition = "binary(16) DEFAULT 0")
@@ -35,7 +39,6 @@ public class CommonEntity  {
         this.updatedAt = DateTimeUtils.resultTimestamp();
         this.updatedBy = currentLoginId;
     }
-
 
     public void setCommonUpdate(UUID currentLoginId) {
         this.updatedAt = DateTimeUtils.resultTimestamp();

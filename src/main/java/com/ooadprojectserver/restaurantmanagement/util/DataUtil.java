@@ -18,6 +18,7 @@ public class DataUtil {
             BeanUtils.copyProperties(source, target);
             return (T) target;
         } catch (Exception e) {
+            log.error("error copy properties: {}", e.getMessage());
             throw new RuntimeException(e);
         }
     }

@@ -3,7 +3,7 @@ package com.ooadprojectserver.restaurantmanagement.model.bill;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ooadprojectserver.restaurantmanagement.constant.DateTimeConstant;
 import com.ooadprojectserver.restaurantmanagement.model.order.Order;
-import com.ooadprojectserver.restaurantmanagement.model.order.payment.Payment;
+import com.ooadprojectserver.restaurantmanagement.model.payment.Payment;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;

@@ -31,11 +31,6 @@ public class MessageConstant {
     public static final String CREATE_INGREDIENT_SUCCESS = "Create Ingredient Successfully";
     public static final String DELETE_INGREDIENT_SUCCESS = "Delete Ingredient Successfully";
     public static final String UPDATE_INGREDIENT_SUCCESS = "Update Ingredient Successfully";
-    //    Composition
-    public static final String GET_COMPOSITION_SUCCESS = "Get Composition Successfully";
-    public static final String CREATE_COMPOSITION_SUCCESS = "Create Composition Successfully";
-    public static final String DELETE_COMPOSITION_SUCCESS = "Delete Composition Successfully";
-    public static final String UPDATE_COMPOSITION_SUCCESS = "Update Composition Successfully";
     //    Inventory
     public static final String GET_INVENTORY_SUCCESS = "Get Inventory Successfully";
     public static final String IMPORT_INGREDIENT_SUCCESS = "Import Ingredient Successfully";
@@ -50,6 +45,13 @@ public class MessageConstant {
     public static final String CREATE_ORDER_LINE_SUCCESS = "Create Order Line Successfully";
     public static final String DELETE_ORDER_LINE_SUCCESS = "Delete Order Line Successfully";
     public static final String UPDATE_ORDER_LINE_SUCCESS = "Update Order Line Successfully";
+
     //    Payment
+    public static final String GET_ALL_TRANSFER_METHOD_SUCCESS = "Get All Transfer Method Successfully";
+    public static final String GET_TRANSFER_METHOD_BY_ID_SUCCESS = "Get Transfer Method By Id Successfully";
+    public static final String CREATE_TRANSFER_METHOD_SUCCESS = "Create Transfer Method Successfully";
+    public static final String UPDATE_TRANSFER_METHOD_SUCCESS = "Update Transfer Method Successfully";
+    public static final String DELETE_TRANSFER_METHOD_SUCCESS = "Delete Transfer Method Successfully";
+    //   Bill
     public static final String CREATE_BILL_SUCCESS = "Create Bill Successfully";
 }

@@ -4,6 +4,7 @@ public class APIConstant {
     // Common Routes
     public static final String VERSION = "/api/v1";
     public static final String SEARCH = "/search";
+    public static final String ID = "/{id}";
 
     // Auth Routes
     public static final String AUTH = VERSION + "/auth";
@@ -28,8 +29,13 @@ public class APIConstant {
     public static final String ORDER_ID = "/{order_id}";
     public static final String ORDER_LINE_ID = "/{order_line_id}";
 
-    // Payments Routes
+    // Payment Routes
     public static final String PAYMENTS = VERSION + "/payments";
+
+    public static final String TRANSFER_METHODS = VERSION + "/transfer-methods";
+
+    // Bill Routes
+    public static final String BILLS = VERSION + "/bills";
 
     // Food Routes
     public static final String FOODS = VERSION + "/foods";
@@ -38,10 +44,6 @@ public class APIConstant {
     // Ingredient Routes
     public static final String INGREDIENT = VERSION + "/ingredients";
     public static final String INGREDIENT_ID = "/{ingredient_id}";
-
-    // Composition Routes
-    public static final String COMPOSITION = VERSION + "/compositions";
-    public static final String COMPOSITION_ID = "/{composition_id}";
 
     // Inventory Routes
     public static final String INVENTORY = VERSION + "/inventory";

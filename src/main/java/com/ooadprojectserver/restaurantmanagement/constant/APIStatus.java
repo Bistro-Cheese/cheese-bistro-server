@@ -54,6 +54,9 @@ public enum APIStatus {
     ORDER_TABLE_NOT_EMPTY(400, "Order table not empty"),
 
     //    Payment
+    PAYMENT_NOT_FOUND(404, "Payment not found"),
+    TRANSFER_METHOD_NOT_FOUND(404, "Transfer method not found"),
+    PAYMENT_METHOD_ALREADY_EXISTED(400, "Payment method already existed"),
     ORDER_COMPLETED(400, "Order already completed");
 
     private final int status;
