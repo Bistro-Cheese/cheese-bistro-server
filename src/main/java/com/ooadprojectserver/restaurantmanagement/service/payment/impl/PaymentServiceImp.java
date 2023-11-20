@@ -25,9 +25,7 @@ public class PaymentServiceImp implements PaymentService {
 
     @Override
     public Payment getById(UUID id) {
-        return paymentRepository.findById(id).orElseThrow(
-                () -> new CustomException(APIStatus.PAYMENT_NOT_FOUND)
-        );
+        return this.getPaymentById(id);
     }
 
     @Override
@@ -43,5 +41,11 @@ public class PaymentServiceImp implements PaymentService {
     @Override
     public void delete(UUID id) {
 
+    }
+
+    private Payment getPaymentById(UUID id) {
+        return paymentRepository.findById(id).orElseThrow(
+                () -> new CustomException(APIStatus.PAYMENT_NOT_FOUND)
+        );
     }
 }

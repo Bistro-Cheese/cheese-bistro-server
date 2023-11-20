@@ -8,6 +8,7 @@ import org.hibernate.type.SqlTypes;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Getter
@@ -42,7 +43,7 @@ public class Food extends CommonEntity implements Serializable {
 
     @Column(name = "price", nullable = false)
     @JdbcTypeCode(SqlTypes.DECIMAL)
-    private Long price;
+    private BigDecimal price;
 
 
     @Column(name = "status", nullable = false)

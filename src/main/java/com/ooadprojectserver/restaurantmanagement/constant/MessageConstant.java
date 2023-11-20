@@ -52,6 +52,13 @@ public class MessageConstant {
     public static final String CREATE_TRANSFER_METHOD_SUCCESS = "Create Transfer Method Successfully";
     public static final String UPDATE_TRANSFER_METHOD_SUCCESS = "Update Transfer Method Successfully";
     public static final String DELETE_TRANSFER_METHOD_SUCCESS = "Delete Transfer Method Successfully";
+
+    //   Discount
+    public static final String CREATE_DISCOUNT_SUCCESS = "Create Discount Successfully";
+    public static final String GET_DISCOUNTS_SUCCESS = "Get Discounts Successfully";
+    public static final String GET_DISCOUNT_BY_ID_SUCCESS = "Get Discount By Id Successfully";
+    public static final String DELETE_DISCOUNT_SUCCESS = "Delete Discount Successfully";
+    public static final String UPDATE_DISCOUNT_SUCCESS = "Update Discount Successfully";
     //   Bill
     public static final String CREATE_BILL_SUCCESS = "Create Bill Successfully";
 }

@@ -52,12 +52,20 @@ public enum APIStatus {
     INGREDIENT_NOT_ENOUGH(400, "Ingredient not enough"),
     ORDER_LINE_NOT_FOUND(404, "Order line not found"),
     ORDER_TABLE_NOT_EMPTY(400, "Order table not empty"),
+    ORDER_COMPLETED(400, "Order already completed"),
 
     //    Payment
     PAYMENT_NOT_FOUND(404, "Payment not found"),
     TRANSFER_METHOD_NOT_FOUND(404, "Transfer method not found"),
     PAYMENT_METHOD_ALREADY_EXISTED(400, "Payment method already existed"),
-    ORDER_COMPLETED(400, "Order already completed");
+
+    // Discount
+    DISCOUNT_NOT_FOUND(404, "Discount not found"),
+    WRONG_DISCOUNT_VALUE(400, "Wrong discount value"),
+    WRONG_FORMAT_DATE(400, "Wrong format date"),
+    START_DATE_AFTER_END_DATE(400, "Start date must be before end date"),
+    START_DATE_BEFORE_CURRENT_DATE(400, "Start date must be after current date"),
+    INVALID_DISCOUNT_DATE(400, "Invalid discount date");
 
     private final int status;
     private final String message;
