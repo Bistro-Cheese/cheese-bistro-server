@@ -12,7 +12,4 @@ public interface OrderService {
     List<OrderResponse> getOrders();
     void createOrder(OrderRequest orderRequest);
     void deleteOrder(UUID orderId);
-    void createOrderLine(UUID orderId, OrderLineRequest orderLineRequest);
-    void updateOrderLine(UUID orderLineId, OrderLineRequest orderLineRequest);
-    void deleteOrderLine(UUID orderLineId);
 }

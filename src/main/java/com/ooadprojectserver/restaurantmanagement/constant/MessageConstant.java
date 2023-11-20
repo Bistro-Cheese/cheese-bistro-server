@@ -37,6 +37,12 @@ public class MessageConstant {
 
     //email
     public static final String EMAIL_SEND_SUCCESS = "Email Send Successfully";
+    // Table
+    public static final String CREATE_TABLE_SUCCESS = "Create Table Successfully";
+    public static final String GET_TABLES_SUCCESS = "Get Tables Successfully";
+    public static final String GET_TABLE_BY_ID_SUCCESS = "Get Table By Id Successfully";
+    public static final String DELETE_TABLE_SUCCESS = "Delete Table Successfully";
+    public static final String UPDATE_TABLE_SUCCESS = "Update Table Successfully";
 
     //    Order
     public static final String GET_ORDER_SUCCESS = "Get Orders Successfully";

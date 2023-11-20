@@ -2,7 +2,6 @@ package com.ooadprojectserver.restaurantmanagement.controller;
 
 import com.ooadprojectserver.restaurantmanagement.constant.APIConstant;
 import com.ooadprojectserver.restaurantmanagement.constant.MessageConstant;
-import com.ooadprojectserver.restaurantmanagement.dto.request.order.OrderLineRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.request.order.OrderRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.response.APIResponse;
 import com.ooadprojectserver.restaurantmanagement.dto.response.MessageResponse;
@@ -52,44 +51,6 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new MessageResponse(
                         MessageConstant.DELETE_ORDER_SUCCESS
-                )
-        );
-    }
-
-    @PostMapping(APIConstant.ORDER_ID)
-    public ResponseEntity<MessageResponse> createOrderLine(
-            @PathVariable("order_id") UUID orderId,
-            @RequestBody OrderLineRequest orderLineRequest
-    ) {
-        orderService.createOrderLine(orderId, orderLineRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body(
-                new MessageResponse(
-                        MessageConstant.CREATE_ORDER_LINE_SUCCESS
-                )
-        );
-    }
-
-    @PutMapping(APIConstant.ORDER_LINE_ID)
-    public ResponseEntity<MessageResponse> updateOrderLine(
-            @PathVariable("order_line_id") UUID orderLineId,
-            @RequestBody OrderLineRequest orderLineRequest
-    ) {
-        orderService.updateOrderLine(orderLineId, orderLineRequest);
-        return ResponseEntity.status(HttpStatus.OK).body(
-                new MessageResponse(
-                        MessageConstant.UPDATE_ORDER_LINE_SUCCESS
-                )
-        );
-    }
-
-    @DeleteMapping(APIConstant.ORDER_LINE_ID)
-    public ResponseEntity<MessageResponse> deleteOrderLine(
-            @PathVariable("order_line_id") UUID orderLineId
-    ) {
-        orderService.deleteOrderLine(orderLineId);
-        return ResponseEntity.status(HttpStatus.OK).body(
-                new MessageResponse(
-                        MessageConstant.DELETE_ORDER_LINE_SUCCESS
                 )
         );
     }

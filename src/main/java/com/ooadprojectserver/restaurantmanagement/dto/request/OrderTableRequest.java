@@ -1,4 +1,4 @@
-package com.ooadprojectserver.restaurantmanagement.dto.response.order;
+package com.ooadprojectserver.restaurantmanagement.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class TableInfoResponse {
-    private Integer id;
+public class OrderTableRequest {
     private Integer number;
-    private Integer status;
+    private Integer seats;
 }

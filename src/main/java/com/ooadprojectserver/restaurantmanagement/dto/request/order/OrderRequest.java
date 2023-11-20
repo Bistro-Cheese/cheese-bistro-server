@@ -10,5 +10,5 @@ import lombok.*;
 @NoArgsConstructor
 public class OrderRequest {
     @JsonProperty("table_id")
-    private Long tableId;
+    private Integer tableId;
 }

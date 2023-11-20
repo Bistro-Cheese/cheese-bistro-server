@@ -7,10 +7,14 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
-public interface OrderTableRepository extends JpaRepository<OrderTable, Long> {
+import java.util.Optional;
+
+public interface OrderTableRepository extends JpaRepository<OrderTable, Integer> {
+    Optional<OrderTable> findByTableNumber(Integer tableNumber);
+
     @Transactional
     @Modifying
     @Query("update OrderTable o set o.tableStatus = ?1 where o.id = ?2")
-    void updateTableStatusById(TableStatus tableStatus, Long id);
+    void updateTableStatusById(TableStatus tableStatus, Integer id);
 
 }

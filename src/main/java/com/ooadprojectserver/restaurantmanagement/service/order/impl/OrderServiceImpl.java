@@ -1,7 +1,6 @@
 package com.ooadprojectserver.restaurantmanagement.service.order.impl;
 
 import com.ooadprojectserver.restaurantmanagement.constant.APIStatus;
-import com.ooadprojectserver.restaurantmanagement.dto.request.order.OrderLineRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.request.order.OrderRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.response.order.OrderLineResponse;
 import com.ooadprojectserver.restaurantmanagement.dto.response.order.OrderResponse;
@@ -37,7 +36,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderResponse> getOrders() {
-        var staff = getStaff();
+        Staff staff = getStaff();
         List<OrderResponse> orderResponseList = new ArrayList<>();
 
         List<OrderTable> orderTableList = orderTableRepository.findAll();
@@ -51,25 +50,22 @@ public class OrderServiceImpl implements OrderService {
     public void createOrder(OrderRequest orderRequest) {
         Staff staff = getStaff();
 
-        if (staff != null)
-            logger.info("staff order: " + staff.getFirstName());
-
         OrderTable orderTable = orderTableRepository.findById(orderRequest.getTableId()).orElseThrow(
                 () -> new CustomException(APIStatus.ORDER_TABLE_NOT_FOUND)
         );
+
         if (!orderTable.getTableStatus().equals(TableStatus.EMPTY)) {
             throw new CustomException(APIStatus.ORDER_TABLE_NOT_EMPTY);
         }
+
         orderTableRepository.updateTableStatusById(TableStatus.OCCUPIED, orderTable.getId());
         Order newOrder = Order.builder()
                 .staff(staff)
                 .orderTable(orderTable)
                 .status(OrderStatus.PENDING)
                 .build();
-        logger.info("order: " + newOrder.getStatus());
 
         newOrder.setCommonCreate(userDetailService.getIdLogin());
-
         orderRepository.save(newOrder);
     }
 
@@ -80,65 +76,11 @@ public class OrderServiceImpl implements OrderService {
         );
 
         List<OrderLine> orderLineList = orderLineRepository.findByOrder_Id(orderId);
-
         //add food quantity back to inventory
 
         orderLineList.stream().map(OrderLine::getId).forEach(orderLineRepository::deleteById);
         orderRepository.deleteById(orderId);
         orderTableRepository.updateTableStatusById(TableStatus.EMPTY, order.getOrderTable().getId());
-    }
-
-    @Override
-    public void createOrderLine(UUID orderId, OrderLineRequest orderLineRequest) {
-//        Order order = orderRepository.findById(orderId).orElseThrow(
-//                () -> new CustomException(APIStatus.ORDER_NOT_FOUND)
-//        );
-//        Food food = foodRepository.findById(orderLineRequest.getFoodId()).orElseThrow(
-//                () -> new CustomException(APIStatus.FOOD_NOT_FOUND)
-//        );
-//
-//        var orderLine = OrderLine.builder()
-//                .order(order)
-//                .food(food)
-//                .quantity(orderLineRequest.getQuantity())
-//                .build();
-//
-//        List<Composition> compositionList = compositionRepository.findByFood(food.getId());
-//        compositionList.forEach(composition -> {
-//            inventoryService.getIngredientFromInventory(composition, orderLine);
-//        });
-//
-//        orderLineRepository.save(orderLine);
-    }
-
-    @Override
-    public void updateOrderLine(UUID orderLineId, OrderLineRequest orderLineRequest) {
-//        OrderLine orderLine = orderLineRepository.findById(orderLineId).orElseThrow(
-//                () -> new CustomException(APIStatus.ORDER_LINE_NOT_FOUND)
-//        );
-//
-//        List<Composition> compositionList = compositionRepository.findByFood(orderLine.getFood().getId());
-//        if (orderLineRequest.getQuantity() < orderLine.getQuantity()) {
-//            compositionList.forEach(composition -> {
-//                composition.setPortion(composition.getPortion() * (orderLine.getQuantity() - orderLineRequest.getQuantity()));
-//                inventoryService.returnIngredientToInventory(composition, orderLine);
-//            });
-//        } else if (orderLineRequest.getQuantity() > orderLine.getQuantity()) {
-//            compositionList.forEach(composition -> {
-//                composition.setPortion(composition.getPortion() * (orderLineRequest.getQuantity() - orderLine.getQuantity()));
-//                inventoryService.getIngredientFromInventory(composition, orderLine);
-//            });
-//        }
-//
-//        orderLineRepository.updateQuantityById(orderLineRequest.getQuantity(), orderLineId);
-    }
-
-    @Override
-    public void deleteOrderLine(UUID orderLineId) {
-        OrderLine orderLine = orderLineRepository.findById(orderLineId).orElseThrow(
-                () -> new CustomException(APIStatus.ORDER_LINE_NOT_FOUND)
-        );
-        orderLineRepository.deleteById(orderLineId);
     }
 
     //private methods
