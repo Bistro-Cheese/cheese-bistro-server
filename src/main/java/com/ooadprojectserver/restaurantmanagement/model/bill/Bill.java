@@ -2,17 +2,15 @@ package com.ooadprojectserver.restaurantmanagement.model.bill;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ooadprojectserver.restaurantmanagement.constant.DateTimeConstant;
+import com.ooadprojectserver.restaurantmanagement.model.discount.Discount;
 import com.ooadprojectserver.restaurantmanagement.model.order.Order;
 import com.ooadprojectserver.restaurantmanagement.model.payment.Payment;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -24,9 +22,6 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@EntityListeners(AuditingEntityListener.class)
-@DynamicInsert
-@DynamicUpdate
 @Table(name = "bill")
 public class Bill {
     @Id

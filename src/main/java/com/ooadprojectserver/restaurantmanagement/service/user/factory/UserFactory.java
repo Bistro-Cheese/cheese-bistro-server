@@ -77,7 +77,7 @@ public abstract class UserFactory {
         try {
             return dateFormat.parse(dateOfBirth);
         } catch (Exception e) {
-            throw new CustomException(APIStatus.INVALID_DATE_OF_BIRTH);
+            throw new CustomException(APIStatus.WRONG_FORMAT_DATE);
         }
     }
 }

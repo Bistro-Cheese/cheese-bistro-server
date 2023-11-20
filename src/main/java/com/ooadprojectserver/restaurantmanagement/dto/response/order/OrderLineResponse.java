@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Data
@@ -20,7 +21,7 @@ public class OrderLineResponse {
     @JsonProperty("food_name")
     private String foodName;
     @JsonProperty("food_price")
-    private Long foodPrice;
+    private BigDecimal foodPrice;
     @JsonProperty("quantity")
     private Integer quantity;
 }
