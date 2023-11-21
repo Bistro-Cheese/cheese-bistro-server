@@ -4,7 +4,9 @@ import com.ooadprojectserver.restaurantmanagement.constant.APIStatus;
 import com.ooadprojectserver.restaurantmanagement.dto.request.ingredient.IngredientRequest;
 import com.ooadprojectserver.restaurantmanagement.exception.CustomException;
 import com.ooadprojectserver.restaurantmanagement.model.ingredient.Ingredient;
-import com.ooadprojectserver.restaurantmanagement.repository.inventory.IngredientRepository;
+import com.ooadprojectserver.restaurantmanagement.model.inventory.Inventory;
+import com.ooadprojectserver.restaurantmanagement.repository.ingredient.IngredientRepository;
+import com.ooadprojectserver.restaurantmanagement.repository.inventory.InventoryRepository;
 import com.ooadprojectserver.restaurantmanagement.service.user.UserDetailService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -22,6 +24,7 @@ public class IngredientServiceImpl implements IngredientService {
 
     private static final Logger logger = LoggerFactory.getLogger(IngredientServiceImpl.class);
     private final IngredientRepository ingredientRepository;
+    private final InventoryRepository  inventoryRepository;
     private final UserDetailService userDetailService;
 
 
@@ -32,13 +35,18 @@ public class IngredientServiceImpl implements IngredientService {
             throw new CustomException(APIStatus.INGREDIENT_ALREADY_EXISTED);
         });
 
-        //TODO: Copy properties from req to newIngredient
         Ingredient newIngredient = copyProperties(req, Ingredient.class);
 
-        //TODO: setCommonCreate
         newIngredient.setCommonCreate(userDetailService.getIdLogin());
 
+        Inventory inventory = new Inventory();
+        inventory.setIngredient(newIngredient);
+        inventory.setTotalQuantity(0.0);
+
+        inventory.setCommonCreate(userDetailService.getIdLogin());
+
         ingredientRepository.save(newIngredient);
+        inventoryRepository.save(inventory);
     }
 
     @Override
@@ -49,9 +57,11 @@ public class IngredientServiceImpl implements IngredientService {
             throw new CustomException(APIStatus.INGREDIENT_ALREADY_EXISTED);
         }
 
-        ingredient = copyProperties(req, Ingredient.class);
+        ingredient.setName(req.getName());
+        ingredient.setSupplier(req.getSupplier());
+        ingredient.setIngredientType(req.getIngredientType());
+        ingredient.setUnit(req.getUnit());
 
-        //TODO: setCommonUpdate
         ingredient.setCommonUpdate(userDetailService.getIdLogin());
 
         ingredientRepository.save(ingredient);
@@ -73,7 +83,7 @@ public class IngredientServiceImpl implements IngredientService {
         return getIngredient(id);
     }
 
-    private Ingredient getIngredient(Long id) {
+    public Ingredient getIngredient(Long id) {
         return ingredientRepository.findById(id).orElseThrow(() -> {
             logger.error("Ingredient not found with id: {}", id);
             return new CustomException(APIStatus.INGREDIENT_NOT_FOUND);
