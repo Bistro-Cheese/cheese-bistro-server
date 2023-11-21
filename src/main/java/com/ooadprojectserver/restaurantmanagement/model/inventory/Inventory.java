@@ -5,13 +5,13 @@ import com.ooadprojectserver.restaurantmanagement.model.ingredient.Ingredient;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.UUID;
 
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "inventory")
 public class Inventory extends CommonEntity {
@@ -28,4 +28,12 @@ public class Inventory extends CommonEntity {
     @NotNull
     @Column(name = "total_quan", nullable = false, length = 45)
     private Double totalQuantity;
+
+    public void importInventory(Double quantity) {
+        this.totalQuantity += quantity;
+    }
+
+    public void exportInventory(Double quantity) {
+        this.totalQuantity -= quantity;
+    }
 }

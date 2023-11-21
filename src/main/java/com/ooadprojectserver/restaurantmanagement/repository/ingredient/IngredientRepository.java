@@ -1,4 +1,4 @@
-package com.ooadprojectserver.restaurantmanagement.repository.inventory;
+package com.ooadprojectserver.restaurantmanagement.repository.ingredient;
 
 import com.ooadprojectserver.restaurantmanagement.model.ingredient.Ingredient;
 import org.springframework.data.jpa.repository.JpaRepository;

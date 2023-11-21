@@ -33,7 +33,8 @@ public class MessageConstant {
     public static final String UPDATE_INGREDIENT_SUCCESS = "Update Ingredient Successfully";
     //    Inventory
     public static final String GET_INVENTORY_SUCCESS = "Get Inventory Successfully";
-    public static final String IMPORT_INGREDIENT_SUCCESS = "Import Ingredient Successfully";
+    public static final String UPDATE_INVENTORY_SUCCESS = "Update Inventory Successfully";
+    public static final String DELETE_INVENTORY_SUCCESS = "Delete Inventory Successfully";
 
     //email
     public static final String EMAIL_SEND_SUCCESS = "Email Send Successfully";

@@ -10,8 +10,12 @@ public enum APIStatus {
     ERR_DELETE_OWNER(403, "Owner cannot be deleted"),
 
     // Common status
+    SUCCESS_CODE(200, "Success"),
+    ERR_NOT_FOUND(404, "Not found"),
     ERR_INTERNAL_SERVER(500, "Internal Error"),
     ERR_BAD_REQUEST(400, "Bad request"),
+    ERROR_GET_TOTAL_ITEM_FAILED(500, "Error get total item failed"),
+    CM007(400, "Page size must not be greater than 100000"),
 
     //User
     USER_NOT_FOUND(404, "User Not Found"),
@@ -30,6 +34,10 @@ public enum APIStatus {
     //    Ingredient status
     INGREDIENT_NOT_FOUND(404, "Ingredient Not Found"),
     INGREDIENT_ALREADY_EXISTED(400, "This ingredient already created"),
+
+    //    Inventory status
+    INVENTORY_NOT_FOUND(404, "Inventory Not Found"),
+    INVENTORY_ALREADY_EXIST(400, "This ingredient already created"),
 
     //    Pagination
     ERR_PAGINATION(400, "Page size or page number must not be less than one"),

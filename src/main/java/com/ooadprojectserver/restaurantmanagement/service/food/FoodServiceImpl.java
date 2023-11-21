@@ -9,7 +9,6 @@ import com.ooadprojectserver.restaurantmanagement.model.food.Category;
 import com.ooadprojectserver.restaurantmanagement.model.food.Food;
 import com.ooadprojectserver.restaurantmanagement.repository.food.CategoryRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.food.FoodRepository;
-import com.ooadprojectserver.restaurantmanagement.repository.inventory.InventoryRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.specification.FoodSpecification;
 import com.ooadprojectserver.restaurantmanagement.service.user.UserDetailService;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +27,6 @@ public class FoodServiceImpl implements FoodService {
 
     private final FoodRepository foodRepository;
     private final CategoryRepository categoryRepository;
-    private final InventoryRepository inventoryRepository;
     //get all foods
     @Override
     public List<Food> getAllFoods() {
@@ -91,6 +89,7 @@ public class FoodServiceImpl implements FoodService {
         searchRequest.getPagingRequest().checkValidPaging();
         Page<Food> foodPage = foodRepository.findAll(
                 new FoodSpecification(searchRequest.getParams()), searchRequest.getPagingRequest().toPageRequest());
+
         return new PagingResponse(
                 foodPage.getContent(),
                 foodPage.getTotalElements(),

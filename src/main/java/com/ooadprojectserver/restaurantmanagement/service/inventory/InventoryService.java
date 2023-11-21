@@ -1,65 +1,19 @@
-//package com.ooadprojectserver.restaurantmanagement.service.inventory;
-//
-//import com.ooadprojectserver.restaurantmanagement.repository.inventory.InventoryRepository;
-//import lombok.RequiredArgsConstructor;
-//import org.springframework.stereotype.Service;
-//
-//@Service
-//@RequiredArgsConstructor
-//public class InventoryService {
-//    private final InventoryRepository inventoryRepository;
-//
-////    public List<Inventory> getInventory() {
-////        return inventoryRepository.findAll();
-////    }
-////
-////    public void addIngredientToInventory(InventoryRequest request, Long ingredientId) {
-////        var quantity = request.getQuantity();
-////        var ingredient = getIngredient(ingredientId);
-////        updateIngredient(ingredient, quantity);
-////    }
-////
-////    public void returnIngredientToInventory(
-////           Composition composition, OrderLine orderLine
-////    ) {
-////        var quantity = (double) (composition.getPortion() * orderLine.getQuantity());
-////        var ingredientId = composition.getIngredient().getId();
-////        var ingredient = getIngredient(ingredientId);
-////        updateIngredient(ingredient, quantity);
-////    }
-////
-////    public void getIngredientFromInventory(Composition composition, OrderLine orderLine) {
-////        var quantity = (double) (composition.getPortion() * orderLine.getQuantity());
-////        var ingredientId = composition.getIngredient().getId();
-////        Inventory inventory = inventoryRepository.findByIngredient_Id(ingredientId);
-////        if (inventory == null) {
-////            throw new CustomException(APIStatus.INGREDIENT_NOT_FOUND);
-////        }
-////        if (inventory.getQuantity() < quantity) {
-////            throw new CustomException(APIStatus.INGREDIENT_NOT_ENOUGH);
-////        }
-////        inventory.setQuantity(inventory.getQuantity() - quantity);
-////        inventoryRepository.save(inventory);
-////    }
-////
-////    private Ingredient getIngredient(Long ingredientId){
-////        return ingredientRepository.findById(ingredientId).orElseThrow(
-////                () -> new CustomException(APIStatus.INGREDIENT_NOT_FOUND)
-////        );
-////    }
-////
-////    private void updateIngredient(Ingredient ingredient, double quantity){
-////        Inventory inventory = inventoryRepository.findByIngredient_Id(ingredient.getId());
-////        if (inventory != null) {
-////            inventory.setQuantity(inventory.getQuantity() + quantity);
-////            inventoryRepository.save(inventory);
-////            return;
-////        }
-////        var newInventory = Inventory.builder()
-////                .ingredient(ingredient)
-////                .quantity(quantity)
-////                .build();
-////        inventoryRepository.save(newInventory);
-////    }
-//
-//}
+package com.ooadprojectserver.restaurantmanagement.service.inventory;
+
+import com.ooadprojectserver.restaurantmanagement.dto.common.pagination.PageInfo;
+import com.ooadprojectserver.restaurantmanagement.dto.request.inventory.InventoryCreateRequest;
+import com.ooadprojectserver.restaurantmanagement.dto.request.inventory.InventorySearchRequest;
+import com.ooadprojectserver.restaurantmanagement.dto.request.inventory.InventoryUpdateRequest;
+import com.ooadprojectserver.restaurantmanagement.dto.response.inventory.InventoryResponse;
+import com.ooadprojectserver.restaurantmanagement.model.inventory.Inventory;
+import org.springframework.data.domain.Page;
+
+import java.util.UUID;
+
+public interface InventoryService {
+    void create(InventoryCreateRequest req);
+    public Page<InventoryResponse> search(InventorySearchRequest request, PageInfo pageInfo);
+    void update(UUID id, InventoryUpdateRequest req);
+    void delete(UUID id);
+    Inventory self(UUID id);
+}

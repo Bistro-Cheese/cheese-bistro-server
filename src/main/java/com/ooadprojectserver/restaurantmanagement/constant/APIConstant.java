@@ -52,6 +52,8 @@ public class APIConstant {
 
     // Inventory Routes
     public static final String INVENTORY = VERSION + "/inventory";
+    public static final String INVENTORY_ID = "/{inventory_id}";
+
 
     // Email Routes
     public static final String EMAIL = VERSION + "/email";
