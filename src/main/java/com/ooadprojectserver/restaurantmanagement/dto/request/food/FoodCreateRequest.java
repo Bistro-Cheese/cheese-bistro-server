@@ -1,4 +1,4 @@
-package com.ooadprojectserver.restaurantmanagement.dto.request;
+package com.ooadprojectserver.restaurantmanagement.dto.request.food;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -6,13 +6,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
-
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class FoodRequest {
+public class FoodCreateRequest {
     @JsonProperty("name")
     private String name;
     @JsonProperty("category")

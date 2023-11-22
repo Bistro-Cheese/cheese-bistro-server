@@ -2,15 +2,14 @@ package com.ooadprojectserver.restaurantmanagement.controller;
 
 import com.ooadprojectserver.restaurantmanagement.constant.APIConstant;
 import com.ooadprojectserver.restaurantmanagement.constant.MessageConstant;
-import com.ooadprojectserver.restaurantmanagement.dto.request.FoodRequest;
-import com.ooadprojectserver.restaurantmanagement.dto.request.PagingRequest;
-import com.ooadprojectserver.restaurantmanagement.dto.request.SearchRequest;
-import com.ooadprojectserver.restaurantmanagement.dto.response.APIResponse;
+import com.ooadprojectserver.restaurantmanagement.dto.common.pagination.PageInfo;
+import com.ooadprojectserver.restaurantmanagement.dto.request.food.FoodCreateRequest;
+import com.ooadprojectserver.restaurantmanagement.dto.request.food.FoodSearchRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.response.MessageResponse;
-import com.ooadprojectserver.restaurantmanagement.dto.response.PagingResponse;
-import com.ooadprojectserver.restaurantmanagement.model.food.Food;
+import com.ooadprojectserver.restaurantmanagement.dto.response.food.FoodResponse;
 import com.ooadprojectserver.restaurantmanagement.service.food.FoodService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,21 +25,10 @@ import static org.springframework.http.HttpStatus.OK;
 public class FoodController {
     private final FoodService foodService;
 
-    ///get all food
-    @GetMapping()
-    public ResponseEntity<APIResponse<List<Food>>> getAllFoods() {
-        return ResponseEntity.status(OK).body(
-                new APIResponse<>(
-                        MessageConstant.GET_ALL_FOODS_SUCCESS,
-                        foodService.getAllFoods()
-                )
-        );
-    }
-
     //create food
     @PostMapping()
     public ResponseEntity<MessageResponse> createFood(
-            @RequestBody FoodRequest request
+            @RequestBody FoodCreateRequest request
     ) {
         foodService.createFood(request);
         return ResponseEntity.status(CREATED).body(
@@ -65,7 +53,7 @@ public class FoodController {
     @PutMapping(APIConstant.FOOD_ID)
     public ResponseEntity<MessageResponse> updateFood(
             @PathVariable("food_id") UUID foodId,
-            @RequestBody FoodRequest request
+            @RequestBody FoodCreateRequest request
     ) {
         foodService.updateFood(foodId, request);
         return ResponseEntity.status(OK).body(
@@ -75,25 +63,8 @@ public class FoodController {
 
     //search food
     @GetMapping(APIConstant.SEARCH)
-    public ResponseEntity<APIResponse<PagingResponse>> searchFood(
-            @RequestParam(name = "category", defaultValue = "") String category,
-            @RequestParam(name = "search_key", defaultValue = "") String searchKey,
-            @RequestParam(name = "min_price", defaultValue = "0") String minPrice,
-            @RequestParam(name = "max_price", defaultValue = "") String maxPrice,
-            @RequestParam(name = "sort_case", defaultValue = "1") String sortCase,
-            @RequestParam(name = "is_asc_sort", defaultValue = "") String isAscSort,
-            @RequestParam(name = "page_number", defaultValue = "1") Integer pageNumber,
-            @RequestParam(name = "page_size", defaultValue = "10") Integer pageSize
-    ) {
-        SearchRequest searchRequest = SearchRequest.builder()
-                .params(List.of(category, searchKey, minPrice, maxPrice, sortCase, isAscSort))
-                .pagingRequest(new PagingRequest(pageNumber, pageSize))
-                .build();
-        return ResponseEntity.status(OK).body(
-                new APIResponse<>(
-                        MessageConstant.SEARCH_FOOD_SUCCESS,
-                        foodService.searchFood(searchRequest)
-                )
-        );
+    public ResponseEntity<Page<FoodResponse>> searchFood(FoodSearchRequest req, PageInfo pageInfo) {
+        var rs = foodService.search(req, pageInfo);
+        return ResponseEntity.status(OK).body(rs);
     }
 }
