@@ -1,15 +1,15 @@
 package com.ooadprojectserver.restaurantmanagement.service.food;
 
-import com.ooadprojectserver.restaurantmanagement.dto.request.FoodRequest;
+import com.ooadprojectserver.restaurantmanagement.dto.common.pagination.PageInfo;
+import com.ooadprojectserver.restaurantmanagement.dto.request.food.FoodCreateRequest;
 import com.ooadprojectserver.restaurantmanagement.constant.APIStatus;
-import com.ooadprojectserver.restaurantmanagement.dto.request.SearchRequest;
-import com.ooadprojectserver.restaurantmanagement.dto.response.PagingResponse;
+import com.ooadprojectserver.restaurantmanagement.dto.request.food.FoodSearchRequest;
+import com.ooadprojectserver.restaurantmanagement.dto.response.food.FoodResponse;
 import com.ooadprojectserver.restaurantmanagement.exception.CustomException;
 import com.ooadprojectserver.restaurantmanagement.model.food.Category;
 import com.ooadprojectserver.restaurantmanagement.model.food.Food;
 import com.ooadprojectserver.restaurantmanagement.repository.food.CategoryRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.food.FoodRepository;
-import com.ooadprojectserver.restaurantmanagement.repository.specification.FoodSpecification;
 import com.ooadprojectserver.restaurantmanagement.service.user.UserDetailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -40,7 +40,7 @@ public class FoodServiceImpl implements FoodService {
 
     //create food
     @Override
-    public void createFood(FoodRequest request) {
+    public void createFood(FoodCreateRequest request) {
         //TODO: refactor create food
         Category category = categoryRepository.findById(request.getCategory()).orElseThrow(
                 () -> new CustomException(APIStatus.CATEGORY_NOT_FOUND)
@@ -65,7 +65,7 @@ public class FoodServiceImpl implements FoodService {
     }
 
     @Override
-    public void updateFood(UUID foodId, FoodRequest updatingFood) {
+    public void updateFood(UUID foodId, FoodCreateRequest updatingFood) {
         Food existingFood = foodRepository.findById(foodId).orElseThrow(
                 () -> new CustomException(APIStatus.FOOD_NOT_FOUND)
         );
@@ -74,7 +74,7 @@ public class FoodServiceImpl implements FoodService {
         );
 
         //TODO: refactor update food
-        updatingFood = copyProperties(updatingFood, FoodRequest.class);
+        updatingFood = copyProperties(updatingFood, FoodCreateRequest.class);
         foodRepository.save(existingFood);
     }
 
@@ -85,16 +85,7 @@ public class FoodServiceImpl implements FoodService {
     }
 
     @Override
-    public PagingResponse searchFood(SearchRequest searchRequest) {
-        searchRequest.getPagingRequest().checkValidPaging();
-        Page<Food> foodPage = foodRepository.findAll(
-                new FoodSpecification(searchRequest.getParams()), searchRequest.getPagingRequest().toPageRequest());
-
-        return new PagingResponse(
-                foodPage.getContent(),
-                foodPage.getTotalElements(),
-                foodPage.getTotalPages(),
-                foodPage.getNumber() + 1
-        );
+    public Page<FoodResponse> search(FoodSearchRequest searchRequest, PageInfo pageInfo) {
+      return foodRepository.search(searchRequest, pageInfo);
     }
 }
