@@ -70,7 +70,7 @@ public class FoodRepositoryCustomImpl implements FoodRepositoryCustom {
             if(!isNullObject(isAscSort) && isAscSort){
                 sqlSort = "order by " + sortCase  + " asc ";
             } else sqlSort = "order by " + sortCase  + " desc ";
-        }
+        } else sqlSort = "order by f.name asc ";
 
         logger.info("sql Sort: {}", sqlSort);
 
