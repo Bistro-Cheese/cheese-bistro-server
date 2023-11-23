@@ -1,25 +1,18 @@
 package com.ooadprojectserver.restaurantmanagement.service.order.impl;
 
 import com.ooadprojectserver.restaurantmanagement.constant.APIStatus;
-import com.ooadprojectserver.restaurantmanagement.dto.request.order.OrderRequest;
-import com.ooadprojectserver.restaurantmanagement.dto.response.order.OrderLineResponse;
-import com.ooadprojectserver.restaurantmanagement.dto.response.order.OrderResponse;
-import com.ooadprojectserver.restaurantmanagement.dto.response.order.TableInfoResponse;
 import com.ooadprojectserver.restaurantmanagement.exception.CustomException;
 import com.ooadprojectserver.restaurantmanagement.model.order.*;
 import com.ooadprojectserver.restaurantmanagement.model.user.Staff;
 import com.ooadprojectserver.restaurantmanagement.repository.order.OrderLineRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.order.OrderRepository;
-import com.ooadprojectserver.restaurantmanagement.repository.order.OrderTableRepository;
-import com.ooadprojectserver.restaurantmanagement.repository.user.UserRepository;
 import com.ooadprojectserver.restaurantmanagement.service.order.OrderService;
+import com.ooadprojectserver.restaurantmanagement.service.order.OrderTableService;
+import com.ooadprojectserver.restaurantmanagement.service.user.StaffService;
 import com.ooadprojectserver.restaurantmanagement.service.user.UserDetailService;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,38 +20,31 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
     private final UserDetailService userDetailService;
+    private final StaffService staffService;
+    private final OrderTableService orderTableService;
 
-    private final UserRepository userRepository;
     private final OrderRepository orderRepository;
-    private final OrderTableRepository orderTableRepository;
     private final OrderLineRepository orderLineRepository;
-    Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
 
     @Override
-    public List<OrderResponse> getOrders() {
-        Staff staff = getStaff();
-        List<OrderResponse> orderResponseList = new ArrayList<>();
-
-        List<OrderTable> orderTableList = orderTableRepository.findAll();
-
-        //method get all orders
-        getAllOrders(orderResponseList, orderTableList, staff);
-        return orderResponseList;
+    public Order getById(UUID orderId) {
+        return orderRepository.findById(orderId).orElseThrow(
+                () -> new CustomException(APIStatus.ORDER_NOT_FOUND)
+        );
     }
 
     @Override
-    public void createOrder(OrderRequest orderRequest) {
+    public void create(Integer tableId) {
         Staff staff = getStaff();
 
-        OrderTable orderTable = orderTableRepository.findById(orderRequest.getTableId()).orElseThrow(
-                () -> new CustomException(APIStatus.ORDER_TABLE_NOT_FOUND)
-        );
+        OrderTable orderTable = orderTableService.getById(tableId);
 
         if (!orderTable.getTableStatus().equals(TableStatus.EMPTY)) {
             throw new CustomException(APIStatus.ORDER_TABLE_NOT_EMPTY);
         }
 
-        orderTableRepository.updateTableStatusById(TableStatus.OCCUPIED, orderTable.getId());
+        orderTableService.updateStatus(orderTable.getId(), TableStatus.OCCUPIED);
+
         Order newOrder = Order.builder()
                 .staff(staff)
                 .orderTable(orderTable)
@@ -70,64 +56,24 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void deleteOrder(UUID orderId) {
+    public void delete(UUID orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow(
                 () -> new CustomException(APIStatus.ORDER_NOT_FOUND)
         );
 
+        // delete order_lines of order
         List<OrderLine> orderLineList = orderLineRepository.findByOrder_Id(orderId);
-        //add food quantity back to inventory
-
         orderLineList.stream().map(OrderLine::getId).forEach(orderLineRepository::deleteById);
-        orderRepository.deleteById(orderId);
-        orderTableRepository.updateTableStatusById(TableStatus.EMPTY, order.getOrderTable().getId());
-    }
 
-    //private methods
-    private void getAllOrders( List<OrderResponse> orderResponseList, List<OrderTable> orderTableList, Staff staff) {
-        for (OrderTable orderTable : orderTableList) {
-            if (orderTable.getTableStatus().equals(TableStatus.EMPTY)) {
-                var orderResponse = OrderResponse.builder()
-                        .table(tableInfoResponseBuild(orderTable))
-                        .build();
-                orderResponseList.add(orderResponse);
-                continue;
-            }
-            List<OrderLineResponse> orderLineResponseList = new ArrayList<>();
-            Order order = orderRepository.findOrder(staff.getId(), orderTable.getId(), OrderStatus.PENDING);
-            List<OrderLine> orderLineList = orderLineRepository.findByOrder_Id(order.getId());
-            orderLineList.stream().map(this::orderLineResponseBuild).forEach(orderLineResponseList::add);
-            var orderResponse =  OrderResponse.builder()
-                    .table(tableInfoResponseBuild(orderTable))
-                    .orderId(order.getId())
-                    .orderLines(orderLineResponseList)
-                    .build();
-            orderResponseList.add(orderResponse);
-        }
+        // delete order
+        orderRepository.delete(order);
+
+        // update table status
+        orderTableService.updateStatus(order.getOrderTable().getId(), TableStatus.EMPTY);
     }
 
     private Staff getStaff() {
         UUID staffId = userDetailService.getIdLogin();
-        return (Staff) userRepository.findById(staffId).orElseThrow(
-                () -> new CustomException(APIStatus.USER_NOT_FOUND)
-        );
-    }
-
-    private TableInfoResponse tableInfoResponseBuild (OrderTable orderTable) {
-        return TableInfoResponse.builder()
-                .id(orderTable.getId())
-                .number(orderTable.getTableNumber())
-                .status(orderTable.getTableStatus().ordinal())
-                .build();
-    }
-
-    private OrderLineResponse orderLineResponseBuild(OrderLine orderLine) {
-        return OrderLineResponse.builder()
-                .id(orderLine.getId())
-                .foodId(orderLine.getFood().getId())
-                .foodName(orderLine.getFood().getName())
-                .foodPrice(orderLine.getFood().getPrice())
-                .quantity(orderLine.getQuantity())
-                .build();
+        return (Staff) staffService.getUserById(staffId);
     }
 }

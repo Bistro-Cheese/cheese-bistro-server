@@ -22,10 +22,6 @@ public class TransferMethodServiceImpl implements TransferMethodService {
 
     @Override
     public void create(TransferMethodRequest request) {
-        repository.findByAccountNumber(request.getAccountNumber()).ifPresent(
-                transferMethod -> {
-                    throw new CustomException(APIStatus.PAYMENT_METHOD_ALREADY_EXISTED);
-                });
         TransferMethod newTransferMethod = copyProperties(request, TransferMethod.class);
         newTransferMethod.setCommonCreate(userDetailService.getIdLogin());
         repository.save(newTransferMethod);

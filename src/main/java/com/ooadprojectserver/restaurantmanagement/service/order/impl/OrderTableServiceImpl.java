@@ -8,6 +8,7 @@ import com.ooadprojectserver.restaurantmanagement.model.order.TableStatus;
 import com.ooadprojectserver.restaurantmanagement.repository.order.OrderTableRepository;
 import com.ooadprojectserver.restaurantmanagement.service.order.OrderTableService;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.type.descriptor.converter.internal.OrdinalEnumValueConverter;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -52,6 +53,13 @@ public class OrderTableServiceImpl implements OrderTableService {
     @Override
     public OrderTable getById(Integer tableId) {
         return this.getTable(tableId);
+    }
+
+    @Override
+    public void updateStatus(Integer tableId, TableStatus status) {
+        OrderTable table = this.getTable(tableId);
+        table.setTableStatus(status);
+        repository.save(table);
     }
 
     private OrderTable getTable(Integer tableId) {

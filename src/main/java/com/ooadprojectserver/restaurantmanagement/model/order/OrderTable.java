@@ -13,7 +13,7 @@ import java.io.Serializable;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "order_table")
+@Table(name = "res_table")
 public class OrderTable implements Serializable {
 
     @Serial

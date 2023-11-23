@@ -3,9 +3,6 @@ package com.ooadprojectserver.restaurantmanagement.model.order;
 import com.ooadprojectserver.restaurantmanagement.model.food.Food;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -17,9 +14,6 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@EntityListeners(AuditingEntityListener.class)
-@DynamicInsert
-@DynamicUpdate
 @Table(name = "order_line")
 public class OrderLine implements Serializable {
 

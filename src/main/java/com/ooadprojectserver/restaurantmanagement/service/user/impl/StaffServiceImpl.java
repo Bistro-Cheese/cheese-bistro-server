@@ -13,6 +13,8 @@ import com.ooadprojectserver.restaurantmanagement.service.user.factory.StaffFact
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class StaffServiceImpl implements StaffService {
@@ -38,6 +40,13 @@ public class StaffServiceImpl implements StaffService {
                 () -> new CustomException(APIStatus.USER_NOT_FOUND)
         );
         return UserResponse.covertUserToUserResponse(staff);
+    }
+
+    @Override
+    public User getUserById(UUID id) {
+        return userRepository.findById(id).orElseThrow(
+                () -> new CustomException(APIStatus.USER_NOT_FOUND)
+        );
     }
     // UserService implementation End
 }

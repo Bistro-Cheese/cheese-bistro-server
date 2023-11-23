@@ -28,11 +28,11 @@ public class Payment extends CommonEntity {
     @JoinColumn(name = "method_id")
     private TransferMethod methodId;
 
-    @Column(name = "cus_nme",nullable = false)
     @NotNull
+    @Column(name = "cus_nme",nullable = false)
     private String customerName;
 
-    @Column(name = "phone_num",nullable = false)
     @NotNull
+    @Column(name = "phone_num",nullable = false)
     private String phoneNumber;
 }

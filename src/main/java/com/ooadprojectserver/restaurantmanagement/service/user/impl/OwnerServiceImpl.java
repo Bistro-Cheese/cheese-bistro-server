@@ -76,6 +76,13 @@ public class OwnerServiceImpl implements OwnerService {
         );
         return UserResponse.covertUserToUserResponse(owner);
     }
+
+    @Override
+    public User getUserById(UUID id) {
+        return userRepository.findById(id).orElseThrow(
+                () -> new CustomException(APIStatus.USER_NOT_FOUND)
+        );
+    }
     // Implement User Service End
 
     // Implement Owner Service Start

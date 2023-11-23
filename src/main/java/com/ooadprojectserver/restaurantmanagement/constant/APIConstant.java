@@ -27,13 +27,14 @@ public class APIConstant {
     // Order Routes
     public static final String ORDERS = VERSION + "/orders";
     public static final String ORDER_ID = "/{order_id}";
-    public static final String ORDER_LINE_ID = "/{order_line_id}";
+    public static final String ORDER_LINES = VERSION + "/order-lines";
 
+    public static final String ORDER_LINE_ID = "/{order_line_id}";
     public static final String TABLES = VERSION + "/tables";
+    public static final String TABLE_ID = "/{table_id}";
 
     // Payment Routes
     public static final String PAYMENTS = VERSION + "/payments";
-
     public static final String TRANSFER_METHODS = VERSION + "/transfer-methods";
 
     // Discount Routes

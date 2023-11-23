@@ -2,6 +2,7 @@ package com.ooadprojectserver.restaurantmanagement.service.order;
 
 import com.ooadprojectserver.restaurantmanagement.dto.request.OrderTableRequest;
 import com.ooadprojectserver.restaurantmanagement.model.order.OrderTable;
+import com.ooadprojectserver.restaurantmanagement.model.order.TableStatus;
 
 import java.util.List;
 
@@ -11,4 +12,5 @@ public interface OrderTableService {
     void delete(Integer tableId);
     List<OrderTable> getAll();
     OrderTable getById(Integer tableId);
+    void updateStatus(Integer tableId, TableStatus status);
 }
