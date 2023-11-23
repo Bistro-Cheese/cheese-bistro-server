@@ -30,7 +30,7 @@ public class TransferMethod extends CommonEntity {
     private String methodName;
 
     @NotNull
-    @Column(name = "acc_num", nullable = false, unique = true)
+    @Column(name = "acc_num", nullable = false)
     private String accountNumber;
 
     @NotNull

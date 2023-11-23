@@ -3,6 +3,7 @@ package com.ooadprojectserver.restaurantmanagement.model.order;
 import com.ooadprojectserver.restaurantmanagement.model.CommonEntity;
 import com.ooadprojectserver.restaurantmanagement.model.user.Staff;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.io.Serial;
@@ -15,7 +16,7 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "orders")
+@Table(name = "res_order")
 public class Order extends CommonEntity implements Serializable {
 
     @Serial
@@ -26,18 +27,18 @@ public class Order extends CommonEntity implements Serializable {
     @Column(name = "id")
     private UUID id;
 
+    @NotNull
     @ManyToOne
-    @JoinColumn(name = "staff_id")
+    @JoinColumn(name = "staff_id", nullable = false)
     private Staff staff;
 
+    @NotNull
     @ManyToOne
-    @JoinColumn(name = "table_id")
+    @JoinColumn(name = "table_id", nullable = false)
     private OrderTable orderTable;
 
-    @Column(name = "phone_cus")
-    private String phoneNumber;
-
-    @Column(name = "status")
+    @NotNull
+    @Column(name = "status", nullable = false)
     @Enumerated(EnumType.ORDINAL)
     private OrderStatus status;
 }

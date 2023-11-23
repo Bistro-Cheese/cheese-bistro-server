@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -42,6 +43,13 @@ public class ManagerServiceImpl implements ManagerService {
                 () -> new CustomException(APIStatus.USER_NOT_FOUND)
         );
         return UserResponse.covertUserToUserResponse(manager);
+    }
+
+    @Override
+    public User getUserById(UUID id) {
+        return userRepository.findById(id).orElseThrow(
+                () -> new CustomException(APIStatus.USER_NOT_FOUND)
+        );
     }
     // UserService implementation End
 
