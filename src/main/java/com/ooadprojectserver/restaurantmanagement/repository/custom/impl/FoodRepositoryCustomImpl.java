@@ -39,7 +39,7 @@ public class FoodRepositoryCustomImpl implements FoodRepositoryCustom {
 
         Map<String, Object> queryParams = new HashMap<>();
 
-        String sqlGetData = "select f.id as id, f.name as name, f.description as description, f.price as price, f.image as image, f.status as status, c.name as category ";
+        String sqlGetData = "select f.id as id, f.name as name, f.description as description, f.price as price, f.image as image, f.status as status, c.name as category    ";
 
         StringBuilder sqlConditional = new StringBuilder();
         sqlConditional.append(" from food f join category c on f.category_id = c.id ");
