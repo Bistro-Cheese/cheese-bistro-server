@@ -2,7 +2,10 @@ package com.ooadprojectserver.restaurantmanagement.controller;
 
 import com.ooadprojectserver.restaurantmanagement.constant.APIConstant;
 import com.ooadprojectserver.restaurantmanagement.constant.MessageConstant;
+import com.ooadprojectserver.restaurantmanagement.dto.request.order.OrderRequest;
+import com.ooadprojectserver.restaurantmanagement.dto.response.APIResponse;
 import com.ooadprojectserver.restaurantmanagement.dto.response.MessageResponse;
+import com.ooadprojectserver.restaurantmanagement.dto.response.order.DetailOrderResponse;
 import com.ooadprojectserver.restaurantmanagement.service.order.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,11 +20,23 @@ import java.util.UUID;
 public class OrderController {
     private final OrderService orderService;
 
-    @PostMapping(APIConstant.TABLE_ID)
-    public ResponseEntity<MessageResponse> createOrder(
+    @GetMapping(APIConstant.TABLE_ID)
+    public ResponseEntity<APIResponse<DetailOrderResponse>> getOrderByTableId(
             @PathVariable("table_id") Integer tableId
     ) {
-        orderService.create(tableId);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new APIResponse<>(
+                        MessageConstant.GET_ORDER_SUCCESS,
+                        orderService.getByTableId(tableId)
+                )
+        );
+    }
+
+    @PostMapping()
+    public ResponseEntity<MessageResponse> createOrder(
+            @RequestBody OrderRequest orderRequest
+    ) {
+        orderService.create(orderRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 new MessageResponse(
                         MessageConstant.CREATE_ORDER_SUCCESS

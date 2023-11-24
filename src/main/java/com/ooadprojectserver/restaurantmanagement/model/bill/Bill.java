@@ -60,11 +60,11 @@ public class Bill {
     @CreatedDate
     @Column(name = "cus_in")
     @JsonFormat(pattern = DateTimeConstant.FORMAT_DATE_TIME, timezone = DateTimeConstant.TIMEZONE)
-    private Date checkIn;
+    private Date cusIn;
 
     @LastModifiedDate
     @Column(name = "cus_out")
     @JsonFormat(pattern = DateTimeConstant.FORMAT_DATE_TIME, timezone = DateTimeConstant.TIMEZONE)
-    private Date checkOut;
+    private Date cusOut;
 
 }

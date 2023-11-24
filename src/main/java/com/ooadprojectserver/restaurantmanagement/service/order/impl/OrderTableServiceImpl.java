@@ -1,14 +1,13 @@
 package com.ooadprojectserver.restaurantmanagement.service.order.impl;
 
 import com.ooadprojectserver.restaurantmanagement.constant.APIStatus;
-import com.ooadprojectserver.restaurantmanagement.dto.request.OrderTableRequest;
+import com.ooadprojectserver.restaurantmanagement.dto.request.order.OrderTableRequest;
 import com.ooadprojectserver.restaurantmanagement.exception.CustomException;
 import com.ooadprojectserver.restaurantmanagement.model.order.OrderTable;
 import com.ooadprojectserver.restaurantmanagement.model.order.TableStatus;
 import com.ooadprojectserver.restaurantmanagement.repository.order.OrderTableRepository;
 import com.ooadprojectserver.restaurantmanagement.service.order.OrderTableService;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.type.descriptor.converter.internal.OrdinalEnumValueConverter;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.ooadprojectserver.restaurantmanagement.dto.request;
+package com.ooadprojectserver.restaurantmanagement.dto.request.order;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
@@ -11,8 +11,6 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderLineRequest {
-    @JsonProperty("order_id")
-    private UUID orderId;
     @JsonProperty("food_id")
     private UUID foodId;
     private Integer quantity;

@@ -3,6 +3,7 @@ package com.ooadprojectserver.restaurantmanagement.service.discount;
 import com.ooadprojectserver.restaurantmanagement.dto.request.DiscountRequest;
 import com.ooadprojectserver.restaurantmanagement.model.discount.Discount;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface DiscountService {
@@ -15,4 +16,6 @@ public interface DiscountService {
     List<Discount> getAll();
 
     Discount getById(Integer discountId);
+
+    BigDecimal calculateDiscount(BigDecimal total, Discount discount);
 }

@@ -2,7 +2,7 @@ package com.ooadprojectserver.restaurantmanagement.controller;
 
 import com.ooadprojectserver.restaurantmanagement.constant.APIConstant;
 import com.ooadprojectserver.restaurantmanagement.constant.MessageConstant;
-import com.ooadprojectserver.restaurantmanagement.dto.request.OrderLineRequest;
+import com.ooadprojectserver.restaurantmanagement.dto.request.order.OrderLineRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.response.MessageResponse;
 import com.ooadprojectserver.restaurantmanagement.service.order.OrderLineService;
 import lombok.RequiredArgsConstructor;
@@ -18,9 +18,12 @@ import java.util.UUID;
 public class OrderLineController {
     private final OrderLineService orderLineService;
 
-    @PostMapping()
-    public ResponseEntity<MessageResponse> createOrderLine(@RequestBody OrderLineRequest req) {
-        orderLineService.create(req);
+    @PostMapping(APIConstant.ORDER_ID)
+    public ResponseEntity<MessageResponse> createOrderLine(
+            @PathVariable("order_id") UUID orderId,
+            @RequestBody OrderLineRequest req
+    ) {
+        orderLineService.create(orderId, req);
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 new MessageResponse(MessageConstant.CREATE_ORDER_LINE_SUCCESS)
         );
