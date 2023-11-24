@@ -36,4 +36,8 @@ public class Inventory extends CommonEntity {
     public void exportInventory(Double quantity) {
         this.totalQuantity -= quantity;
     }
+
+    public Boolean isEnough(Double quantity) {
+        return this.totalQuantity >= quantity;
+    }
 }

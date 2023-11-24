@@ -55,4 +55,11 @@ public class MessageConstant {
     public static final String DELETE_TRANSFER_METHOD_SUCCESS = "Delete Transfer Method Successfully";
     //   Bill
     public static final String CREATE_BILL_SUCCESS = "Create Bill Successfully";
+
+    //    Inventory
+    public static final String INVENTORY_NOT_FOUND = "Inventory not found";
+    public static final String IMPORT_INVENTORY_SUCCESSFULLY = "Import inventory successfully";
+    public static final String EXPORT_INVENTORY_SUCCESSFULLY = "Export inventory successfully";
+    public static final String NOT_ENOUGH_INVENTORY = "Not enough inventory";
+    public static final String INVALID_OPERATION_TYPE = "Invalid operation type";
 }

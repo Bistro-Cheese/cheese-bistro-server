@@ -5,11 +5,13 @@ import com.ooadprojectserver.restaurantmanagement.constant.MessageConstant;
 import com.ooadprojectserver.restaurantmanagement.dto.common.pagination.PageInfo;
 import com.ooadprojectserver.restaurantmanagement.dto.request.inventory.InventorySearchRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.request.inventory.InventoryUpdateRequest;
+import com.ooadprojectserver.restaurantmanagement.dto.request.operation.OperationRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.response.APIResponse;
 import com.ooadprojectserver.restaurantmanagement.dto.response.MessageResponse;
 import com.ooadprojectserver.restaurantmanagement.dto.response.inventory.InventoryResponse;
 import com.ooadprojectserver.restaurantmanagement.model.inventory.Inventory;
 import com.ooadprojectserver.restaurantmanagement.service.inventory.InventoryService;
+import com.ooadprojectserver.restaurantmanagement.service.operation.OperationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -23,7 +25,10 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @RequestMapping(APIConstant.INVENTORY)
 public class InventoryController {
+
     private final InventoryService inventoryService;
+    private final OperationService operationService;
+
     @GetMapping()
     public ResponseEntity<Page<InventoryResponse>> search(InventorySearchRequest req, PageInfo pageInfo) {
         var rs = inventoryService.search(req, pageInfo);
@@ -60,6 +65,16 @@ public class InventoryController {
         inventoryService.delete(inventoryId);
         return ResponseEntity.status(HttpStatus.OK).body(
                 new MessageResponse(MessageConstant.DELETE_INVENTORY_SUCCESS)
+        );
+    }
+
+    @PostMapping(APIConstant.STOCK)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<MessageResponse> stock(
+            @RequestBody OperationRequest request
+    ) {
+        return ResponseEntity.ok(
+                operationService.stockInventory(request)
         );
     }
 }
