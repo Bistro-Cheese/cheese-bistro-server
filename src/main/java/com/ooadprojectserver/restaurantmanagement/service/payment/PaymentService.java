@@ -11,7 +11,7 @@ public interface PaymentService {
 
     Payment getById(UUID id);
 
-    void create(PaymentRequest req);
+    Payment create(PaymentRequest req);
 
     void update(UUID id, PaymentRequest req);
 

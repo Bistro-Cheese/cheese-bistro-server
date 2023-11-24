@@ -72,6 +72,20 @@ public class DiscountServiceImpl implements DiscountService {
         return this.getDiscount(discountId);
     }
 
+    @Override
+    public BigDecimal calculateDiscount(BigDecimal total, Discount discount) {
+        if (discount == null) return BigDecimal.valueOf(0);
+        if (!discount.getIsActive()) return BigDecimal.valueOf(0);
+        if (discount.getUsesMax() != null && discount.getUsesCount() >= discount.getUsesMax()) return BigDecimal.valueOf(0);
+        if (discount.getStartDate().after(new Date())) return BigDecimal.valueOf(0);
+        if (discount.getEndDate().before(new Date())) return BigDecimal.valueOf(0);
+        if (discount.getType() == DiscountType.PERCENTAGE) {
+            return total.multiply(discount.getValue()).divide(BigDecimal.valueOf(100));
+        } else {
+            return discount.getValue();
+        }
+    }
+
     private Discount getDiscount(Integer discountId) {
         return discountRepository.findById(discountId).orElseThrow(() -> new CustomException(APIStatus.DISCOUNT_NOT_FOUND));
     }

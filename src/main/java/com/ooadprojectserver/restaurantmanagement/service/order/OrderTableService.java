@@ -1,6 +1,6 @@
 package com.ooadprojectserver.restaurantmanagement.service.order;
 
-import com.ooadprojectserver.restaurantmanagement.dto.request.OrderTableRequest;
+import com.ooadprojectserver.restaurantmanagement.dto.request.order.OrderTableRequest;
 import com.ooadprojectserver.restaurantmanagement.model.order.OrderTable;
 import com.ooadprojectserver.restaurantmanagement.model.order.TableStatus;
 

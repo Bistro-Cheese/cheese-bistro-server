@@ -4,8 +4,10 @@ import com.ooadprojectserver.restaurantmanagement.constant.APIStatus;
 import com.ooadprojectserver.restaurantmanagement.dto.request.PaymentRequest;
 import com.ooadprojectserver.restaurantmanagement.exception.CustomException;
 import com.ooadprojectserver.restaurantmanagement.model.payment.Payment;
+import com.ooadprojectserver.restaurantmanagement.model.payment.TransferMethod;
 import com.ooadprojectserver.restaurantmanagement.repository.payment.PaymentRepository;
 import com.ooadprojectserver.restaurantmanagement.service.payment.PaymentService;
+import com.ooadprojectserver.restaurantmanagement.service.payment.TransferMethodService;
 import com.ooadprojectserver.restaurantmanagement.service.user.UserDetailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,8 @@ import static com.ooadprojectserver.restaurantmanagement.util.DataUtil.copyPrope
 @RequiredArgsConstructor
 public class PaymentServiceImp implements PaymentService {
     private final UserDetailService userDetailService;
+    private final TransferMethodService transferMethodService;
+
     private final PaymentRepository paymentRepository;
 
     @Override
@@ -33,10 +37,14 @@ public class PaymentServiceImp implements PaymentService {
     }
 
     @Override
-    public void create(PaymentRequest req) {
+    public Payment create(PaymentRequest req) {
         Payment payment = copyProperties(req, Payment.class);
+
+        TransferMethod transferMethod = transferMethodService.getById(req.getMethodId());
+        payment.setMethodId(transferMethod);
+
         payment.setCommonCreate(userDetailService.getIdLogin());
-        paymentRepository.save(payment);
+        return paymentRepository.save(payment);
     }
 
     @Override

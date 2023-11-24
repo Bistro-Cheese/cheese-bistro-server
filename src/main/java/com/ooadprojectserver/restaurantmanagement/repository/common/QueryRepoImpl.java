@@ -10,6 +10,8 @@ import jakarta.persistence.Tuple;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -32,6 +34,8 @@ import static com.ooadprojectserver.restaurantmanagement.util.DateTimeUtils.safe
 @Slf4j
 public class QueryRepoImpl implements QueryRepo {
     private final EntityManager em;
+
+    Logger logger = LoggerFactory.getLogger(QueryRepoImpl.class);
 
     @Override
     public <T> T query(String sql, Map<String, Object> params, @NotNull Class<T> classTarget) {
@@ -87,6 +91,7 @@ public class QueryRepoImpl implements QueryRepo {
             if (!isNullOrEmpty(params)) params.forEach(query::setParameter);
 
             List<Tuple> queryResult = query.getResultList();
+            logger.info("queryResult: {}", queryResult);
 
             return tupleToObject(queryResult, classTarget);
         }

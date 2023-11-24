@@ -1,4 +1,4 @@
-package com.ooadprojectserver.restaurantmanagement.dto.request;
+package com.ooadprojectserver.restaurantmanagement.dto.request.order;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
