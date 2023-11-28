@@ -46,7 +46,7 @@ public class MessageConstant {
     public static final String UPDATE_TABLE_SUCCESS = "Update Table Successfully";
 
     //    Order
-    public static final String GET_ORDER_SUCCESS = "Get Orders Successfully";
+    public static final String GET_ORDER_SUCCESS = "Get Order Successfully";
     public static final String GET_ORDER_BY_TABLE_ID_SUCCESS = "Get Orders By Table Id Successfully";
     public static final String CREATE_ORDER_SUCCESS = "Create Order Successfully";
     public static final String DELETE_ORDER_SUCCESS = "Delete Order Successfully";

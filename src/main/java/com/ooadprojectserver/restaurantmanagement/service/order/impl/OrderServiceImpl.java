@@ -57,6 +57,7 @@ public class OrderServiceImpl implements OrderService {
                 .id(order.getId())
                 .staff(staffResponse)
                 .orderLines(orderLineList)
+                .subTotal(calculateSubTotal(order.getId()))
                 .status(order.getStatus().toString())
                 .build();
     }
