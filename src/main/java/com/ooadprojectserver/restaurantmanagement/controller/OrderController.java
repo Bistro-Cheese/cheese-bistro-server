@@ -26,7 +26,7 @@ public class OrderController {
     ) {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new APIResponse<>(
-                        MessageConstant.GET_ORDER_SUCCESS,
+                        MessageConstant.GET_ORDER_BY_TABLE_ID_SUCCESS,
                         orderService.getByTableId(tableId)
                 )
         );
