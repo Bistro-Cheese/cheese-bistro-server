@@ -61,4 +61,8 @@ public class APIConstant {
     public static final String EMAIL = VERSION + "/email";
     public static final String EMAIL_SEND = "/send";
     public static final String EMAIL_SEND_FILE = "/send-file";
+
+    //report routes
+    public static final String REPORT = VERSION + "/report";
+    public static final String DAILY_REVENUE = "/daily-revenue";
 }
