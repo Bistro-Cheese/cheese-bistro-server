@@ -16,6 +16,7 @@ import com.ooadprojectserver.restaurantmanagement.service.order.OrderService;
 import com.ooadprojectserver.restaurantmanagement.service.order.OrderTableService;
 import com.ooadprojectserver.restaurantmanagement.service.user.StaffService;
 import com.ooadprojectserver.restaurantmanagement.service.user.UserDetailService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -70,6 +71,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public void create(OrderRequest request) {
         Staff staff = getStaff();
 
