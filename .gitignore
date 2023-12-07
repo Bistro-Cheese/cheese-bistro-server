@@ -5,6 +5,8 @@ target/
 !**/src/test/**/target/
 logs/
 application-dev.yml
+application-docker.yml
+
 
 ### STS ###
 .apt_generated
@@ -33,3 +35,5 @@ build/
 
 ### VS Code ###
 .vscode/
+
+.env

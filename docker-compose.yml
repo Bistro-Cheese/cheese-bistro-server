@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  bistrocheesespring:
+    container_name: bistrocheesespring
+    restart: no
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    networks:
+      - cb-backend
+    depends_on:
+      mysqldb:
+        condition: service_healthy
+
+  mysqldb:
+    container_name: mysqldb
+    image: mysql:8.2.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 12345678
+      MYSQL_DATABASE: restaurant_management
+      MYSQL_USER: bistrocheese
+      MYSQL_PASSWORD: 12345678
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./src/main/resources/script:/docker-entrypoint-initdb.d/
+    healthcheck:
+      test: ["CMD", "curl" ,"-f", "http://localhost:3306"]
+      interval: 1s
+      retries: 3
+      start_period: 25s
+    networks:
+      - cb-backend
+
+volumes:
+    mysql-data:
+networks:
+    cb-backend:
+      name: cb-backend
