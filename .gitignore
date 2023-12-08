@@ -5,7 +5,6 @@ target/
 !**/src/test/**/target/
 logs/
 application-dev.yml
-application-docker.yml
 
 
 ### STS ###
