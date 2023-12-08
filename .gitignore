@@ -8,6 +8,7 @@ application-dev.yml
 application-docker.yml
 
 
+
 ### STS ###
 .apt_generated
 .classpath
