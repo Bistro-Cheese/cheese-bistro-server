@@ -1,6 +1,7 @@
 package com.ooadprojectserver.restaurantmanagement.service.order.impl;
 
 import com.ooadprojectserver.restaurantmanagement.constant.APIStatus;
+import com.ooadprojectserver.restaurantmanagement.dto.request.order.OrderLineRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.request.order.OrderLineSearchRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.request.order.OrderRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.response.order.DetailOrderResponse;
@@ -38,9 +39,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public DetailOrderResponse getByTableId(Integer tableId) {
 
-        Order order = orderRepository.findByOrderTable_IdAndStatus(tableId, OrderStatus.PENDING).orElseThrow(
-                () -> new CustomException(APIStatus.ORDER_NOT_FOUND)
-        );
+        Order order = getOrderByTableIdAndStatus(tableId, OrderStatus.PENDING);
 
         List<OrderLineResponse> orderLineList = orderLineRepository.search(OrderLineSearchRequest.builder()
                 .orderId(order.getId())
@@ -94,6 +93,26 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public void update(OrderRequest request) {
+        List<OrderLineRequest> orderLineRequestList = request.getOrderLines();
+
+        Order updatingOrder = getOrderByTableIdAndStatus(request.getTableId(), OrderStatus.PENDING);
+        List<OrderLine> orderLineList = orderLineRepository.findByOrder_Id(updatingOrder.getId());
+
+        orderLineRequestList.forEach(orderLineRequest -> {
+            orderLineRepository.findByOrder_IdAndFood_Id(updatingOrder.getId(),
+                    orderLineRequest.getFoodId()).ifPresentOrElse(
+                    orderLine1 -> {
+                        orderLineService.update(orderLine1.getId(), orderLineRequest);
+                    },
+                    () -> {
+                        orderLineService.create(updatingOrder.getId(), orderLineRequest);
+                    }
+            );
+        });
+    }
+
+    @Override
     public void delete(UUID orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow(
                 () -> new CustomException(APIStatus.ORDER_NOT_FOUND)
@@ -125,5 +144,11 @@ public class OrderServiceImpl implements OrderService {
     private Staff getStaff() {
         UUID staffId = userDetailService.getIdLogin();
         return (Staff) staffService.getUserById(staffId);
+    }
+
+    private Order getOrderByTableIdAndStatus(Integer tableId, OrderStatus status) {
+        return orderRepository.findByOrderTable_IdAndStatus(tableId, status).orElseThrow(
+                () -> new CustomException(APIStatus.ORDER_NOT_FOUND)
+        );
     }
 }

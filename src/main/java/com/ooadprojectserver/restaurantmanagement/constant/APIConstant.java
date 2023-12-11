@@ -26,6 +26,7 @@ public class APIConstant {
 
     // Order Routes
     public static final String ORDERS = VERSION + "/orders";
+    public static final String ORDER_BY_TABLE_ID = "/tables/{table_id}";
     public static final String ORDER_ID = "/{order_id}";
     public static final String ORDER_LINES = VERSION + "/order-lines";
 
