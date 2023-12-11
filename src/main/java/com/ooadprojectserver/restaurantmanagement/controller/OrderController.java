@@ -20,7 +20,7 @@ import java.util.UUID;
 public class OrderController {
     private final OrderService orderService;
 
-    @GetMapping(APIConstant.TABLE_ID)
+    @GetMapping(APIConstant.ORDER_BY_TABLE_ID)
     public ResponseEntity<APIResponse<DetailOrderResponse>> getOrderByTableId(
             @PathVariable("table_id") Integer tableId
     ) {
@@ -40,6 +40,18 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 new MessageResponse(
                         MessageConstant.CREATE_ORDER_SUCCESS
+                )
+        );
+    }
+
+    @PutMapping()
+    public ResponseEntity<MessageResponse> updateOrder(
+            @RequestBody OrderRequest orderRequest
+    ) {
+        orderService.update(orderRequest);
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new MessageResponse(
+                        MessageConstant.UPDATE_ORDER_SUCCESS
                 )
         );
     }

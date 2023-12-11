@@ -11,6 +11,7 @@ public interface OrderService {
     DetailOrderResponse getByTableId(Integer tableId);
     Order getById(UUID orderId);
     void create(OrderRequest request);
+    void update(OrderRequest request);
     void delete(UUID orderId);
     BigDecimal calculateSubTotal(UUID orderId);
 }
