@@ -36,7 +36,6 @@ public class APIConstant {
 
     // Payment Routes
     public static final String PAYMENTS = VERSION + "/payments";
-    public static final String TRANSFER_METHODS = VERSION + "/transfer-methods";
 
     // Discount Routes
     public static final String DISCOUNTS = VERSION + "/discounts";

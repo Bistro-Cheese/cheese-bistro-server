@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(APIConstant.TRANSFER_METHODS)
+@RequestMapping(APIConstant.PAYMENTS)
 public class TransferMethodController {
     private final TransferMethodService transferMethodService;
 

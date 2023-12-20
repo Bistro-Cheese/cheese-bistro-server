@@ -1,5 +1,6 @@
 package com.ooadprojectserver.restaurantmanagement.model.payment;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ooadprojectserver.restaurantmanagement.model.CommonEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -23,6 +24,7 @@ public class TransferMethod extends CommonEntity {
     @NotNull
     @Column(name = "method_type", nullable = false)
     @Enumerated(EnumType.ORDINAL)
+    @JsonFormat(shape = JsonFormat.Shape.NUMBER_INT)
     private MethodType methodType;
 
     @NotNull

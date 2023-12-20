@@ -12,18 +12,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TransferMethodRequest {
-    @JsonProperty("method_type")
     private MethodType methodType;
 
-    @JsonProperty("method_name")
     private String methodName;
 
-    @JsonProperty("account_number")
     private String accountNumber;
 
-    @JsonProperty("account_holder_name")
     private String accountHolderName;
 
-    @JsonProperty("is_active")
     private Boolean isActive;
 }
