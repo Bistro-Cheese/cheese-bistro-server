@@ -50,6 +50,7 @@ public class FoodServiceImpl implements FoodService {
             throw new CustomException(APIStatus.FOOD_ALREADY_EXISTED);
         } else {
             Food newFood = copyProperties(request, Food.class);
+            newFood.setCategory(category);
             newFood.setCommonCreate(userDetailService.getIdLogin());
             foodRepository.save(newFood);
         }

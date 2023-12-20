@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -20,7 +22,7 @@ public class FoodCreateRequest {
     @JsonProperty("product_image")
     private String productImage;
     @JsonProperty("price")
-    private Long price;
+    private BigDecimal price;
     @JsonProperty("status")
     private Integer status;
 }
