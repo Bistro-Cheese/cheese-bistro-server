@@ -19,7 +19,7 @@ public class FoodCreateRequest {
     private Integer category;
     @JsonProperty("description")
     private String description;
-    @JsonProperty("product_image")
+    @JsonProperty("image")
     private String productImage;
     @JsonProperty("price")
     private BigDecimal price;

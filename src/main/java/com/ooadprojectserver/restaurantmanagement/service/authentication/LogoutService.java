@@ -21,9 +21,11 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class LogoutService implements LogoutHandler {
+
     private final TokenRepository tokenRepository;
     private final UserRepository userRepository;
     private final JwtService jwtService;
+
     @Override
     public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
         final String authHeader = request.getHeader("Authorization");
