@@ -67,7 +67,8 @@ public class FoodServiceImpl implements FoodService {
 
     @Override
     public void updateFood(UUID foodId, FoodCreateRequest updatingFood) {
-        Food existingFood = foodRepository.findById(foodId).orElseThrow(
+
+        Food existedFood = foodRepository.findById(foodId).orElseThrow(
                 () -> new CustomException(APIStatus.FOOD_NOT_FOUND)
         );
         Category updateCategory = categoryRepository.findById(updatingFood.getCategory()).orElseThrow(
@@ -75,8 +76,15 @@ public class FoodServiceImpl implements FoodService {
         );
 
         //TODO: refactor update food
-        updatingFood = copyProperties(updatingFood, FoodCreateRequest.class);
-        foodRepository.save(existingFood);
+        existedFood.setName(updatingFood.getName());
+        existedFood.setCategory(updateCategory);
+        existedFood.setDescription(updatingFood.getDescription());
+        existedFood.setProductImage(updatingFood.getProductImage());
+        existedFood.setPrice(updatingFood.getPrice());
+        existedFood.setStatus(updatingFood.getStatus());
+        existedFood.setCommonUpdate(userDetailService.getIdLogin());
+
+        foodRepository.save(existedFood);
     }
 
     public Food getDetailFood(UUID foodId) {

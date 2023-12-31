@@ -1,6 +1,7 @@
 package com.ooadprojectserver.restaurantmanagement.service.user.impl;
 
 import com.ooadprojectserver.restaurantmanagement.constant.APIStatus;
+import com.ooadprojectserver.restaurantmanagement.dto.request.ConfirmationRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.request.SearchRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.request.UserCreateRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.response.PagingResponse;
@@ -103,14 +104,14 @@ public class OwnerServiceImpl implements OwnerService {
             throw new CustomException(APIStatus.PHONE_NUMBER_ALREADY_EXISTED);
         });
 
-        // Send confirmation email
-//        ConfirmationRequest confirm = ConfirmationRequest.builder()
-//                .fullName(userRegisterRequest.getFirstName() + " " + userRegisterRequest.getLastName())
-//                .username(userRegisterRequest.getUsername())
-//                .password(userRegisterRequest.getPassword())
-//                .emailTo(userRegisterRequest.getEmail())
-//                .build();
-//        emailService.sendMailWithInline(confirm, Locale.ENGLISH);
+//         Send confirmation email
+        ConfirmationRequest confirm = ConfirmationRequest.builder()
+                .fullName(userRegisterRequest.getFirstName() + " " + userRegisterRequest.getLastName())
+                .username(userRegisterRequest.getUsername())
+                .password(userRegisterRequest.getPassword())
+                .emailTo(userRegisterRequest.getEmail())
+                .build();
+        emailService.sendMailWithInline(confirm, Locale.ENGLISH);
 
         // Save user
         UserService userService = roleToServiceMap.get(userRegisterRequest.getRole());
