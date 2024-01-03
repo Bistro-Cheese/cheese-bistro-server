@@ -1,5 +1,6 @@
 package com.ooadprojectserver.restaurantmanagement.model.ingredient;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ooadprojectserver.restaurantmanagement.model.CommonEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -27,6 +28,7 @@ public class Ingredient extends CommonEntity {
     @NotNull
     @Column(name = "ingredient_type", nullable = false)
     @Enumerated(EnumType.ORDINAL)
+    @JsonFormat(shape = JsonFormat.Shape.NUMBER)
     private IngredientType ingredientType;
 
     @Size(max = 45)

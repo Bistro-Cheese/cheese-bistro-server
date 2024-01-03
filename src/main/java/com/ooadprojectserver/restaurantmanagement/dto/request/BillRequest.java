@@ -1,12 +1,14 @@
 package com.ooadprojectserver.restaurantmanagement.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ooadprojectserver.restaurantmanagement.model.bill.BillStatus;
 import com.ooadprojectserver.restaurantmanagement.model.payment.PaymentType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Data
@@ -16,9 +18,19 @@ import java.util.UUID;
 public class BillRequest {
     @JsonProperty("order_id")
     private UUID orderId;
+
+    @JsonProperty("customer_id")
+    private UUID customerId;
+
     @JsonProperty("discount_id")
     private Integer discountId;
-    private Long paid;
+
+    private BillStatus status;
+
+    private BigDecimal paid;
+
+    private BigDecimal deposit;
+
 
     // Payment
     @JsonProperty("method_id")

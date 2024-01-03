@@ -1,5 +1,6 @@
 package com.ooadprojectserver.restaurantmanagement.model.payment;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ooadprojectserver.restaurantmanagement.model.CommonEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -22,17 +23,10 @@ public class Payment extends CommonEntity {
     @Column(name = "type", nullable = false)
     @NotNull
     @Enumerated(EnumType.ORDINAL)
+    @JsonFormat(shape = JsonFormat.Shape.NUMBER)
     private PaymentType paymentType;
 
     @ManyToOne
     @JoinColumn(name = "method_id")
     private TransferMethod methodId;
-
-    @NotNull
-    @Column(name = "cus_nme",nullable = false)
-    private String customerName;
-
-    @NotNull
-    @Column(name = "phone_num",nullable = false)
-    private String phoneNumber;
 }

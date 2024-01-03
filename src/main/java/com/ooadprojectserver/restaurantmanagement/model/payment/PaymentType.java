@@ -7,5 +7,5 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum PaymentType {
     CASH,
-    TRANSFER;
+    TRANSFER
 }
