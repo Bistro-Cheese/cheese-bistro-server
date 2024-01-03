@@ -18,7 +18,4 @@ public class BillController {
         billService.create(billRequest);
         return ResponseEntity.status(201).body(new MessageResponse("Create bill successfully"));
     }
-
-    @PutMapping(APIConstant.ID)
-    public ResponseEntity<MessageResponse> updateBill(@RequestBody )
 }

@@ -50,8 +50,6 @@ public class PaymentServiceImp implements PaymentService {
     @Override
     public void update(UUID id, PaymentRequest req) {
         Payment payment = this.getPaymentById(id);
-        payment.setCustomerName(req.getCustomerName());
-        payment.setPhoneNumber(req.getPhoneNumber());
         payment.setCommonUpdate(userDetailService.getIdLogin());
         paymentRepository.save(payment);
     }

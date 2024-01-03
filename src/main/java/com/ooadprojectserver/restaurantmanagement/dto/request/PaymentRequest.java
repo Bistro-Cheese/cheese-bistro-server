@@ -17,10 +17,4 @@ public class PaymentRequest {
 
     @JsonProperty("payment_type")
     private PaymentType paymentType;
-
-    @JsonProperty("customer_name")
-    private String customerName;
-
-    @JsonProperty("phone_number")
-    private String phoneNumber;
 }
