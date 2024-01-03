@@ -2,6 +2,7 @@ package com.ooadprojectserver.restaurantmanagement.model.bill;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ooadprojectserver.restaurantmanagement.constant.DateTimeConstant;
+import com.ooadprojectserver.restaurantmanagement.model.customer.Customer;
 import com.ooadprojectserver.restaurantmanagement.model.discount.Discount;
 import com.ooadprojectserver.restaurantmanagement.model.order.Order;
 import com.ooadprojectserver.restaurantmanagement.model.payment.Payment;
@@ -41,6 +42,10 @@ public class Bill {
     @JoinColumn(name = "pay_id")
     private Payment payment;
 
+    @ManyToOne
+    @JoinColumn(name = "cus_id")
+    private Customer customer;
+
     @Column(name = "total")
     @JdbcTypeCode(SqlTypes.DECIMAL)
     private BigDecimal total;
@@ -57,6 +62,14 @@ public class Bill {
     @JdbcTypeCode(SqlTypes.DECIMAL)
     private BigDecimal change;
 
+    @Column(name = "deposit")
+    @JdbcTypeCode(SqlTypes.DECIMAL)
+    private BigDecimal deposit;
+
+    @Column(name = "status")
+    @Enumerated(value = EnumType.ORDINAL)
+    private BillStatus status;
+
     @CreatedDate
     @Column(name = "cus_in")
     @JsonFormat(pattern = DateTimeConstant.FORMAT_DATE_TIME, timezone = DateTimeConstant.TIMEZONE)
@@ -66,5 +79,4 @@ public class Bill {
     @Column(name = "cus_out")
     @JsonFormat(pattern = DateTimeConstant.FORMAT_DATE_TIME, timezone = DateTimeConstant.TIMEZONE)
     private Date cusOut;
-
 }

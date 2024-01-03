@@ -71,9 +71,8 @@ public class BillServiceImpl implements BillService {
         bill.setPayment(payment);
         bill.setTotal(total);
         bill.setSubTotal(orderService.calculateSubTotal(billRequest.getOrderId()));
-        bill.setPaid(BigDecimal.valueOf(billRequest.getPaid()));
-        bill.setChange(BigDecimal.valueOf(billRequest.getPaid()).subtract(total));
-
+        bill.setPaid(billRequest.getPaid());
+        bill.setChange(billRequest.getPaid().subtract(total));
         bill.setCusIn(order.getCreatedAt());
         bill.setCusOut(new Date());
 
