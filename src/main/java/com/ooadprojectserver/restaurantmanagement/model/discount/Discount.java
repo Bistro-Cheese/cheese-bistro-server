@@ -57,4 +57,20 @@ public class Discount extends CommonEntity {
     @NotNull
     @Column(name = "is_active", nullable = false)
     private Boolean isActive;
+
+    public BigDecimal calculateDiscount(BigDecimal total){
+        if (!this.isActive) return BigDecimal.valueOf(0);
+        if (this.usesMax != null && this.usesCount >= this.usesMax) return BigDecimal.valueOf(0);
+        if (this.type == DiscountType.PERCENTAGE) {
+            return total.multiply(this.value).divide(BigDecimal.valueOf(100));
+        } else {
+            return this.value;
+        }
+    }
+
+    public Boolean canUseDiscount()
+    {
+        Date currentDate = new Date();
+        return currentDate.before(this.endDate) && currentDate.after(this.startDate);
+    }
 }

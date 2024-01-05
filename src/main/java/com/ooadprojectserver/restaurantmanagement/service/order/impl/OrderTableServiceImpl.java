@@ -15,6 +15,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class OrderTableServiceImpl implements OrderTableService {
+
     private final OrderTableRepository repository;
 
     @Override

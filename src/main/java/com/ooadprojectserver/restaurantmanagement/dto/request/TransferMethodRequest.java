@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TransferMethodRequest {
+
     private MethodType methodType;
 
     private String methodName;

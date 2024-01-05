@@ -1,5 +1,6 @@
 package com.ooadprojectserver.restaurantmanagement.dto.response.order;
 
+import com.ooadprojectserver.restaurantmanagement.model.order.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,5 +19,6 @@ public class DetailOrderResponse {
     private StaffResponse staff;
     private List<OrderLineResponse> orderLines;
     private BigDecimal subTotal;
-    private String status;
+    private BigDecimal total;
+    private OrderStatus status;
 }

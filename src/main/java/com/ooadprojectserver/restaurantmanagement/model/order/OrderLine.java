@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Getter
@@ -35,4 +36,9 @@ public class OrderLine implements Serializable {
 
     @Column(name = "quantity")
     private Integer quantity;
+
+    public BigDecimal calculateSubTotal() {
+        return BigDecimal.valueOf(this.quantity)
+                .multiply(this.food.getPrice());
+    }
 }

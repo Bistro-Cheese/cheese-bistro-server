@@ -1,16 +1,12 @@
-package com.ooadprojectserver.restaurantmanagement.dto.request;
+package com.ooadprojectserver.restaurantmanagement.dto.request.customer;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class CustomerRequest {
+public class CustomerCreateRequest {
     @JsonProperty("customer_name")
     private String customerName;
 

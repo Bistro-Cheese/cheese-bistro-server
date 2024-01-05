@@ -1,6 +1,7 @@
 package com.ooadprojectserver.restaurantmanagement.model.bill;
 
 public enum BillStatus {
-    OPEN,
-    CLOSED
+    RESERVED,
+    PENDING,
+    COMPLETED,
 }
