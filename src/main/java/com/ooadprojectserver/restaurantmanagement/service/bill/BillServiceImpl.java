@@ -1,25 +1,22 @@
 package com.ooadprojectserver.restaurantmanagement.service.bill;
 
-import com.ooadprojectserver.restaurantmanagement.dto.request.BillRequest;
+import com.ooadprojectserver.restaurantmanagement.constant.APIStatus;
+import com.ooadprojectserver.restaurantmanagement.dto.request.bill.BillRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.request.PaymentRequest;
+import com.ooadprojectserver.restaurantmanagement.exception.CustomException;
 import com.ooadprojectserver.restaurantmanagement.model.bill.Bill;
-import com.ooadprojectserver.restaurantmanagement.model.discount.Discount;
-import com.ooadprojectserver.restaurantmanagement.model.order.Order;
-import com.ooadprojectserver.restaurantmanagement.model.order.OrderStatus;
-import com.ooadprojectserver.restaurantmanagement.model.order.OrderTable;
-import com.ooadprojectserver.restaurantmanagement.model.order.TableStatus;
+import com.ooadprojectserver.restaurantmanagement.model.order.*;
 import com.ooadprojectserver.restaurantmanagement.model.payment.Payment;
 import com.ooadprojectserver.restaurantmanagement.repository.bill.BillRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.order.OrderRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.order.OrderTableRepository;
-import com.ooadprojectserver.restaurantmanagement.service.discount.DiscountService;
-import com.ooadprojectserver.restaurantmanagement.service.order.OrderService;
 import com.ooadprojectserver.restaurantmanagement.service.payment.PaymentService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.Date;
+import java.util.UUID;
 
 import static com.ooadprojectserver.restaurantmanagement.util.DataUtil.copyProperties;
 
@@ -28,24 +25,27 @@ import static com.ooadprojectserver.restaurantmanagement.util.DataUtil.copyPrope
 public class BillServiceImpl implements BillService {
     private final BillRepository billRepository;
     private final OrderRepository orderRepository;
-
-    private final OrderService orderService;
-    private final DiscountService discountService;
     private final PaymentService paymentService;
     private final OrderTableRepository orderTableRepository;
 
+
     @Override
+    @Transactional
     public void create(BillRequest billRequest) {
         Bill bill = new Bill();
+//         Find order by id
+        Order order = getOrderById(billRequest.getOrderId());
+        if (order.getStatus() == OrderStatus.COMPLETED) {
+            throw new CustomException(APIStatus.ORDER_COMPLETED);
+        }
 
-        // Find order by id
-        Order order = orderService.getById(billRequest.getOrderId());
-
-        // Update order status
+//         Update order status
         order.setStatus(OrderStatus.COMPLETED);
         orderRepository.save(order);
 
-        // Update table status
+//        bill.setSubTotal(order.getTotal());
+
+//         Update table status
         OrderTable table = order.getOrderTable();
         table.setTableStatus(TableStatus.EMPTY);
         orderTableRepository.save(table);
@@ -55,27 +55,49 @@ public class BillServiceImpl implements BillService {
         Payment payment = paymentService.create(paymentRequest);
 
         // Find discount by id
-        if (billRequest.getDiscountId() != null) {
-            Discount discount = discountService.getById(billRequest.getDiscountId());
-            bill.setDiscount(discount);
+//        if (billRequest.getDiscountId() != null) {
+//            Discount discount = discountService.getById(billRequest.getDiscountId());
+//            if (!discount.canUseDiscount()){
+//                throw new CustomException(APIStatus.DISCOUNT_CANNOT_USE);
+//            }
+//            bill.setDiscount(discount);
+//            BigDecimal total = bill.getSubTotal().subtract(bill.getDiscount().calculateDiscount(bill.getSubTotal()));
+//            bill.setTotal(total);
+//        } else {
+//            bill.setTotal(bill.getSubTotal());
+//        }
+
+        // Create customer
+//        BigDecimal mustPay = bill.getTotal().subtract(order.getDeposit());
+//        CustomerCreateRequest customerCreateRequest = copyProperties(billRequest, CustomerCreateRequest.class);
+//        customerCreateRequest.setSpend(mustPay);
+//        Customer customer = customerService.create(customerCreateRequest);
+
+        // Check payment, paid must be greater than or equal to mustPay
+        if (billRequest.getPaid().compareTo(order.getTotal()) < 0) {
+            throw new CustomException(APIStatus.PAYMENT_NOT_ENOUGH);
         }
 
-        BigDecimal total = orderService.calculateSubTotal(billRequest.getOrderId())
-                .subtract(discountService.calculateDiscount(
-                                orderService.calculateSubTotal(billRequest.getOrderId()),
-                                bill.getDiscount()
-                        )
-                );
-
         bill.setOrder(order);
+        bill.setTotal(order.getTotal());
         bill.setPayment(payment);
-        bill.setTotal(total);
-        bill.setSubTotal(orderService.calculateSubTotal(billRequest.getOrderId()));
         bill.setPaid(billRequest.getPaid());
-        bill.setChange(billRequest.getPaid().subtract(total));
-        bill.setCusIn(order.getCreatedAt());
+        bill.setChange(billRequest.getPaid().subtract(order.getTotal()));
+        bill.setCusIn(order.getCusIn());
         bill.setCusOut(new Date());
 
         billRepository.save(bill);
     }
+
+    @Override
+    public void update(BillRequest billRequest) {
+
+    }
+
+    private Order getOrderById(UUID orderId) {
+        return orderRepository.findById(orderId).orElseThrow(
+                () -> new CustomException(APIStatus.ORDER_NOT_FOUND)
+        );
+    }
+
 }

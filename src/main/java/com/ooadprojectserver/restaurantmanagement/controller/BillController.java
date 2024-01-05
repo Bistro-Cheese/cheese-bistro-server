@@ -1,7 +1,7 @@
 package com.ooadprojectserver.restaurantmanagement.controller;
 
 import com.ooadprojectserver.restaurantmanagement.constant.APIConstant;
-import com.ooadprojectserver.restaurantmanagement.dto.request.BillRequest;
+import com.ooadprojectserver.restaurantmanagement.dto.request.bill.BillRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.response.MessageResponse;
 import com.ooadprojectserver.restaurantmanagement.service.bill.BillService;
 import lombok.RequiredArgsConstructor;

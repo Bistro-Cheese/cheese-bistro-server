@@ -57,4 +57,14 @@ public class Customer extends CommonEntity {
             this.customerType = CustomerType.STANDARD;
         }
     }
+
+    public BigDecimal calculateDiscount(BigDecimal total){
+        if (this.customerType == CustomerType.VIP){
+            return total.subtract(total.multiply(BigDecimal.valueOf(0.1)));
+        } else if (this.customerType == CustomerType.MEMBERSHIP){
+            return total.subtract(total.multiply(BigDecimal.valueOf(0.05)));
+        } else {
+            return total;
+        }
+    }
 }

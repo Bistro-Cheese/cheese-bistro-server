@@ -3,16 +3,21 @@ package com.ooadprojectserver.restaurantmanagement.controller;
 import com.ooadprojectserver.restaurantmanagement.constant.APIConstant;
 import com.ooadprojectserver.restaurantmanagement.constant.MessageConstant;
 import com.ooadprojectserver.restaurantmanagement.dto.request.order.OrderRequest;
+import com.ooadprojectserver.restaurantmanagement.dto.request.order.OrderSearchRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.response.APIResponse;
 import com.ooadprojectserver.restaurantmanagement.dto.response.MessageResponse;
 import com.ooadprojectserver.restaurantmanagement.dto.response.order.DetailOrderResponse;
+import com.ooadprojectserver.restaurantmanagement.dto.response.order.OrderSearchResponse;
 import com.ooadprojectserver.restaurantmanagement.service.order.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
+
+import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,6 +35,12 @@ public class OrderController {
                         orderService.getByTableId(tableId)
                 )
         );
+    }
+
+    @GetMapping(APIConstant.SEARCH)
+    public ResponseEntity<List<OrderSearchResponse>> search(OrderSearchRequest req) {
+        var rs = orderService.search(req);
+        return ResponseEntity.status(OK).body(rs);
     }
 
     @PostMapping()

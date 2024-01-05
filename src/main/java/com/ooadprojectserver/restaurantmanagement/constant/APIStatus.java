@@ -65,6 +65,7 @@ public enum APIStatus {
 
     //    Payment
     PAYMENT_NOT_FOUND(404, "Payment not found"),
+    PAYMENT_NOT_ENOUGH(400, "Payment not enough"),
     TRANSFER_METHOD_NOT_FOUND(404, "Transfer method not found"),
     PAYMENT_METHOD_ALREADY_EXISTED(400, "Payment method already existed"),
 
@@ -74,7 +75,11 @@ public enum APIStatus {
     WRONG_FORMAT_DATE(400, "Wrong format date"),
     START_DATE_AFTER_END_DATE(400, "Start date must be before end date"),
     START_DATE_BEFORE_CURRENT_DATE(400, "Start date must be after current date"),
-    INVALID_DISCOUNT_DATE(400, "Invalid discount date");
+    INVALID_DISCOUNT_DATE(400, "Invalid discount date"),
+    DISCOUNT_CANNOT_USE(400, "Discount cannot use"),
+
+    //Bill
+    BILL_NOT_FOUND(404, "Bill not found");
 
     private final int status;
     private final String message;

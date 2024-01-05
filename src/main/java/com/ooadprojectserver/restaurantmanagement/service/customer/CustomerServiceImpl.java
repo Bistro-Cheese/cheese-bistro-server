@@ -1,6 +1,6 @@
 package com.ooadprojectserver.restaurantmanagement.service.customer;
 
-import com.ooadprojectserver.restaurantmanagement.dto.request.CustomerRequest;
+import com.ooadprojectserver.restaurantmanagement.dto.request.customer.CustomerCreateRequest;
 import com.ooadprojectserver.restaurantmanagement.model.customer.Customer;
 import com.ooadprojectserver.restaurantmanagement.model.customer.CustomerType;
 import com.ooadprojectserver.restaurantmanagement.repository.CustomerRepository;
@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -18,19 +19,33 @@ public class CustomerServiceImpl implements CustomerService{
     private final UserDetailService userDetailService;
 
     @Override
-    public void create(CustomerRequest customerRequest) {
+    public Customer create(CustomerCreateRequest customerCreateRequest) {
         UUID staffId = userDetailService.getIdLogin();
 
-        Customer customer = Customer.builder()
-                .customerName(customerRequest.getCustomerName())
-                .phoneNumber(customerRequest.getPhoneNumber())
-                .visitCount(1)
-                .totalSpent(customerRequest.getSpend())
-                .customerType(CustomerType.STANDARD)
-                .build();
-        customer.setCommonCreate(staffId);
+        Optional<Customer> customer = customerRepository.findByCustomerNameAndPhoneNumber(
+                customerCreateRequest.getCustomerName(),
+                customerCreateRequest.getPhoneNumber());
 
-        customerRepository.save(customer);
+        if (customer.isPresent()) {
+            customer.get().addTotalSpent(customerCreateRequest.getSpend());
+            customer.get().addVisitCount();
+            customer.get().setCustomerType();
+
+            customer.get().setCommonUpdate(staffId);
+
+            return customerRepository.save(customer.get());
+        } else {
+            Customer newCustomer = Customer.builder()
+                    .customerName(customerCreateRequest.getCustomerName())
+                    .phoneNumber(customerCreateRequest.getPhoneNumber())
+                    .visitCount(1)
+                    .totalSpent(customerCreateRequest.getSpend())
+                    .customerType(CustomerType.STANDARD)
+                    .build();
+            newCustomer.setCommonCreate(staffId);
+
+            return customerRepository.save(newCustomer);
+        }
     }
 
     @Override
@@ -53,10 +68,10 @@ public class CustomerServiceImpl implements CustomerService{
     }
 
     @Override
-    public void updateAfterOrder(UUID customerId, CustomerRequest customerRequest) {
+    public void updateAfterOrder(UUID customerId, CustomerCreateRequest customerCreateRequest) {
         Customer customer = this.getById(customerId);
 
-        customer.addTotalSpent(customerRequest.getSpend());
+        customer.addTotalSpent(customerCreateRequest.getSpend());
         customer.addVisitCount();
         customer.setCustomerType();
 

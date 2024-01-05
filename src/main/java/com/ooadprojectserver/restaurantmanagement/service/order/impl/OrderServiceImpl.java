@@ -1,17 +1,24 @@
 package com.ooadprojectserver.restaurantmanagement.service.order.impl;
 
 import com.ooadprojectserver.restaurantmanagement.constant.APIStatus;
+import com.ooadprojectserver.restaurantmanagement.dto.request.customer.CustomerCreateRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.request.order.OrderLineRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.request.order.OrderLineSearchRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.request.order.OrderRequest;
+import com.ooadprojectserver.restaurantmanagement.dto.request.order.OrderSearchRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.response.order.DetailOrderResponse;
 import com.ooadprojectserver.restaurantmanagement.dto.response.order.OrderLineResponse;
+import com.ooadprojectserver.restaurantmanagement.dto.response.order.OrderSearchResponse;
 import com.ooadprojectserver.restaurantmanagement.dto.response.order.StaffResponse;
 import com.ooadprojectserver.restaurantmanagement.exception.CustomException;
+import com.ooadprojectserver.restaurantmanagement.model.customer.Customer;
+import com.ooadprojectserver.restaurantmanagement.model.discount.Discount;
 import com.ooadprojectserver.restaurantmanagement.model.order.*;
 import com.ooadprojectserver.restaurantmanagement.model.user.Staff;
 import com.ooadprojectserver.restaurantmanagement.repository.order.OrderLineRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.order.OrderRepository;
+import com.ooadprojectserver.restaurantmanagement.service.customer.CustomerService;
+import com.ooadprojectserver.restaurantmanagement.service.discount.DiscountService;
 import com.ooadprojectserver.restaurantmanagement.service.order.OrderLineService;
 import com.ooadprojectserver.restaurantmanagement.service.order.OrderService;
 import com.ooadprojectserver.restaurantmanagement.service.order.OrderTableService;
@@ -25,16 +32,20 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
+import static com.ooadprojectserver.restaurantmanagement.util.DataUtil.copyProperties;
+
 @Service
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
+
     private final UserDetailService userDetailService;
     private final StaffService staffService;
     private final OrderTableService orderTableService;
     private final OrderLineService orderLineService;
-
     private final OrderRepository orderRepository;
     private final OrderLineRepository orderLineRepository;
+    private final DiscountService discountService;
+    private final CustomerService customerService;
 
     @Override
     public DetailOrderResponse getByTableId(Integer tableId) {
@@ -57,8 +68,9 @@ public class OrderServiceImpl implements OrderService {
                 .id(order.getId())
                 .staff(staffResponse)
                 .orderLines(orderLineList)
-                .subTotal(calculateSubTotal(order.getId()))
-                .status(order.getStatus().toString())
+                .subTotal(order.getSubTotal())
+                .total(order.getTotal())
+                .status(order.getStatus())
                 .build();
     }
 
@@ -76,21 +88,62 @@ public class OrderServiceImpl implements OrderService {
 
         OrderTable orderTable = orderTableService.getById(request.getTableId());
 
+        // Check table status
         if (!orderTable.getTableStatus().equals(TableStatus.EMPTY)) {
             throw new CustomException(APIStatus.ORDER_TABLE_NOT_EMPTY);
         }
 
-        orderTableService.updateStatus(orderTable.getId(), TableStatus.OCCUPIED);
+        // Update table status
+        if (request.getStatus().equals( OrderStatus.PENDING)) {
+            orderTableService.updateStatus(orderTable.getId(), TableStatus.OCCUPIED);
+        }
+
 
         Order newOrder = Order.builder()
                 .staff(staff)
+                .numberOfCustomer(request.getNumberOfCustomer())
                 .orderTable(orderTable)
-                .status(OrderStatus.PENDING)
+                .status(request.getStatus())
                 .build();
         newOrder.setCommonCreate(userDetailService.getIdLogin());
+
         UUID orderId = orderRepository.save(newOrder).getId();
+
         request.getOrderLines().forEach(orderLineRequest -> orderLineService.create(orderId, orderLineRequest));
+
+        // calculate price of order when not use discount and sale for customer
+        newOrder.setSubTotal(calculateSubTotal(newOrder.getId()));
+
+        //Calculate price after apply discount
+        if (request.getDiscountId() != null) {
+            Discount discount = discountService.getById(request.getDiscountId());
+            if (!discount.canUseDiscount()){
+                throw new CustomException(APIStatus.DISCOUNT_CANNOT_USE);
+            }
+            newOrder.setDiscount(discount);
+            BigDecimal total = newOrder.getSubTotal().subtract(newOrder.getDiscount().calculateDiscount(newOrder.getSubTotal()));
+            newOrder.setTotal(total);
+        } else {
+            newOrder.setTotal(newOrder.getSubTotal());
+        }
+
+        // Calculate deposit
+        newOrder.calculateDeposit();
+
+        // Create customer
+        BigDecimal mustPay = newOrder.getTotal().subtract(newOrder.getDeposit());
+        CustomerCreateRequest customerCreateRequest = copyProperties(request, CustomerCreateRequest.class);
+        customerCreateRequest.setSpend(mustPay);
+        Customer customer = customerService.create(customerCreateRequest);
+
+        newOrder.setCustomer(customer);
+        newOrder.setTotal(customer.calculateDiscount(newOrder.getTotal()));
+        newOrder.setCusInTime(request.getCusIn());
+
+        orderRepository.save(newOrder);
     }
+
+
 
     @Override
     public void update(OrderRequest request) {
@@ -130,7 +183,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public BigDecimal calculateSubTotal(UUID orderId) {
+    public List<OrderSearchResponse> search(OrderSearchRequest status) {
+        return orderRepository.search(status);
+    }
+
+    private BigDecimal calculateSubTotal(UUID orderId) {
         List<OrderLine> orderLineList = orderLineRepository.findByOrder_Id(orderId);
 
         BigDecimal subTotal = BigDecimal.ZERO;

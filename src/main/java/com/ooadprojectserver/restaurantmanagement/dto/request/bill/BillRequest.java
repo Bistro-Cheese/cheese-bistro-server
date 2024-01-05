@@ -1,4 +1,4 @@
-package com.ooadprojectserver.restaurantmanagement.dto.request;
+package com.ooadprojectserver.restaurantmanagement.dto.request.bill;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ooadprojectserver.restaurantmanagement.model.bill.BillStatus;
@@ -16,29 +16,20 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BillRequest {
+
     @JsonProperty("order_id")
     private UUID orderId;
 
-    @JsonProperty("customer_id")
-    private UUID customerId;
-
-    @JsonProperty("discount_id")
-    private Integer discountId;
-
+    @JsonProperty("status")
     private BillStatus status;
 
+    @JsonProperty("paid")
     private BigDecimal paid;
-
-    private BigDecimal deposit;
-
 
     // Payment
     @JsonProperty("method_id")
     private Integer methodId;
+
     @JsonProperty("payment_type")
     private PaymentType paymentType;
-    @JsonProperty("customer_name")
-    private String customerName;
-    @JsonProperty("phone_number")
-    private String phoneNumber;
 }

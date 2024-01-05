@@ -2,8 +2,6 @@ package com.ooadprojectserver.restaurantmanagement.model.bill;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ooadprojectserver.restaurantmanagement.constant.DateTimeConstant;
-import com.ooadprojectserver.restaurantmanagement.model.customer.Customer;
-import com.ooadprojectserver.restaurantmanagement.model.discount.Discount;
 import com.ooadprojectserver.restaurantmanagement.model.order.Order;
 import com.ooadprojectserver.restaurantmanagement.model.payment.Payment;
 import jakarta.persistence.*;
@@ -34,25 +32,28 @@ public class Bill {
     @JoinColumn(name = "order_id")
     private Order order;
 
-    @ManyToOne
-    @JoinColumn(name = "discount_id")
-    private Discount discount;
+    //TODO: move discount to order
+//    @ManyToOne
+//    @JoinColumn(name = "discount_id")
+//    private Discount discount;
 
     @ManyToOne
     @JoinColumn(name = "pay_id")
     private Payment payment;
 
-    @ManyToOne
-    @JoinColumn(name = "cus_id")
-    private Customer customer;
+    //TODO: move customer to order
+//    @ManyToOne
+//    @JoinColumn(name = "cus_id")
+//    private Customer customer;
 
     @Column(name = "total")
     @JdbcTypeCode(SqlTypes.DECIMAL)
     private BigDecimal total;
 
-    @Column(name = "sub_total")
-    @JdbcTypeCode(SqlTypes.DECIMAL)
-    private BigDecimal subTotal;
+    //TODO: remove subTotal
+//    @Column(name = "sub_total")
+//    @JdbcTypeCode(SqlTypes.DECIMAL)
+//    private BigDecimal subTotal;
 
     @Column(name = "paid")
     @JdbcTypeCode(SqlTypes.DECIMAL)
@@ -62,13 +63,15 @@ public class Bill {
     @JdbcTypeCode(SqlTypes.DECIMAL)
     private BigDecimal change;
 
-    @Column(name = "deposit")
-    @JdbcTypeCode(SqlTypes.DECIMAL)
-    private BigDecimal deposit;
+    //TODO: remove subTotal
+//    @Column(name = "deposit")
+//    @JdbcTypeCode(SqlTypes.DECIMAL)
+//    private BigDecimal deposit;
 
-    @Column(name = "status")
-    @Enumerated(value = EnumType.ORDINAL)
-    private BillStatus status;
+    //TODO: Remove status
+//    @Column(name = "status")
+//    @Enumerated(value = EnumType.ORDINAL)
+//    private BillStatus status;
 
     @CreatedDate
     @Column(name = "cus_in")
@@ -79,4 +82,5 @@ public class Bill {
     @Column(name = "cus_out")
     @JsonFormat(pattern = DateTimeConstant.FORMAT_DATE_TIME, timezone = DateTimeConstant.TIMEZONE)
     private Date cusOut;
+
 }
