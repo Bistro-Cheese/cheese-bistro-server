@@ -64,5 +64,7 @@ public class APIConstant {
 
     //report routes
     public static final String REPORT = VERSION + "/report";
-    public static final String DAILY_REVENUE = "/daily-revenue";
+    public static final String DAILY_REVENUE = "/daily-report";
+    public static final String MONTHLY_REVENUE = "/monthly-report";
+    public static final String YEARLY_REVENUE = "/yearly-report";
 }

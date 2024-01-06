@@ -16,7 +16,7 @@ import static com.ooadprojectserver.restaurantmanagement.util.DateTimeUtils.DATE
 @Setter
 @Entity
 @Table(name = "daily_revenue")
-public class DailyRevenue {
+public class DailyReport {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -29,6 +29,9 @@ public class DailyRevenue {
 
     @Column(name = "revenue", precision = 38, scale = 2)
     private BigDecimal revenue;
+
+    @Column(name = "num_of_cus")
+    private Long numOfCustomers;
 
     @Column(name = "num_of_orders")
     private Long numOfOrders;
