@@ -27,9 +27,7 @@ public class ReportController {
     private final ReportService reportService;
 
     @GetMapping(APIConstant.DAILY_REVENUE)
-    public ResponseEntity<APIResponse<List<DailyReport>>> getDailyReport(
-            @RequestBody DailyReportRequest request
-    ) {
+    public ResponseEntity<APIResponse<List<DailyReport>>> getDailyReport(DailyReportRequest request) {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new APIResponse<>(
                         MessageConstant.GET_DAILY_REVENUE_SUCCESS,
