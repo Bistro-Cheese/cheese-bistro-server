@@ -9,7 +9,7 @@ import java.util.Date;
 import static com.ooadprojectserver.restaurantmanagement.util.DateTimeUtils.DATE_FORMAT;
 
 @Data
-public class DailyRevenueRequest {
+public class DailyReportRequest {
     @JsonProperty("fromDate")
     @JsonFormat(pattern = DATE_FORMAT)
     private Date fromDate;

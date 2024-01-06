@@ -1,7 +1,7 @@
 package com.ooadprojectserver.restaurantmanagement.repository.custom.impl;
 
-import com.ooadprojectserver.restaurantmanagement.dto.request.report.DailyRevenueRequest;
-import com.ooadprojectserver.restaurantmanagement.model.report.DailyRevenue;
+import com.ooadprojectserver.restaurantmanagement.dto.request.report.DailyReportRequest;
+import com.ooadprojectserver.restaurantmanagement.model.report.DailyReport;
 import com.ooadprojectserver.restaurantmanagement.repository.common.QueryRepo;
 import com.ooadprojectserver.restaurantmanagement.repository.custom.DailyRevenueRepositoryCustom;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ public class DailyRevenueRepositoryCustomImpl implements DailyRevenueRepositoryC
     private final QueryRepo queryRepo;
 
     @Override
-    public List<DailyRevenue> search(DailyRevenueRequest request) {
+    public List<DailyReport> search(DailyReportRequest request) {
 
         SimpleDateFormat parser = new SimpleDateFormat(DATE_FORMAT);
 
@@ -43,6 +43,6 @@ public class DailyRevenueRepositoryCustomImpl implements DailyRevenueRepositoryC
 
         query.append("order by id asc ");
 
-        return queryRepo.queryList(query.toString(), queryParams, DailyRevenue.class);
+        return queryRepo.queryList(query.toString(), queryParams, DailyReport.class);
     }
 }

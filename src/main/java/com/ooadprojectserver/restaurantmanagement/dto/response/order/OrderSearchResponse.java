@@ -2,12 +2,10 @@ package com.ooadprojectserver.restaurantmanagement.dto.response.order;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ooadprojectserver.restaurantmanagement.constant.DateTimeConstant;
-import com.ooadprojectserver.restaurantmanagement.model.order.OrderStatus;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.UUID;
 

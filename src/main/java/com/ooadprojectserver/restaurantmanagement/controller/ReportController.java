@@ -2,9 +2,12 @@ package com.ooadprojectserver.restaurantmanagement.controller;
 
 import com.ooadprojectserver.restaurantmanagement.constant.APIConstant;
 import com.ooadprojectserver.restaurantmanagement.constant.MessageConstant;
-import com.ooadprojectserver.restaurantmanagement.dto.request.report.DailyRevenueRequest;
+import com.ooadprojectserver.restaurantmanagement.dto.request.report.DailyReportRequest;
+import com.ooadprojectserver.restaurantmanagement.dto.request.report.MonthlyReportRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.response.APIResponse;
-import com.ooadprojectserver.restaurantmanagement.model.report.DailyRevenue;
+import com.ooadprojectserver.restaurantmanagement.model.report.DailyReport;
+import com.ooadprojectserver.restaurantmanagement.model.report.MonthlyReport;
+import com.ooadprojectserver.restaurantmanagement.model.report.YearlyReport;
 import com.ooadprojectserver.restaurantmanagement.service.report.ReportService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,13 +27,35 @@ public class ReportController {
     private final ReportService reportService;
 
     @GetMapping(APIConstant.DAILY_REVENUE)
-    public ResponseEntity<APIResponse<List<DailyRevenue>>> getDailyRevenueReport(
-            @RequestBody DailyRevenueRequest request
+    public ResponseEntity<APIResponse<List<DailyReport>>> getDailyReport(
+            @RequestBody DailyReportRequest request
     ) {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new APIResponse<>(
                         MessageConstant.GET_DAILY_REVENUE_SUCCESS,
                         reportService.searchDailyRevenue(request)
+                )
+        );
+    }
+
+    @GetMapping(APIConstant.MONTHLY_REVENUE)
+    public ResponseEntity<APIResponse<List<MonthlyReport>>> getMonthlyReport(
+            @RequestBody MonthlyReportRequest request
+    ) {
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new APIResponse<>(
+                        MessageConstant.GET_MONTHLY_REVENUE_SUCCESS,
+                        reportService.getMonthlyRevenueByYear(request)
+                )
+        );
+    }
+
+    @GetMapping(APIConstant.YEARLY_REVENUE)
+    public ResponseEntity<APIResponse<List<YearlyReport>>> getYearlyReport() {
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new APIResponse<>(
+                        MessageConstant.GET_YEARLY_REVENUE_SUCCESS,
+                        reportService.getYearlyRevenue()
                 )
         );
     }
