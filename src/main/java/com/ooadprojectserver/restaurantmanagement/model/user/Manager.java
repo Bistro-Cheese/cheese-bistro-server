@@ -22,7 +22,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Entity
 @Table(name = "manager")
 public class Manager extends User {
-    @Column(name = "certi_managment", nullable = false)
+    @Column(name = "certi_management", nullable = false)
     private String certificationManagement;
 
     @Column(name = "frg_lg", nullable = false)

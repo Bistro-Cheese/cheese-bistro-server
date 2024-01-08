@@ -26,7 +26,7 @@ public class DailyRevenueRepositoryCustomImpl implements DailyRevenueRepositoryC
 
         Map<String, Object> queryParams = new HashMap<>();
 
-        StringBuilder query = new StringBuilder("select id, date, revenue, num_of_orders ");
+        StringBuilder query = new StringBuilder("select id, date, revenue, num_of_orders, num_of_cus ");
         query.append("from daily_revenue ");
 
         if (!isNullObject(request.getFromDate())){
