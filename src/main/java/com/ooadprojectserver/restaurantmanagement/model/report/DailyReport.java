@@ -31,7 +31,7 @@ public class DailyReport {
     private BigDecimal revenue;
 
     @Column(name = "num_of_cus")
-    private Long numOfCustomers;
+    private Long numOfCus;
 
     @Column(name = "num_of_orders")
     private Long numOfOrders;

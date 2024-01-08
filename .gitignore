@@ -6,6 +6,7 @@ target/
 logs/
 application-dev.yml
 application-docker.yml
+application-prod.yml
 
 
 
