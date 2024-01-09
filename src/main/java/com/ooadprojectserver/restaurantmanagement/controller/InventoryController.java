@@ -10,6 +10,7 @@ import com.ooadprojectserver.restaurantmanagement.dto.response.APIResponse;
 import com.ooadprojectserver.restaurantmanagement.dto.response.MessageResponse;
 import com.ooadprojectserver.restaurantmanagement.dto.response.inventory.InventoryResponse;
 import com.ooadprojectserver.restaurantmanagement.model.inventory.Inventory;
+import com.ooadprojectserver.restaurantmanagement.model.operation.Operation;
 import com.ooadprojectserver.restaurantmanagement.service.inventory.InventoryService;
 import com.ooadprojectserver.restaurantmanagement.service.operation.OperationService;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -75,6 +77,16 @@ public class InventoryController {
     ) {
         return ResponseEntity.ok(
                 operationService.stockInventory(request)
+        );
+    }
+
+    @GetMapping( APIConstant.OPERATIONS)
+    public ResponseEntity<APIResponse<List<Operation>>> getOperations() {
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new APIResponse<>(
+                        MessageConstant.GET_ALL_OPERATIONS_SUCCESS,
+                        operationService.getAllOperation()
+                )
         );
     }
 }
