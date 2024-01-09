@@ -69,4 +69,5 @@ public class APIConstant {
     public static final String DAILY_REVENUE = "/daily-report";
     public static final String MONTHLY_REVENUE = "/monthly-report";
     public static final String YEARLY_REVENUE = "/yearly-report";
+    public static final String INVENTORY_REPORT = "/inventory-report";
 }
