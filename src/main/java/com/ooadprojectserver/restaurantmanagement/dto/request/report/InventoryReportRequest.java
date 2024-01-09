@@ -4,14 +4,15 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ooadprojectserver.restaurantmanagement.constant.DateTimeConstant;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import static com.ooadprojectserver.restaurantmanagement.util.DateTimeUtils.DATE_FORMAT2;
 
 @Data
 public class InventoryReportRequest {
     @JsonProperty("date")
-    @JsonFormat(pattern = DATE_FORMAT2, timezone = DateTimeConstant.TIMEZONE)
-    private Date date;
+    @DateTimeFormat(pattern = DATE_FORMAT2)
+    private LocalDate date;
 }

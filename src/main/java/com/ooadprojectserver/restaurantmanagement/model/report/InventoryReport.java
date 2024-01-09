@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import static com.ooadprojectserver.restaurantmanagement.util.DateTimeUtils.DATE_FORMAT2;
@@ -40,8 +41,7 @@ public class InventoryReport {
     private Double exportQuantity;
 
     @Column(name = "operation_date")
-    @JsonFormat(pattern = DATE_FORMAT2, timezone = DateTimeConstant.TIMEZONE)
     @DateTimeFormat(pattern = DATE_FORMAT2)
-    private Date operationDate;
+    private LocalDate operationDate;
 
 }
