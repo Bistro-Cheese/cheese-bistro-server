@@ -39,6 +39,18 @@ public class IngredientController {
         );
     }
 
+    @GetMapping("/{ingredient_name}")
+    public ResponseEntity<APIResponse<Ingredient>> getIngredientByName(
+            @PathVariable("ingredient_name") String ingredientName
+    ) {
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new APIResponse<>(
+                        MessageConstant.GET_INGREDIENT_SUCCESS,
+                        ingredientService.getByName(ingredientName)
+                )
+        );
+    }
+
     @PutMapping(APIConstant.INGREDIENT_ID)
     public ResponseEntity<MessageResponse> updateIngredient(
             @PathVariable("ingredient_id") Long ingredientId,

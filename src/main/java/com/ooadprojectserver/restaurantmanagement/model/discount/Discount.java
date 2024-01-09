@@ -30,6 +30,7 @@ public class Discount extends CommonEntity {
     @NotNull
     @Column(name = "type", nullable = false)
     @Enumerated(EnumType.ORDINAL)
+    @JsonFormat(shape = JsonFormat.Shape.NUMBER)
     private DiscountType type;
 
     @NotNull
