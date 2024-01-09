@@ -62,7 +62,7 @@ public class ReportController {
 
     @GetMapping(APIConstant.INVENTORY_REPORT)
     public ResponseEntity<APIResponse<List<InventoryReport>>> getInventoryReport(
-            @RequestBody InventoryReportRequest request) {
+            InventoryReportRequest request) {
         return ResponseEntity.status(HttpStatus.OK).body(
                 new APIResponse<>(
                         MessageConstant.GET_INVENTORY_REPORT_SUCCESS,
