@@ -8,6 +8,7 @@ import com.ooadprojectserver.restaurantmanagement.model.inventory.Inventory;
 import com.ooadprojectserver.restaurantmanagement.repository.ingredient.IngredientRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.inventory.InventoryRepository;
 import com.ooadprojectserver.restaurantmanagement.service.user.UserDetailService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +31,7 @@ public class IngredientServiceImpl implements IngredientService {
 
 
     @Override
+    @Transactional
     public void create(IngredientRequest req) {
         ingredientRepository.findBySupplierAndName(req.getSupplier(), req.getName()).ifPresent(ingredient -> {
             throw new CustomException(APIStatus.INGREDIENT_ALREADY_EXISTED);
