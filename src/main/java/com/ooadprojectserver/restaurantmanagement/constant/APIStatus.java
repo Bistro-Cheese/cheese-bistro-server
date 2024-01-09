@@ -38,6 +38,7 @@ public enum APIStatus {
     //    Inventory status
     INVENTORY_NOT_FOUND(404, "Inventory Not Found"),
     INVENTORY_ALREADY_EXIST(400, "This ingredient already created"),
+    INVENTORY_NOT_ENOUGH(400, "Inventory not enough"),
 
     //    Pagination
     ERR_PAGINATION(400, "Page size or page number must not be less than one"),

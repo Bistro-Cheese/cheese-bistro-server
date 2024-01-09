@@ -77,6 +77,7 @@ public class MessageConstant {
     public static final String EXPORT_INVENTORY_SUCCESSFULLY = "Export inventory successfully";
     public static final String NOT_ENOUGH_INVENTORY = "Not enough inventory";
     public static final String INVALID_OPERATION_TYPE = "Invalid operation type";
+    public static final String GET_ALL_OPERATIONS_SUCCESS = "Get All Operations Successfully";
 
     //report
     public static final String GET_DAILY_REVENUE_SUCCESS = "Get Daily Revenue Successfully";
