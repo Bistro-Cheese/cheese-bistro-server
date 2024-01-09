@@ -11,4 +11,5 @@ public interface IngredientService {
     void delete(Long id);
     List<Ingredient> getAll();
     Ingredient self(Long id);
+    Ingredient getByName(String name);
 }

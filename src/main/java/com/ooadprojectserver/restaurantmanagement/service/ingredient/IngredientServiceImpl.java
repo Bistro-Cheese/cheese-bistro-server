@@ -53,10 +53,6 @@ public class IngredientServiceImpl implements IngredientService {
     public void update(Long id, IngredientRequest req) {
         Ingredient ingredient = getIngredient(id);
 
-        if (ingredient.getName().equals(req.getName()) && ingredient.getSupplier().equals(req.getSupplier())) {
-            throw new CustomException(APIStatus.INGREDIENT_ALREADY_EXISTED);
-        }
-
         ingredient.setName(req.getName());
         ingredient.setSupplier(req.getSupplier());
         ingredient.setIngredientType(req.getIngredientType());
@@ -70,6 +66,7 @@ public class IngredientServiceImpl implements IngredientService {
     @Override
     public void delete(Long id) {
         Ingredient ingredient = getIngredient(id);
+        inventoryRepository.deleteByIngredient(ingredient);
         ingredientRepository.delete(ingredient);
     }
 
@@ -81,6 +78,14 @@ public class IngredientServiceImpl implements IngredientService {
     @Override
     public Ingredient self(Long id) {
         return getIngredient(id);
+    }
+
+    @Override
+    public Ingredient getByName(String name) {
+        return ingredientRepository.findByName(name).orElseThrow(() -> {
+            logger.error("Ingredient not found with name: {}", name);
+            return new CustomException(APIStatus.INGREDIENT_NOT_FOUND);
+        });
     }
 
     public Ingredient getIngredient(Long id) {
