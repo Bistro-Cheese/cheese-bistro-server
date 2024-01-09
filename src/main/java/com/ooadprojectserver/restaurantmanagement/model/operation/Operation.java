@@ -6,15 +6,17 @@ import com.ooadprojectserver.restaurantmanagement.model.user.Manager;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Date;
 import java.util.UUID;
 
 @Getter
 @Setter
+@Builder
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "operation")
 public class Operation extends CommonEntity {
     @Id
@@ -35,5 +37,4 @@ public class Operation extends CommonEntity {
     @NotNull
     @Column(name = "quantity", nullable = false)
     private Double quantity;
-
 }

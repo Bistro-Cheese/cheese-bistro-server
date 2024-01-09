@@ -5,14 +5,14 @@ import com.ooadprojectserver.restaurantmanagement.model.ingredient.Ingredient;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.UUID;
 
 @Data
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "inventory")
 public class Inventory extends CommonEntity {
     @Id
