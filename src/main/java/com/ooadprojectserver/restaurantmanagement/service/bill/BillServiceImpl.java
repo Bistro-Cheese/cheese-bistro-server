@@ -31,7 +31,7 @@ public class BillServiceImpl implements BillService {
 
     @Override
     @Transactional
-    public void create(BillRequest billRequest) {
+    public Bill create(BillRequest billRequest) {
         Bill bill = new Bill();
 //         Find order by id
         Order order = getOrderById(billRequest.getOrderId());
@@ -86,7 +86,7 @@ public class BillServiceImpl implements BillService {
         bill.setCusIn(order.getCusIn());
         bill.setCusOut(new Date());
 
-        billRepository.save(bill);
+        return billRepository.save(bill);
     }
 
     @Override

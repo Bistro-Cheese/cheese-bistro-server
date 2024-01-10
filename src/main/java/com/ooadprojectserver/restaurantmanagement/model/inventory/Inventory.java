@@ -21,13 +21,15 @@ public class Inventory extends CommonEntity {
     private UUID id;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @Column(name = "total_quan", nullable = false, length = 45)
+    private Double totalQuantity;
+
+    @NotNull
+    @ManyToOne
     @JoinColumn(name = "ingredient_id", nullable = false)
     private Ingredient ingredient;
 
-    @NotNull
-    @Column(name = "total_quan", nullable = false, length = 45)
-    private Double totalQuantity;
+
 
     public void importInventory(Double quantity) {
         this.totalQuantity += quantity;

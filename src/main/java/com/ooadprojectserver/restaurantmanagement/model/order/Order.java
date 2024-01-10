@@ -71,6 +71,7 @@ public class Order extends CommonEntity implements Serializable {
 
     @Column(name = "status", nullable = false)
     @Enumerated(EnumType.ORDINAL)
+    @JsonFormat(shape = JsonFormat.Shape.NUMBER)
     private OrderStatus status;
 
     public void calculateDeposit() {

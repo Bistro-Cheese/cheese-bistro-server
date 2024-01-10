@@ -4,6 +4,7 @@ import com.ooadprojectserver.restaurantmanagement.constant.APIStatus;
 import com.ooadprojectserver.restaurantmanagement.dto.request.PaymentRequest;
 import com.ooadprojectserver.restaurantmanagement.exception.CustomException;
 import com.ooadprojectserver.restaurantmanagement.model.payment.Payment;
+import com.ooadprojectserver.restaurantmanagement.model.payment.PaymentType;
 import com.ooadprojectserver.restaurantmanagement.model.payment.TransferMethod;
 import com.ooadprojectserver.restaurantmanagement.repository.payment.PaymentRepository;
 import com.ooadprojectserver.restaurantmanagement.service.payment.PaymentService;
@@ -38,10 +39,16 @@ public class PaymentServiceImp implements PaymentService {
 
     @Override
     public Payment create(PaymentRequest req) {
-        Payment payment = copyProperties(req, Payment.class);
+        Payment payment = new Payment();
 
-        TransferMethod transferMethod = transferMethodService.getById(req.getMethodId());
-        payment.setMethodId(transferMethod);
+        if (req.getPaymentType() == PaymentType.CASH) {
+            payment.setPaymentType(PaymentType.CASH);
+            payment.setMethodId(null);
+        } else {
+            payment.setPaymentType(PaymentType.TRANSFER);
+            TransferMethod transferMethod = transferMethodService.getById(req.getMethodId());
+            payment.setMethodId(transferMethod);
+        }
 
         payment.setCommonCreate(userDetailService.getIdLogin());
         return paymentRepository.save(payment);

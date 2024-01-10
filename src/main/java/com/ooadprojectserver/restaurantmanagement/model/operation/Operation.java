@@ -1,5 +1,6 @@
 package com.ooadprojectserver.restaurantmanagement.model.operation;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ooadprojectserver.restaurantmanagement.model.CommonEntity;
 import com.ooadprojectserver.restaurantmanagement.model.inventory.Inventory;
 import com.ooadprojectserver.restaurantmanagement.model.user.Manager;
@@ -25,16 +26,19 @@ public class Operation extends CommonEntity {
     private UUID id;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "inventory_id", nullable = false)
-    private Inventory inventory;
-
-    @NotNull
     @Column(name = "type", nullable = false)
     @Enumerated(EnumType.ORDINAL)
+    @JsonFormat(shape = JsonFormat.Shape.NUMBER)
     private OperationType type;
 
     @NotNull
     @Column(name = "quantity", nullable = false)
     private Double quantity;
+
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "inventory_id", nullable = false)
+    private Inventory inventory;
+
+
 }
