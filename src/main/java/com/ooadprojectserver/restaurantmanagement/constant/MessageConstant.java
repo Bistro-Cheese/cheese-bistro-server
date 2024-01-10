@@ -83,4 +83,5 @@ public class MessageConstant {
     public static final String GET_DAILY_REVENUE_SUCCESS = "Get Daily Revenue Successfully";
     public static final String GET_MONTHLY_REVENUE_SUCCESS = "Get Monthly Revenue Successfully";
     public static final String GET_YEARLY_REVENUE_SUCCESS = "Get Yearly Revenue Successfully";
+    public static final String GET_INVENTORY_REPORT_SUCCESS = "Get Inventory Report Successfully";
 }
