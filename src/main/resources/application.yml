@@ -7,24 +7,28 @@ spring:
   main:
     allow-bean-definition-overriding: true
   profiles:
-    active: ${ACTIVE_PROFILE:dev}
+    active: ${ACTIVE_PROFILE:prod}
   jpa:
     hibernate:
       ddl-auto: ${MYSQL_DDL_AUTO}
     show-sql: true
-    defer-datasource-initialization: true
+#    properties:
+#      hibernate:
+#        dialect: org.hibernate.dialect.MySQLDialect
+  #    defer-datasource-initialization: true
 #    generate-ddl: true
   #    database-platform: org.hibernate.dialect.MySQLDialect
   datasource:
-    url: jdbc:mysql://${MYSQL_HOST:mysqldb}:${MYSQL_PORT:3306}/${MYSQL_DATABASE:restaurant_management}
-    username: ${MYSQL_USERNAME}
-    password: ${MYSQL_PASSWORD}
-    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://${MYSQL_HOST:mysqldb}:${MYSQL_PORT:3306}/${MYSQL_DATABASE:restaurant_management}
+#    username: ${MYSQL_USERNAME}
+#    password: ${MYSQL_PASSWORD}
+#    driver-class-name: com.mysql.cj.jdbc.Driver
   sql:
     init:
       data-locations: classpath:data.sql
       schema-locations: classpath:schema.sql
       mode: ${INIT_MODE}
+      continue-on-error: true
   security:
     oath2:
       client:
@@ -47,6 +51,15 @@ spring:
           connectiontimeout: 10000
           timeout: 10000
           writetimeout: 10000
+
+bistro:
+  database:
+    mysql:
+      url: jdbc:mysql://${MYSQL_HOST:mysqldb}:${MYSQL_PORT:3306}/${MYSQL_DATABASE:restaurant_management}
+      username: ${MYSQL_USERNAME}
+      password: ${MYSQL_PASSWORD}
+      driverClassName: com.mysql.cj.jdbc.Driver
+
 ---
 application:
   security:
