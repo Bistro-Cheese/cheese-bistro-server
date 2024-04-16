@@ -1,422 +1,498 @@
--- user domain --
-CREATE TABLE if not exists `template` (
-                            `id` int NOT NULL AUTO_INCREMENT,
-                            `code` varchar(255) NOT NULL,
-                            `content` varchar(255) NOT NULL,
-                            `name` varchar(255) NOT NULL,
-                            `title` varchar(255) NOT NULL,
-                            `type` int NOT NULL,
-                            PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- address --
-CREATE TABLE if not exists `address`  (
-                                          `id` binary(16) NOT NULL,
-                                          `addr_line` varchar(255) DEFAULT NULL,
-                                          `city` varchar(255) DEFAULT NULL,
-                                          `region` varchar(255) DEFAULT NULL,
-                                          PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-
--- user--
-CREATE TABLE if not exists `user` (
-                                      `id` binary(16) NOT NULL,
-                                      `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                                      `created_by` binary(16) DEFAULT '0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',
-                                      `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                                      `updated_by` binary(16) DEFAULT '0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',
-                                      `avt` varchar(255) DEFAULT NULL,
-                                      `dob` datetime(6) DEFAULT NULL,
-                                      `email` varchar(255) DEFAULT NULL,
-                                      `enabled` bit(1) NOT NULL,
-                                      `fst_name` varchar(255) DEFAULT NULL,
-                                      `lst_name` varchar(255) NOT NULL,
-                                      `password` varchar(255) DEFAULT NULL,
-                                      `phone_num` varchar(255) DEFAULT NULL,
-                                      `role` int NOT NULL,
-                                      `status` int DEFAULT NULL,
-                                      `username` varchar(255) DEFAULT NULL,
-                                      `addr_id` binary(16) DEFAULT NULL,
-                                      PRIMARY KEY (`id`),
-                                      CONSTRAINT `user_addr_fk` FOREIGN KEY (`addr_id`) REFERENCES `address` (`id`),
-                                      CONSTRAINT `user_chk_1` CHECK ((`role` between 0 and 2))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-
-
--- token --
-CREATE TABLE if not exists `token` (
-                                       `id` binary(16) NOT NULL,
-                                       `expired` bit(1) DEFAULT NULL,
-                                       `revoked` bit(1) DEFAULT NULL,
-                                       `token` varchar(255) DEFAULT NULL,
-                                       `token_type` enum('BEARER') DEFAULT NULL,
-                                       `usr_id` binary(16) DEFAULT NULL,
-                                       PRIMARY KEY (`id`),
-                                       KEY `token_user_id` (`usr_id`),
-                                       CONSTRAINT `token_user_fk` FOREIGN KEY (`usr_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-
-
--- staff --
-CREATE TABLE if not exists `staff` (
-                                       `acdmic_lv` varchar(255) DEFAULT NULL,
-                                       `frg_lg` varchar(255) DEFAULT NULL,
-                                       `id` binary(16) NOT NULL,
-                                       PRIMARY KEY (`id`),
-                                       CONSTRAINT `staff_user_fk` FOREIGN KEY (`id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-
--- owner --
-CREATE TABLE if not exists `owner` (
-                                       `branch` varchar(255) NOT NULL,
-                                       `licen_business` varchar(255) NOT NULL,
-                                       `id` binary(16) NOT NULL,
-                                       PRIMARY KEY (`id`),
-                                       CONSTRAINT `owner_user_fk` FOREIGN KEY (`id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-
--- manager --
-CREATE TABLE if not exists `manager` (
-                                         `certi_managment` varchar(255) NOT NULL,
-                                         `ex_y` varchar(255) NOT NULL,
-                                         `frg_lg` varchar(255) NOT NULL,
-                                         `id` binary(16) NOT NULL,
-                                         PRIMARY KEY (`id`),
-                                         CONSTRAINT `manager_user_fk` FOREIGN KEY (`id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-
-CREATE TABLE if not exists `schedule` (
-                                          `id` bigint NOT NULL,
-                                          `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                                          `created_by` binary(16) DEFAULT '0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',
-                                          `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                                          `updated_by` binary(16) DEFAULT '0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',
-                                          `staff_id` binary(16) NOT NULL,
-                                          PRIMARY KEY (`id`),
-                                          KEY `schedule_staff_id` (`staff_id`),
-                                          CONSTRAINT `schedule_staff_fk` FOREIGN KEY (`staff_id`) REFERENCES `staff` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-
-
--- schedule_line --
-CREATE TABLE if not exists `schedule_line` (
-                                               `id` bigint NOT NULL,
-                                               `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                                               `created_by` binary(16) DEFAULT '0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',
-                                               `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                                               `updated_by` binary(16) DEFAULT '0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',
-                                               `shift` tinyint NOT NULL,
-                                               `status` tinyint DEFAULT NULL,
-                                               `timekeeping_by` binary(16) DEFAULT NULL,
-                                               `work_date` datetime(6) NOT NULL,
-                                               `schedule_id` bigint NOT NULL,
-                                               PRIMARY KEY (`id`),
-                                               KEY `line_schedule_id` (`schedule_id`),
-                                               CONSTRAINT `line_schedule_fk` FOREIGN KEY (`schedule_id`) REFERENCES `schedule` (`id`),
-                                               CONSTRAINT `schedule_line_chk_1` CHECK ((`shift` between 0 and 2))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-
--- user domain --
-
--- food domain --
--- category --
-CREATE TABLE if not exists `category` (
-                                          `id` int NOT NULL AUTO_INCREMENT,
-                                          `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                                          `created_by` binary(16) DEFAULT '0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',
-                                          `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                                          `updated_by` binary(16) DEFAULT '0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',
-                                          `name` varchar(255) DEFAULT NULL,
-                                          PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-
--- food --
-CREATE TABLE if not exists `food` (
-                                      `id` binary(16) NOT NULL,
-                                      `created_date` datetime(6) DEFAULT NULL,
-                                      `description` varchar(255) NOT NULL,
-                                      `last_modified_date` datetime(6) DEFAULT NULL,
-                                      `name` varchar(255) NOT NULL,
-                                      `price` decimal(38,2) NOT NULL,
-                                      `image` varchar(255) NOT NULL,
-                                      `status` int NOT NULL,
-                                      `category_id` int NOT NULL,
-                                      `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                                      `created_by` binary(16) DEFAULT '0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',
-                                      `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                                      `updated_by` binary(16) DEFAULT '0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',
-                                      PRIMARY KEY (`id`),
-                                      UNIQUE KEY `key_food_name` (`name`),
-                                      KEY `food_category_id` (`category_id`),
-                                      CONSTRAINT `food_category_fk` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-
--- food domain --
-
--- order domain --
-
--- table --
-CREATE TABLE if not exists `res_table` (
-                                           `id` int NOT NULL AUTO_INCREMENT,
-                                           `seat_num` int NOT NULL,
-                                           `tab_num` int DEFAULT NULL,
-                                           `status` tinyint NOT NULL,
-                                           PRIMARY KEY (`id`),
-                                           CONSTRAINT `res_table_chk_1` CHECK ((`status` between 0 and 2))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-
-
-
--- order --
-CREATE TABLE if not exists `res_order` (
-                                           `id` binary(16) NOT NULL,
-                                           `phone_cus` varchar(255) DEFAULT NULL,
-                                           `status` tinyint DEFAULT NULL,
-                                           `table_id` int DEFAULT NULL,
-                                           `staff_id` binary(16) DEFAULT NULL,
-                                           `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                                           `created_by` binary(16) DEFAULT '0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',
-                                           `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                                           `updated_by` binary(16) DEFAULT '0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',
-                                           PRIMARY KEY (`id`),
-                                           KEY `orders_table_id` (`table_id`),
-                                           KEY `orders_staff_id` (`staff_id`),
-                                           CONSTRAINT `orders_staff_fk` FOREIGN KEY (`staff_id`) REFERENCES `staff` (`id`),
-                                           CONSTRAINT `orders_table_fk` FOREIGN KEY (`table_id`) REFERENCES `res_table` (`id`),
-                                           CONSTRAINT `orders_chk_1` CHECK ((`status` between 0 and 3))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-
--- order line --
-CREATE TABLE if not exists `order_line` (
-                                            `id` binary(16) NOT NULL,
-                                            `quantity` int DEFAULT NULL,
-                                            `food_id` binary(16) DEFAULT NULL,
-                                            `order_id` binary(16) DEFAULT NULL,
-                                            PRIMARY KEY (`id`),
-                                            KEY `o_line_food_key` (`food_id`),
-                                            KEY `o_line_orders_key` (`order_id`),
-                                            CONSTRAINT `o_line_food_fk` FOREIGN KEY (`food_id`) REFERENCES `food` (`id`),
-                                            CONSTRAINT `o_line_orders_fk` FOREIGN KEY (`order_id`) REFERENCES `res_order` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-CREATE TABLE if not exists `transfer_method` (
-                                                 `id` int NOT NULL AUTO_INCREMENT,
-                                                 `acc_holder_name` varchar(255) NOT NULL,
-                                                 `acc_num` varchar(255) NOT NULL,
-                                                 `is_active` bit(1) NOT NULL,
-                                                 `method_name` varchar(255) NOT NULL,
-                                                 `method_type` tinyint NOT NULL,
-                                                 `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                                                 `created_by` binary(16) DEFAULT '0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',
-                                                 `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                                                 `updated_by` binary(16) DEFAULT '0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',
-                                                 PRIMARY KEY (`id`),
-                                                 CONSTRAINT `transfer_method_chk_1` CHECK ((`method_type` between 0 and 1))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-
-CREATE TABLE if not exists `payment` (
-                                         `id` binary(16) NOT NULL,
-                                         `type` tinyint NOT NULL,
-                                         `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                                         `created_by` binary(16) DEFAULT '0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',
-                                         `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                                         `updated_by` binary(16) DEFAULT '0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',
-                                         `cus_nme` varchar(255) NOT NULL,
-                                         `phone_num` varchar(255) NOT NULL,
-                                         `method_id` int DEFAULT NULL,
-                                         PRIMARY KEY (`id`),
-                                         KEY `key_payment_method` (`method_id`),
-                                         CONSTRAINT `payment_method_fk` FOREIGN KEY (`method_id`) REFERENCES `transfer_method` (`id`),
-                                         CONSTRAINT `payment_chk_1` CHECK ((`type` between 0 and 7))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-
-CREATE TABLE if not exists `discount` (
-                                          `id` int NOT NULL AUTO_INCREMENT,
-                                          `code` varchar(45) NOT NULL,
-                                          `end_date` datetime(6) DEFAULT NULL,
-                                          `start_date` datetime(6) DEFAULT NULL,
-                                          `type` tinyint NOT NULL,
-                                          `uses_cnt` int DEFAULT NULL,
-                                          `uses_max` int DEFAULT NULL,
-                                          `value` decimal(38,2) NOT NULL,
-                                          `is_active` bit(1) NOT NULL,
-                                          `name` varchar(255) NOT NULL,
-                                          `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                                          `created_by` binary(16) DEFAULT '0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',
-                                          `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                                          `updated_by` binary(16) DEFAULT '0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',
-                                          PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-
-CREATE TABLE if not exists `bill` (
-                                      `id` binary(16) NOT NULL,
-                                      `change_paid` decimal(38,2) DEFAULT NULL,
-                                      `cus_in` datetime(6) DEFAULT NULL,
-                                      `cus_out` datetime(6) DEFAULT NULL,
-                                      `paid` decimal(38,2) DEFAULT NULL,
-                                      `sub_total` decimal(38,2) DEFAULT NULL,
-                                      `total` decimal(38,2) DEFAULT NULL,
-                                      `discount_id` int DEFAULT NULL,
-                                      `order_id` binary(16) DEFAULT NULL,
-                                      `pay_id` binary(16) DEFAULT NULL,
-                                      PRIMARY KEY (`id`),
-                                      UNIQUE KEY `bill_orders_key` (`order_id`),
-                                      KEY `bill_discount_key` (`discount_id`),
-                                      KEY `bill_pay_key` (`pay_id`),
-                                      CONSTRAINT `bill_orders_fk` FOREIGN KEY (`pay_id`) REFERENCES `payment` (`id`),
-                                      CONSTRAINT `bill_discount_fk` FOREIGN KEY (`discount_id`) REFERENCES `discount` (`id`),
-                                      CONSTRAINT `bill_pay_fk` FOREIGN KEY (`order_id`) REFERENCES `res_order` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- order domain --
-
--- inventory domain --
-CREATE TABLE if not exists `ingredient` (
-                                            `id` bigint NOT NULL auto_increment,
-                                            `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                                            `created_by` binary(16) DEFAULT '0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',
-                                            `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                                            `updated_by` binary(16) DEFAULT '0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',
-                                            `ingredient_type` tinyint NOT NULL,
-                                            `name` varchar(45) NOT NULL,
-                                            `supplier` varchar(255) NOT NULL,
-                                            `unit` varchar(45) NOT NULL,
-                                            PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-CREATE TABLE if not exists `inventory` (
-                                           `id` binary(16) NOT NULL,
-                                           `ingredient_id` bigint NOT NULL,
-                                           `total_quan` float NOT NULL,
-                                           `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                                           `created_by` binary(16) DEFAULT '0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',
-                                           `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                                           `updated_by` binary(16) DEFAULT '0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',
-                                           PRIMARY KEY (`id`),
-                                           KEY `inventory_ingredient_id_idx` (`ingredient_id`),
-                                           CONSTRAINT `inventory_ingredient_id` FOREIGN KEY (`ingredient_id`) REFERENCES `ingredient` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-
-CREATE TABLE if not exists `operation` (
-                                           `id` binary(16) NOT NULL,
-                                           `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                                           `created_by` binary(16) DEFAULT '0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',
-                                           `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                                           `updated_by` binary(16) DEFAULT '0\0\0\0\0\0\0\0\0\0\0\0\0\0\0\0',
-                                           `quantity` double NOT NULL,
-                                           `type` tinyint NOT NULL,
-                                           `inventory_id` binary(16) NOT NULL,
-                                           PRIMARY KEY (`id`),
-                                           KEY `operation_inven_key` (`inventory_id`),
-                                           CONSTRAINT `operation_inven_fk` FOREIGN KEY (`inventory_id`) REFERENCES `inventory` (`id`),
-                                           CONSTRAINT `operation_chk_1` CHECK ((`type` between 0 and 1))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- inventory domain --
-
--- daily revenue --
-
-CREATE TABLE if not exists `daily_revenue`
+create table address
 (
-    `id` bigint NOT NULL AUTO_INCREMENT,
-    `date` datetime(6) NOT NULL,
-    `revenue` decimal(38,2) DEFAULT NULL,
-    `num_of_orders` bigint DEFAULT NULL,
-    PRIMARY KEY (`id`),
-    UNIQUE KEY `daily_key` (`date`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+    id        binary(16)   not null
+        primary key,
+    addr_line varchar(255) null,
+    city      varchar(255) null,
+    region    varchar(255) null
+);
 
--- Create trigger report daily revenue
--- Insert Bill Trigger --
-# DROP TRIGGER IF EXISTS trg_after_bill_insert;
-# CREATE TRIGGER trg_after_bill_insert
-#     AFTER INSERT ON bill
-#     FOR EACH ROW
-# BEGIN
-#     DECLARE revenue_exists INT;
-#     DECLARE total_amount DECIMAL(38,2);
-#
-#     -- Check if a record already exists for the current date in daily_revenue
-#     SELECT COUNT(*) INTO revenue_exists FROM daily_revenue WHERE `date` = DATE(NEW.cus_out);
-#
-#     -- If a record exists, update it, otherwise insert a new record
-#     IF revenue_exists > 0 THEN
-#         -- Update existing record
-#         UPDATE daily_revenue
-#         SET `revenue` = `revenue` + NEW.total,
-#             `num_of_orders` = `num_of_orders` + 1
-#         WHERE `date` = DATE(NEW.cus_out);
-#     ELSE
-#         -- Insert a new record
-#         INSERT INTO daily_revenue (`date`, `revenue`, `num_of_orders`)
-#         VALUES (DATE(NEW.cus_out), NEW.total, 1);
-#     END IF;
-# END;
-#
-#
-# -- Delete Bill Trigger --
-# DROP TRIGGER IF EXISTS trg_after_bill_delete;
-# CREATE TRIGGER trg_after_bill_delete
-#     AFTER DELETE ON bill
-#     FOR EACH ROW
-# BEGIN
-#     DECLARE revenue_exists INT;
-#     DECLARE total_amount DECIMAL(38,2);
-#
-#     -- Check if a record already exists for the current date in daily_revenue
-#     SELECT COUNT(*) INTO revenue_exists FROM daily_revenue WHERE `date` = DATE(OLD.cus_out);
-#
-#     -- If a record exists, update it, otherwise do nothing (as it shouldn't happen)
-#     IF revenue_exists > 0 THEN
-#         -- Update existing record
-#         UPDATE daily_revenue
-#         SET `revenue` = `revenue` - OLD.total,
-#             `num_of_orders` = `num_of_orders` - 1
-#         WHERE `date` = DATE(OLD.cus_out);
-#     END IF;
-# END;
-#
-#
-#
-# -- UPDATE BILL TRIGGER
-# DROP TRIGGER IF EXISTS trg_after_bill_update;
-# CREATE TRIGGER trg_after_bill_update
-#     AFTER UPDATE ON bill
-#     FOR EACH ROW
-# BEGIN
-#     DECLARE revenue_exists INT;
-#     DECLARE total_amount DECIMAL(38,2);
-#
-#     -- Check if a record already exists for the current date in daily_revenue
-#     SELECT COUNT(*) INTO revenue_exists FROM daily_revenue WHERE `date` = DATE(OLD.cus_out);
-#
-#     -- If a record exists, update it, otherwise do nothing (as it shouldn't happen)
-#     IF revenue_exists > 0 THEN
-#         -- Update existing record
-#         UPDATE daily_revenue
-#         SET `revenue` = `revenue` - OLD.total
-#         WHERE `date` = DATE(OLD.cus_out);
-#
-#         UPDATE daily_revenue
-#         SET `revenue` = `revenue` + NEW.total
-#         WHERE `date` = DATE(OLD.cus_out);
-#
-#     END IF;
-# END;
+create table category
+(
+    id         int auto_increment
+        primary key,
+    created_at timestamp  default CURRENT_TIMESTAMP not null,
+    created_by binary(16) default 0x30              null,
+    updated_at timestamp  default CURRENT_TIMESTAMP not null,
+    updated_by binary(16) default 0x30              null,
+    name       varchar(255)                         null
+);
+
+create table customer
+(
+    id          binary(16)                           not null
+        primary key,
+    created_at  timestamp  default CURRENT_TIMESTAMP not null,
+    created_by  binary(16) default 0x30              null,
+    updated_at  timestamp  default CURRENT_TIMESTAMP not null,
+    updated_by  binary(16) default 0x30              null,
+    cus_nme     varchar(255)                         not null,
+    cus_type    tinyint                              not null,
+    phone_num   varchar(255)                         not null,
+    total_spent decimal(38, 2)                       not null,
+    visit       int                                  not null
+);
+
+create table daily_revenue
+(
+    id            bigint auto_increment
+        primary key,
+    date          datetime(6)                 not null,
+    revenue       decimal(38, 2) default 0.00 null,
+    num_of_orders bigint         default 0    null,
+    num_of_cus    bigint         default 0    null,
+    constraint date_UNIQUE
+        unique (date)
+);
+
+create table discount
+(
+    id         int auto_increment
+        primary key,
+    end_date   datetime(6)                          null,
+    start_date datetime(6)                          null,
+    type       tinyint                              not null,
+    uses_cnt   int                                  null,
+    uses_max   int                                  null,
+    value      decimal(38, 2)                       not null,
+    is_active  bit                                  not null,
+    name       varchar(255)                         not null,
+    created_at timestamp  default CURRENT_TIMESTAMP not null,
+    created_by binary(16) default 0x30              null,
+    updated_at timestamp  default CURRENT_TIMESTAMP not null,
+    updated_by binary(16) default 0x30              null
+);
+
+create table food
+(
+    id                 binary(16)                           not null
+        primary key,
+    created_date       datetime(6)                          null,
+    description        varchar(255)                         not null,
+    last_modified_date datetime(6)                          null,
+    name               varchar(255)                         not null,
+    price              decimal(38, 2)                       not null,
+    image              varchar(255)                         not null,
+    status             int                                  not null,
+    category_id        int                                  not null,
+    created_at         timestamp  default CURRENT_TIMESTAMP not null,
+    created_by         binary(16) default 0x30              null,
+    updated_at         timestamp  default CURRENT_TIMESTAMP not null,
+    updated_by         binary(16) default 0x30              null,
+    constraint key_food_name
+        unique (name),
+    constraint food_category_fk
+        foreign key (category_id) references category (id)
+);
+
+create index food_category_id
+    on food (category_id);
+
+create table ingredient
+(
+    id              bigint auto_increment
+        primary key,
+    created_at      timestamp  default CURRENT_TIMESTAMP not null,
+    created_by      binary(16) default 0x30              null,
+    updated_at      timestamp  default CURRENT_TIMESTAMP not null,
+    updated_by      binary(16) default 0x30              null,
+    ingredient_type tinyint                              not null,
+    name            varchar(45)                          not null,
+    supplier        varchar(255)                         not null,
+    unit            varchar(45)                          not null
+);
+
+create table inventory
+(
+    id            binary(16)                           not null
+        primary key,
+    ingredient_id bigint                               not null,
+    total_quan    float                                not null,
+    created_at    timestamp  default CURRENT_TIMESTAMP not null,
+    created_by    binary(16) default 0x30              null,
+    updated_at    timestamp  default CURRENT_TIMESTAMP not null,
+    updated_by    binary(16) default 0x30              null,
+    constraint inventory_ingredient_id
+        foreign key (ingredient_id) references ingredient (id)
+);
+
+create index inventory_ingredient_id_idx
+    on inventory (ingredient_id);
+
+create definer = root@localhost trigger trg_after_inventory_insert
+    after insert
+    on inventory
+    for each row
+BEGIN
+
+    DECLARE ingre_name VARCHAR(255);
+    DECLARE ingre_supplier VARCHAR(255);
+    DECLARE ingre_unit VARCHAR(45);
+
+    SELECT name, supplier, unit into ingre_name, ingre_supplier, ingre_unit FROM ingredient WHERE id = NEW.ingredient_id;
+
+    INSERT INTO inventory_report(`ingredient_name`, `supplier`, `unit`, `quantity`, `import_quantity`, `export_quantity`, `operation_date`)
+    VALUES (ingre_name, ingre_supplier, ingre_unit, 0, 0, 0, NEW.created_at);
+END;
+
+create table inventory_report
+(
+    id              int auto_increment
+        primary key,
+    ingredient_name varchar(255) not null,
+    supplier        varchar(255) not null,
+    unit            varchar(45)  not null,
+    quantity        float        not null,
+    import_quantity double       not null,
+    export_quantity double       not null,
+    operation_date  date         null,
+    constraint unique_inventory_report_key
+        unique (ingredient_name, supplier, operation_date)
+);
+
+create table monthly_revenue
+(
+    id            int auto_increment
+        primary key,
+    year          int                         not null,
+    month         int                         not null,
+    revenue       decimal(38, 2) default 0.00 null,
+    num_of_orders bigint         default 0    null,
+    num_of_cus    bigint         default 0    null,
+    constraint unique_month
+        unique (year, month)
+);
+
+create table operation
+(
+    id           binary(16)                           not null
+        primary key,
+    created_at   timestamp  default CURRENT_TIMESTAMP not null,
+    created_by   binary(16) default 0x30              null,
+    updated_at   timestamp  default CURRENT_TIMESTAMP not null,
+    updated_by   binary(16) default 0x30              null,
+    quantity     double                               not null,
+    type         tinyint                              not null,
+    inventory_id binary(16)                           not null,
+    constraint operation_inven_fk
+        foreign key (inventory_id) references inventory (id),
+    check (`type` between 0 and 1)
+);
+
+create index operation_inven_key
+    on operation (inventory_id);
+
+create definer = root@localhost trigger trg_after_export_operation
+    after insert
+    on operation
+    for each row
+BEGIN
+    DECLARE ingre_name VARCHAR(255);
+    DECLARE ingre_supplier VARCHAR(255);
+    DECLARE ingre_unit VARCHAR(45);
+
+    select name, supplier, unit into ingre_name, ingre_supplier, ingre_unit FROM ingredient
+    WHERE id = (select ingredient_id from inventory where id = new.inventory_id  );
+
+    -- Update inventory_report for import operation
+    IF NEW.type = 1 THEN
+        INSERT INTO inventory_report(`ingredient_name`, `supplier`, `unit`, `quantity`, `import_quantity`, `export_quantity`, `operation_date`)
+        VALUES (ingre_name, ingre_supplier, ingre_unit, quantity = quantity - NEW.quantity, 0, NEW.quantity, new.created_at)
+        ON DUPLICATE KEY UPDATE
+                             quantity = quantity - NEW.quantity, export_quantity = export_quantity + NEW.quantity;
+    END IF;
+END;
+
+create definer = root@localhost trigger trg_after_import_operation
+    after insert
+    on operation
+    for each row
+BEGIN
+    DECLARE ingre_name VARCHAR(255);
+    DECLARE ingre_supplier VARCHAR(255);
+    DECLARE ingre_unit VARCHAR(45);
+
+    select name, supplier, unit into ingre_name, ingre_supplier, ingre_unit FROM ingredient
+    WHERE id = (select ingredient_id from inventory where id = new.inventory_id  );
+
+    -- Update inventory_report for import operation
+    IF NEW.type = 0 THEN
+        INSERT INTO inventory_report(`ingredient_name`, `supplier`, `unit`, `quantity`, `import_quantity`, `export_quantity`, `operation_date`)
+        VALUES (ingre_name, ingre_supplier, ingre_unit, quantity = quantity + NEW.quantity, NEW.quantity, 0, new.created_at)
+        ON DUPLICATE KEY UPDATE
+                             quantity = quantity + NEW.quantity, import_quantity = import_quantity + NEW.quantity;
+    END IF;
+END;
+
+create table res_table
+(
+    id       int auto_increment
+        primary key,
+    seat_num int     not null,
+    tab_num  int     null,
+    status   tinyint not null,
+    check (`status` between 0 and 2)
+);
+
+create table template
+(
+    id      int auto_increment
+        primary key,
+    code    varchar(255) not null,
+    content varchar(255) not null,
+    name    varchar(255) not null,
+    title   varchar(255) not null,
+    type    int          not null
+);
+
+create table transfer_method
+(
+    id              int auto_increment
+        primary key,
+    acc_holder_name varchar(255)                         not null,
+    acc_num         varchar(255)                         not null,
+    is_active       bit                                  not null,
+    method_name     varchar(255)                         not null,
+    method_type     tinyint                              not null,
+    created_at      timestamp  default CURRENT_TIMESTAMP not null,
+    created_by      binary(16) default 0x30              null,
+    updated_at      timestamp  default CURRENT_TIMESTAMP not null,
+    updated_by      binary(16) default 0x30              null,
+    check (`method_type` between 0 and 1)
+);
+
+create table payment
+(
+    id         binary(16)                           not null
+        primary key,
+    type       tinyint                              not null,
+    created_at timestamp  default CURRENT_TIMESTAMP not null,
+    created_by binary(16) default 0x30              null,
+    updated_at timestamp  default CURRENT_TIMESTAMP not null,
+    updated_by binary(16) default 0x30              null,
+    method_id  int                                  null,
+    constraint payment_method_fk
+        foreign key (method_id) references transfer_method (id)
+);
+
+create index key_payment_method
+    on payment (method_id);
+
+create table user
+(
+    id         binary(16)                           not null
+        primary key,
+    created_at timestamp  default CURRENT_TIMESTAMP not null,
+    created_by binary(16) default 0x30              null,
+    updated_at timestamp  default CURRENT_TIMESTAMP not null,
+    updated_by binary(16) default 0x30              null,
+    avt        varchar(255)                         null,
+    dob        datetime(6)                          null,
+    email      varchar(255)                         null,
+    enabled    bit                                  not null,
+    fst_name   varchar(255)                         null,
+    lst_name   varchar(255)                         not null,
+    password   varchar(255)                         null,
+    phone_num  varchar(255)                         null,
+    role       int                                  not null,
+    status     int                                  null,
+    username   varchar(255)                         null,
+    addr_id    binary(16)                           null,
+    constraint user_addr_fk
+        foreign key (addr_id) references address (id),
+    check (`role` between 0 and 2)
+);
+
+create table manager
+(
+    certi_management varchar(255) not null,
+    ex_y             varchar(255) not null,
+    frg_lg           varchar(255) not null,
+    id               binary(16)   not null
+        primary key,
+    constraint manager_user_fk
+        foreign key (id) references user (id)
+);
+
+create table owner
+(
+    branch         varchar(255) not null,
+    licen_business varchar(255) not null,
+    id             binary(16)   not null
+        primary key,
+    constraint owner_user_fk
+        foreign key (id) references user (id)
+);
+
+create table staff
+(
+    acdmic_lv varchar(255) null,
+    frg_lg    varchar(255) null,
+    id        binary(16)   not null
+        primary key,
+    constraint staff_user_fk
+        foreign key (id) references user (id)
+);
+
+create table res_order
+(
+    id                 binary(16)                           not null
+        primary key,
+    status             tinyint                              null,
+    table_id           int                                  null,
+    staff_id           binary(16)                           null,
+    created_at         timestamp  default CURRENT_TIMESTAMP not null,
+    created_by         binary(16) default 0x30              null,
+    updated_at         timestamp  default CURRENT_TIMESTAMP not null,
+    updated_by         binary(16) default 0x30              null,
+    number_of_customer int                                  not null,
+    deposit            decimal(38, 2)                       null,
+    total              decimal(38, 2)                       null,
+    cus_in             datetime(6)                          null,
+    sub_total          decimal(38, 2)                       null,
+    cus_id             binary(16)                           null,
+    discount_id        int                                  null,
+    constraint order_cus_fk
+        foreign key (cus_id) references customer (id),
+    constraint order_discount_fk
+        foreign key (discount_id) references discount (id),
+    constraint orders_staff_fk
+        foreign key (staff_id) references staff (id),
+    constraint orders_table_fk
+        foreign key (table_id) references res_table (id)
+);
+
+create table bill
+(
+    id          binary(16)     not null
+        primary key,
+    change_paid decimal(38, 2) null,
+    cus_in      datetime(6)    null,
+    cus_out     datetime(6)    null,
+    paid        decimal(38, 2) null,
+    total       decimal(38, 2) null,
+    order_id    binary(16)     null,
+    pay_id      binary(16)     null,
+    constraint bill_orders_key
+        unique (order_id),
+    constraint bill_orders_fk
+        foreign key (pay_id) references payment (id),
+    constraint bill_pay_fk
+        foreign key (order_id) references res_order (id)
+);
+
+create index bill_pay_key
+    on bill (pay_id);
+
+create definer = root@localhost trigger trg_after_bill_insert
+    after insert
+    on bill
+    for each row
+BEGIN
+    DECLARE order_visit BIGINT;
+
+    select number_of_customer into order_visit from restaurant_management.res_order where res_order.id = NEW.order_id;
+
+    INSERT INTO daily_revenue (`date`, `revenue`, `num_of_orders`, `num_of_cus`)
+    VALUES (DATE(NEW.cus_out), NEW.total, 1, COALESCE(order_visit, 1))
+    ON DUPLICATE KEY UPDATE revenue = revenue + NEW.total, num_of_orders = num_of_orders + 1, num_of_cus = num_of_cus + COALESCE(order_visit, 1);
+
+    INSERT INTO monthly_revenue (year, month, revenue, num_of_orders, num_of_cus)
+    VALUES (YEAR(NEW.cus_in), MONTH(NEW.cus_in), NEW.total, 1, COALESCE(order_visit, 1))
+    ON DUPLICATE KEY UPDATE revenue = revenue + NEW.total, num_of_orders = num_of_orders + 1, num_of_cus = num_of_cus + COALESCE(order_visit, 1);
+
+    INSERT INTO yearly_revenue (year, revenue, num_of_orders, num_of_cus)
+    VALUES (YEAR(NEW.cus_in), NEW.total, 1, COALESCE(order_visit, 1))
+    ON DUPLICATE KEY UPDATE revenue = revenue + NEW.total, num_of_orders = num_of_orders + 1, num_of_cus = num_of_cus + COALESCE(order_visit, 1);
+END;
+
+create table order_line
+(
+    id       binary(16) not null
+        primary key,
+    quantity int        null,
+    food_id  binary(16) null,
+    order_id binary(16) null,
+    constraint o_line_food_fk
+        foreign key (food_id) references food (id),
+    constraint o_line_orders_fk
+        foreign key (order_id) references res_order (id)
+);
+
+create index o_line_food_key
+    on order_line (food_id);
+
+create index o_line_orders_key
+    on order_line (order_id);
+
+create index orders_staff_id
+    on res_order (staff_id);
+
+create index orders_table_id
+    on res_order (table_id);
+
+create table schedule
+(
+    id         bigint                               not null
+        primary key,
+    created_at timestamp  default CURRENT_TIMESTAMP not null,
+    created_by binary(16) default 0x30              null,
+    updated_at timestamp  default CURRENT_TIMESTAMP not null,
+    updated_by binary(16) default 0x30              null,
+    staff_id   binary(16)                           not null,
+    constraint schedule_staff_fk
+        foreign key (staff_id) references staff (id)
+);
+
+create index schedule_staff_id
+    on schedule (staff_id);
+
+create table schedule_line
+(
+    id             bigint                               not null
+        primary key,
+    created_at     timestamp  default CURRENT_TIMESTAMP not null,
+    created_by     binary(16) default 0x30              null,
+    updated_at     timestamp  default CURRENT_TIMESTAMP not null,
+    updated_by     binary(16) default 0x30              null,
+    shift          tinyint                              not null,
+    status         tinyint                              null,
+    timekeeping_by binary(16)                           null,
+    work_date      datetime(6)                          not null,
+    schedule_id    bigint                               not null,
+    constraint line_schedule_fk
+        foreign key (schedule_id) references schedule (id),
+    check (`shift` between 0 and 2)
+);
+
+create index line_schedule_id
+    on schedule_line (schedule_id);
+
+create table token
+(
+    id         binary(16)      not null
+        primary key,
+    expired    bit             null,
+    revoked    bit             null,
+    token      varchar(255)    null,
+    token_type enum ('BEARER') null,
+    usr_id     binary(16)      null,
+    constraint token_user_fk
+        foreign key (usr_id) references user (id)
+);
+
+create index token_user_id
+    on token (usr_id);
+
+create table yearly_revenue
+(
+    id            int auto_increment
+        primary key,
+    year          int                         not null,
+    revenue       decimal(38, 2) default 0.00 null,
+    num_of_orders bigint         default 0    null,
+    num_of_cus    bigint         default 0    null,
+    constraint unique_month
+        unique (year)
+);
 
