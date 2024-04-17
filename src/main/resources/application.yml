@@ -7,7 +7,7 @@ spring:
   main:
     allow-bean-definition-overriding: true
   profiles:
-    active: ${ACTIVE_PROFILE:prod}
+    active: ${ACTIVE_PROFILE:dev}
   jpa:
     hibernate:
       ddl-auto: ${MYSQL_DDL_AUTO}

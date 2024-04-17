@@ -1,0 +1,34 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR.....
+      - aws --version
+      - aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin 654654361986.dkr.ecr.ap-southeast-1.amazonaws.com
+      - REPOSITORY_URI=654654361986.dkr.ecr.ap-southeast-1.amazonaws.com/bistro-ecr:latest
+      - IMAGE_TAG=build-$(echo $CODEBUILD_BUILD_ID | awk -F":" '{print $2}')
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo building the Jar file
+      - mvn clean install
+      - echo Building the Docker image...
+      - docker build -t $REPOSITORY_URI:latest .
+      - docker tag $REPOSITORY_URI:latest  $REPOSITORY_URI:$IMAGE_TAG
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Pushing the Docker images...
+      - docker push $REPOSITORY_URI:latest
+      - docker push $REPOSITORY_URI:$IMAGE_TAG
+      #give the container name
+      - DOCKER_CONTAINER_NAME=bistro-spring-ecr-container
+      - echo Writing image definitions file...
+      - printf '[{"name":"%s","imageUri":"%s"}]' $DOCKER_CONTAINER_NAME $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
+      - echo $DOCKER_CONTAINER_NAME
+      - echo printing imagedefinitions.json
+      - cat imagedefinitions.json
+artifacts:
+  files:
+    - target/bistro-spring-deploy-service.jar
