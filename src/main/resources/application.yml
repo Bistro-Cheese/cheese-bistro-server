@@ -7,12 +7,13 @@ spring:
   main:
     allow-bean-definition-overriding: true
   profiles:
-    active: ${ACTIVE_PROFILE:prod}
+    active: ${ACTIVE_PROFILE:dev}
   jpa:
     hibernate:
       ddl-auto: ${MYSQL_DDL_AUTO}
     show-sql: true
-#    properties:
+    defer-datasource-initialization: ${DATASOURCE_INIT}
+  #    properties:
 #      hibernate:
 #        dialect: org.hibernate.dialect.MySQLDialect
   #    defer-datasource-initialization: true

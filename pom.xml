@@ -142,6 +142,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		<finalName>bistro-spring-deploy-service</finalName>
 	</build>
 
 </project>

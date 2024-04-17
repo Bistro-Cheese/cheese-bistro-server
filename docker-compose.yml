@@ -29,7 +29,7 @@ services:
       MYSQL_PASSWORD: '12345678'
     volumes:
       - 'mysql-data:/var/lib/mysql'
-      - './src/main/resources/script:/docker-entrypoint-initdb.d/'
+#      - './src/main/resources/script:/docker-entrypoint-initdb.d/'
     healthcheck:
       test: ["CMD", "curl" ,"-f", "http://localhost:3306"]
       interval: 1s
