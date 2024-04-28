@@ -1,3 +1,15 @@
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  health:
+    db:
+      enabled: true
+    diskspace:
+      enabled: true
+
+
 ---
 server:
   port: ${SERVER_PORT}
@@ -7,23 +19,23 @@ spring:
   main:
     allow-bean-definition-overriding: true
   profiles:
-    active: ${ACTIVE_PROFILE:dev}
+    active: ${ACTIVE_PROFILE:docker}
   jpa:
     hibernate:
       ddl-auto: ${MYSQL_DDL_AUTO}
     show-sql: true
     defer-datasource-initialization: ${DATASOURCE_INIT}
   #    properties:
-#      hibernate:
-#        dialect: org.hibernate.dialect.MySQLDialect
+  #      hibernate:
+  #        dialect: org.hibernate.dialect.MySQLDialect
   #    defer-datasource-initialization: true
-#    generate-ddl: true
+  #    generate-ddl: true
   #    database-platform: org.hibernate.dialect.MySQLDialect
   datasource:
-#    url: jdbc:mysql://${MYSQL_HOST:mysqldb}:${MYSQL_PORT:3306}/${MYSQL_DATABASE:restaurant_management}
-#    username: ${MYSQL_USERNAME}
-#    password: ${MYSQL_PASSWORD}
-#    driver-class-name: com.mysql.cj.jdbc.Driver
+  #    url: jdbc:mysql://${MYSQL_HOST:mysqldb}:${MYSQL_PORT:3306}/${MYSQL_DATABASE:restaurant_management}
+  #    username: ${MYSQL_USERNAME}
+  #    password: ${MYSQL_PASSWORD}
+  #    driver-class-name: com.mysql.cj.jdbc.Driver
   sql:
     init:
       data-locations: classpath:data.sql
@@ -54,12 +66,21 @@ spring:
           writetimeout: 10000
 
 bistro:
-  database:
-    mysql:
-      url: jdbc:mysql://${MYSQL_HOST:mysqldb}:${MYSQL_PORT:3306}/${MYSQL_DATABASE:restaurant_management}
-      username: ${MYSQL_USERNAME}
-      password: ${MYSQL_PASSWORD}
-      driverClassName: com.mysql.cj.jdbc.Driver
+  master:
+    database:
+      mysql:
+        url: jdbc:mysql://${MYSQL_HOST:mysqldb_master}:${MYSQL_PORT:3306}/${MYSQL_DATABASE:restaurant_management}
+        username: ${MYSQL_USERNAME}
+        password: ${MYSQL_PASSWORD}
+        driverClassName: com.mysql.cj.jdbc.Driver
+#  slave:
+#    database:
+#      mysql:
+#        url: jdbc:mysql://mysqldb_slave:3306/restaurant_management_slave
+#        username: bistrocheese
+#        password: 12345678
+#        driverClassName: com.mysql.cj.jdbc.Driver
+
 
 ---
 application:
@@ -71,3 +92,5 @@ application:
       refresh-token:
         expiration: ${JWT_REFRESH_TOKEN_EXPIRATION}
       refresh-cookie-name: ${JWT_REFRESH_COOKIE_NAME}
+
+MAIL_PASSWORD: uksl lulr xunq fvsk

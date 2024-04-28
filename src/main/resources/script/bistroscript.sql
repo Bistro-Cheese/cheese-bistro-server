@@ -203,7 +203,7 @@ create definer = root@localhost trigger trg_after_export_operation
     on operation
     for each row
 BEGIN
-	DECLARE ingre_name VARCHAR(255);
+    DECLARE ingre_name VARCHAR(255);
     DECLARE ingre_supplier VARCHAR(255);
     DECLARE ingre_unit VARCHAR(45);
 
@@ -405,7 +405,7 @@ create definer = root@localhost trigger trg_after_bill_insert
     on bill
     for each row
 BEGIN
-	DECLARE order_visit BIGINT;
+    DECLARE order_visit BIGINT;
 
 select number_of_customer into order_visit from restaurant_management.res_order where res_order.id = NEW.order_id;
 

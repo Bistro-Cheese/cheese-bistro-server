@@ -14,22 +14,30 @@ services:
     networks:
       - cb-backend
     depends_on:
-      mysqldb:
+      mysqldb_master:
         condition: service_healthy
 
-  mysqldb:
-    container_name: mysqldb
+  mysqldb_master:
+    container_name: mysqldb_master
     image: 'mysql:8.2.0'
     restart: always
-    command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci --init-connect='SET NAMES UTF8;' --innodb-flush-log-at-trx-commit=0
+    ports:
+      - '3316:3306'
+    command:
+      - --server-id=1
+      - --log-bin=mysql-bin
+      - --innodb_flush_log_at_trx_commit=1
+      - --sync_binlog=1
+    #    command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci --init-connect='SET NAMES UTF8;' --innodb-flush-log-at-trx-commit=0
     environment:
       MYSQL_ROOT_PASSWORD: '12345678'
-      MYSQL_DATABASE: 'restaurant_management'
+      MYSQL_DATABASE: 'restaurant_management_master'
       MYSQL_USER: 'bistrocheese'
       MYSQL_PASSWORD: '12345678'
     volumes:
-      - 'mysql-data:/var/lib/mysql'
-#      - './src/main/resources/script:/docker-entrypoint-initdb.d/'
+      - 'mysql-master-data:/var/lib/mysql'
+#      - './src/main/resources/db/master/master.cnf:/etc/mysql/conf.d/my.cnf'
+#      - './src/main/resources/script/:/docker-entrypoint-initdb.d/init.sql'
     healthcheck:
       test: ["CMD", "curl" ,"-f", "http://localhost:3306"]
       interval: 1s
@@ -38,8 +46,30 @@ services:
     networks:
       - cb-backend
 
+  mysqldb_slave:
+    container_name: mysqldb_slave
+    image: 'mysql:8.2.0'
+    restart: always
+    ports:
+      - '3317:3306'
+    command:
+      - --server-id=2
+      - --skip-slave-start
+    environment:
+      MYSQL_ROOT_PASSWORD: '12345678'
+      MYSQL_DATABASE: 'restaurant_management_master'
+      MYSQL_USER: 'bistrocheese'
+      MYSQL_PASSWORD: '12345678'
+    volumes:
+      - 'mysql-slave-data:/var/lib/mysql'
+#      - './src/main/resources/db/slave/slave.cnf:/etc/mysql/conf.d/my.cnf'
+#      - './src/main/resources/script/:/docker-entrypoint-initdb.d/init.sql'
+    networks:
+      - cb-backend
+
 volumes:
-    mysql-data:
+  mysql-master-data:
+  mysql-slave-data:
 networks:
-    cb-backend:
-      name: cb-backend
+  cb-backend:
+    name: cb-backend
