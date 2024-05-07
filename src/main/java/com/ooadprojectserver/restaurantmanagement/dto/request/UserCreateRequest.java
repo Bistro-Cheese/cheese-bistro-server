@@ -1,6 +1,7 @@
 package com.ooadprojectserver.restaurantmanagement.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,21 +13,36 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserCreateRequest {
     @JsonProperty("username")
+    @NotBlank(message = "Username is required")
     private String username;
+
     @JsonProperty("first_name")
+    @NotBlank(message = "First name is required")
     private String firstName;
+
     @JsonProperty("last_name")
+    @NotBlank(message = "Last name is required")
     private String lastName;
+
     @JsonProperty("date_of_birth")
+    @NotBlank(message = "Date of birth is required")
     private String dateOfBirth;
+
     @JsonProperty("avatar")
     private String avatar;
+
     @JsonProperty("password")
+    @NotBlank(message = "Password is required")
     private String password;
+
     @JsonProperty("phone_number")
+    @NotBlank(message = "Phone number is required")
     private String phoneNumber;
+
     @JsonProperty("role")
+    @NotBlank(message = "Role is required")
     private Integer role;
+
     @JsonProperty("status")
     private Integer status;
 

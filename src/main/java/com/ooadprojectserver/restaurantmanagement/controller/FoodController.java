@@ -8,6 +8,7 @@ import com.ooadprojectserver.restaurantmanagement.dto.request.food.FoodSearchReq
 import com.ooadprojectserver.restaurantmanagement.dto.response.MessageResponse;
 import com.ooadprojectserver.restaurantmanagement.dto.response.food.FoodResponse;
 import com.ooadprojectserver.restaurantmanagement.service.food.FoodService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +29,7 @@ public class FoodController {
     //create food
     @PostMapping()
     public ResponseEntity<MessageResponse> createFood(
-            @RequestBody FoodCreateRequest request
+            @RequestBody @Valid FoodCreateRequest request
     ) {
         foodService.createFood(request);
         return ResponseEntity.status(CREATED).body(
