@@ -11,6 +11,7 @@ import com.ooadprojectserver.restaurantmanagement.dto.response.PagingResponse;
 import com.ooadprojectserver.restaurantmanagement.dto.response.UserResponse;
 import com.ooadprojectserver.restaurantmanagement.service.user.*;
 import jakarta.annotation.PostConstruct;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -40,7 +41,7 @@ public class UserController {
     }
 
     @PostMapping()
-    public ResponseEntity<MessageResponse> createUser(@RequestBody UserCreateRequest userRegisterRequest) {
+    public ResponseEntity<MessageResponse> createUser(@RequestBody @Valid UserCreateRequest userRegisterRequest) {
         ownerService.createUser(userRegisterRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 new MessageResponse(MessageConstant.CREATE_USER_SUCCESS));

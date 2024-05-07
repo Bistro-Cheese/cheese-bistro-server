@@ -7,6 +7,7 @@ import com.ooadprojectserver.restaurantmanagement.dto.response.APIResponse;
 import com.ooadprojectserver.restaurantmanagement.dto.response.AuthenticationResponse;
 import com.ooadprojectserver.restaurantmanagement.service.authentication.AuthenticationService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping(APIConstant.LOGIN)
-    public ResponseEntity<APIResponse<AuthenticationResponse>> loginController(@RequestBody UserLoginRequest request) {
+    public ResponseEntity<APIResponse<AuthenticationResponse>> loginController(@RequestBody @Valid UserLoginRequest request) {
         AuthenticationResponse authResponse = authenticationService.login(request);
         return ResponseEntity.status(OK).header(HttpHeaders.SET_COOKIE, authResponse.getRefreshTokenCookie().toString()).body(new APIResponse<>(MessageConstant.LOGIN_SUCCESS, authResponse));
     }

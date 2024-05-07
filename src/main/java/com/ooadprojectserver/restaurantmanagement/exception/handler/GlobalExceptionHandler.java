@@ -3,12 +3,20 @@ package com.ooadprojectserver.restaurantmanagement.exception.handler;
 import com.ooadprojectserver.restaurantmanagement.dto.response.ErrorResponse;
 import com.ooadprojectserver.restaurantmanagement.exception.CustomException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
-@ControllerAdvice
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+
+@RestControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(CustomException.class)
     public ResponseEntity<ErrorResponse> handleCustomException(CustomException exception) {
@@ -18,5 +26,19 @@ public class GlobalExceptionHandler {
                 LocalDateTime.now().toString()
         );
         return ResponseEntity.status(exception.getApiStatus().getStatus()).body(errorResponse);
+    }
+
+    @ResponseStatus(BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+
+        ex.getBindingResult().getAllErrors().forEach((error) -> {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            errors.put(fieldName, errorMessage);
+        });
+
+        return errors;
     }
 }
