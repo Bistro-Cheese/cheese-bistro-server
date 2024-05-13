@@ -3,6 +3,7 @@ package com.ooadprojectserver.restaurantmanagement;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.jdbc.DataSourceBuilder;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import javax.sql.DataSource;
@@ -11,6 +12,7 @@ import java.sql.Driver;
 
 @SpringBootApplication
 @EnableScheduling
+@EnableAspectJAutoProxy
 public class RestaurantmanagementApplication {
     public static void main(String[] args) {
         SpringApplication.run(RestaurantmanagementApplication.class, args);
