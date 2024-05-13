@@ -19,23 +19,21 @@ spring:
   main:
     allow-bean-definition-overriding: true
   profiles:
-    active: ${ACTIVE_PROFILE:docker}
+    active: ${ACTIVE_PROFILE:dev}
   jpa:
     hibernate:
       ddl-auto: ${MYSQL_DDL_AUTO}
     show-sql: true
     defer-datasource-initialization: ${DATASOURCE_INIT}
+  aws:
+    access-key: ${AWS_ACCESS_KEY}
+    secret-key: ${AWS_SECRET_KEY}
   #    properties:
   #      hibernate:
   #        dialect: org.hibernate.dialect.MySQLDialect
   #    defer-datasource-initialization: true
   #    generate-ddl: true
   #    database-platform: org.hibernate.dialect.MySQLDialect
-  datasource:
-  #    url: jdbc:mysql://${MYSQL_HOST:mysqldb}:${MYSQL_PORT:3306}/${MYSQL_DATABASE:restaurant_management}
-  #    username: ${MYSQL_USERNAME}
-  #    password: ${MYSQL_PASSWORD}
-  #    driver-class-name: com.mysql.cj.jdbc.Driver
   sql:
     init:
       data-locations: classpath:data.sql
