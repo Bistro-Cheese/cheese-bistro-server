@@ -40,13 +40,6 @@ spring:
       schema-locations: classpath:schema.sql
       mode: ${INIT_MODE}
       continue-on-error: true
-  security:
-    oath2:
-      client:
-        registration:
-          google:
-            client-id: ${GOOGLE_CLIENT_ID}
-            client-secret: ${GOOGLE_CLIENT_SECRET}
   mail:
     host: ${MAIL_HOST}
     port: ${MAIL_PORT}
