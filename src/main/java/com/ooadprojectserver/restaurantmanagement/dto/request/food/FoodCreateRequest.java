@@ -15,11 +15,9 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class FoodCreateRequest {
     @JsonProperty("name")
-    @NotBlank(message = "Name is required")
     private String name;
 
     @JsonProperty("category")
-    @NotBlank(message = "Category is required")
     private Integer category;
 
     @JsonProperty("description")
@@ -29,7 +27,6 @@ public class FoodCreateRequest {
     private String productImage;
 
     @JsonProperty("price")
-    @NotBlank(message = "Price is required")
     private BigDecimal price;
 
     @JsonProperty("status")

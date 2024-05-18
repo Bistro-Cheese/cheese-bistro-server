@@ -7,6 +7,7 @@ import com.ooadprojectserver.restaurantmanagement.dto.request.food.FoodCreateReq
 import com.ooadprojectserver.restaurantmanagement.dto.request.food.FoodSearchRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.response.MessageResponse;
 import com.ooadprojectserver.restaurantmanagement.dto.response.food.FoodResponse;
+import com.ooadprojectserver.restaurantmanagement.model.food.Food;
 import com.ooadprojectserver.restaurantmanagement.service.food.FoodService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -66,6 +67,14 @@ public class FoodController {
     @GetMapping(APIConstant.SEARCH)
     public ResponseEntity<Page<FoodResponse>> searchFood(FoodSearchRequest req, PageInfo pageInfo) {
         var rs = foodService.search(req, pageInfo);
+        return ResponseEntity.status(OK).body(rs);
+    }
+
+    @GetMapping(APIConstant.FOOD_ID)
+    public ResponseEntity<Food> getFoodById(
+            @PathVariable("food_id") UUID foodId
+    ) {
+        var rs = foodService.getDetailFood(foodId);
         return ResponseEntity.status(OK).body(rs);
     }
 }
