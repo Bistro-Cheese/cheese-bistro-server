@@ -40,7 +40,6 @@ public class UserCreateRequest {
     private String phoneNumber;
 
     @JsonProperty("role")
-    @NotBlank(message = "Role is required")
     private Integer role;
 
     @JsonProperty("status")

@@ -12,6 +12,8 @@ import com.ooadprojectserver.restaurantmanagement.model.user.baseUser.User;
 import com.ooadprojectserver.restaurantmanagement.repository.specification.UserSpecification;
 import com.ooadprojectserver.restaurantmanagement.repository.user.UserRepository;
 import com.ooadprojectserver.restaurantmanagement.service.email.EmailService;
+import com.ooadprojectserver.restaurantmanagement.service.email.command.EmailCommand;
+import com.ooadprojectserver.restaurantmanagement.service.email.command.SendMailWithInlineCommand;
 import com.ooadprojectserver.restaurantmanagement.service.user.*;
 import com.ooadprojectserver.restaurantmanagement.service.user.factory.OwnerFactory;
 import jakarta.annotation.PostConstruct;
@@ -38,16 +40,16 @@ public class OwnerServiceImpl implements OwnerService {
             UserRepository userRepository,
             ManagerService managerService,
             StaffService staffService,
-            EmailService emailService,
             UserDetailService userDetailService,
+            EmailService emailService,
             Map<Integer, UserService> roleToServiceMap
     ) {
         this.ownerFactory = ownerFactory;
         this.userRepository = userRepository;
         this.managerService = managerService;
         this.staffService = staffService;
-        this.emailService = emailService;
         this.userDetailService = userDetailService;
+        this.emailService = emailService;
         this.roleToServiceMap = roleToServiceMap;
     }
 
@@ -58,7 +60,6 @@ public class OwnerServiceImpl implements OwnerService {
         roleToServiceMap.put(2, staffService);
     }
 
-    // Implement User Service Start
     @Override
     public void saveUser(UserCreateRequest userRegisterRequest) {
         userRepository.save(ownerFactory.create(userRegisterRequest));
@@ -104,14 +105,16 @@ public class OwnerServiceImpl implements OwnerService {
             throw new CustomException(APIStatus.PHONE_NUMBER_ALREADY_EXISTED);
         });
 
-//         Send confirmation email
+        //         Send confirmation email
         ConfirmationRequest confirm = ConfirmationRequest.builder()
                 .fullName(userRegisterRequest.getFirstName() + " " + userRegisterRequest.getLastName())
                 .username(userRegisterRequest.getUsername())
                 .password(userRegisterRequest.getPassword())
                 .emailTo(userRegisterRequest.getEmail())
                 .build();
-        emailService.sendMailWithInline(confirm, Locale.ENGLISH);
+
+        EmailCommand emailCommand = new SendMailWithInlineCommand(emailService, confirm, Locale.ENGLISH);
+        emailCommand.execute();
 
         // Save user
         UserService userService = roleToServiceMap.get(userRegisterRequest.getRole());
