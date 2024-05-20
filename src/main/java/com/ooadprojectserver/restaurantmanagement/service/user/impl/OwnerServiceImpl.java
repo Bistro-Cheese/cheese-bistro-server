@@ -31,7 +31,7 @@ public class OwnerServiceImpl implements OwnerService {
     private final UserDetailService userDetailService;
     private final EmailService emailService;
 
-    private final Map<Integer, UserService> roleToServiceMap;
+    private Map<Integer, UserService> roleToServiceMap;
 
     public OwnerServiceImpl(
             OwnerFactory ownerFactory,
@@ -39,8 +39,7 @@ public class OwnerServiceImpl implements OwnerService {
             ManagerService managerService,
             StaffService staffService,
             EmailService emailService,
-            UserDetailService userDetailService,
-            Map<Integer, UserService> roleToServiceMap
+            UserDetailService userDetailService
     ) {
         this.ownerFactory = ownerFactory;
         this.userRepository = userRepository;
@@ -48,11 +47,11 @@ public class OwnerServiceImpl implements OwnerService {
         this.staffService = staffService;
         this.emailService = emailService;
         this.userDetailService = userDetailService;
-        this.roleToServiceMap = roleToServiceMap;
     }
 
     @PostConstruct
     private void initRoleToServiceMap() {
+        roleToServiceMap = new HashMap<>();
         roleToServiceMap.put(0, this);
         roleToServiceMap.put(1, managerService);
         roleToServiceMap.put(2, staffService);
@@ -61,12 +60,12 @@ public class OwnerServiceImpl implements OwnerService {
     // Implement User Service Start
     @Override
     public void saveUser(UserCreateRequest userRegisterRequest) {
-        userRepository.save(ownerFactory.create(userRegisterRequest));
+        userRepository.save((Owner) ownerFactory.create(userRegisterRequest));
     }
 
     @Override
     public void updateUserById(User user, UserCreateRequest userRegisterRequest) {
-        userRepository.save(ownerFactory.update(user, userRegisterRequest));
+        userRepository.save((Owner) ownerFactory.update(user, userRegisterRequest));
     }
 
     @Override
@@ -79,8 +78,8 @@ public class OwnerServiceImpl implements OwnerService {
     }
 
     @Override
-    public User getUserById(UUID id) {
-        return userRepository.findById(id).orElseThrow(
+    public Owner getUserById(UUID id) {
+        return (Owner) userRepository.findById(id).orElseThrow(
                 () -> new CustomException(APIStatus.USER_NOT_FOUND)
         );
     }
@@ -133,11 +132,16 @@ public class OwnerServiceImpl implements OwnerService {
     }
 
     @Override
-    public UserResponse getUserDetail(UUID userId) {
+    public User getUserDetail(UUID userId) {
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new CustomException(APIStatus.USER_NOT_FOUND)
         );
-        return UserResponse.covertUserToUserResponse(user);
+        return switch (user.getRole().ordinal()) {
+            case 0 -> getUserById(userId);
+            case 1 -> managerService.getUserById(userId);
+            case 2 -> staffService.getUserById(userId);
+            default -> throw new CustomException(APIStatus.INVALID_ROLE_ID);
+        };
     }
 
     @Override
@@ -155,6 +159,7 @@ public class OwnerServiceImpl implements OwnerService {
                 () -> new CustomException(APIStatus.USER_NOT_FOUND)
         );
 
+
         // Check if email already existed
         if (!Objects.equals(userRegisterRequest.getEmail(), user.getEmail())) {
             userRepository.findByEmail(userRegisterRequest.getEmail()).ifPresent(userRepo -> {
@@ -167,7 +172,6 @@ public class OwnerServiceImpl implements OwnerService {
             throw new CustomException(APIStatus.INVALID_ROLE_ID);
         }
 
-        // Update User
         userService.updateUserById(user, userRegisterRequest);
     }
 

@@ -53,6 +53,12 @@ public abstract class UserFactory {
     public User update(User user, UserCreateRequest userRequest) {
         Date dob = getDate(userRequest.getDateOfBirth());
 
+        Address address = user.getAddress();
+        address.setAddressLine(userRequest.getAddressLine());
+        address.setCity(userRequest.getCity());
+        address.setRegion(userRequest.getRegion());
+        addressRepository.save(address);
+
         user.setUsername(userRequest.getUsername());
         user.setEmail(userRequest.getEmail());
         user.setFirstName(userRequest.getFirstName());
@@ -62,6 +68,7 @@ public abstract class UserFactory {
         user.setPhoneNumber(userRequest.getPhoneNumber());
         user.setDateOfBirth(dob);
         user.setAvatar(userRequest.getAvatar());
+        user.setAddress(address);
 
         user.setCommonUpdate(userDetailService.getIdLogin());
 

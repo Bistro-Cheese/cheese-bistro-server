@@ -15,22 +15,33 @@ public class ManagerFactory extends UserFactory{
     }
 
     @Override
-    protected User createUser(User user, UserCreateRequest userRequest) {
-        return new Manager(
+    protected Manager createUser(User user, UserCreateRequest userRequest) {
+        Manager newManager = new Manager(
                 user,
                 userRequest.getCertificationManagement(),
                 userRequest.getForeignLanguage(),
                 userRequest.getExperiencedYear()
         );
+        newManager.setCreatedAt(user.getCreatedAt());
+        newManager.setCreatedBy(user.getCreatedBy());
+        newManager.setUpdatedAt(user.getUpdatedAt());
+        newManager.setUpdatedBy(user.getUpdatedBy());
+        return newManager;
     }
 
     @Override
-    protected User updateUser(User user, UserCreateRequest userRequest) {
-        return new Manager(
+    protected Manager updateUser(User user, UserCreateRequest userRequest) {
+        Manager updateManager = new Manager(
                 user,
                 userRequest.getCertificationManagement(),
                 userRequest.getForeignLanguage(),
                 userRequest.getExperiencedYear()
         );
+        updateManager.setId(user.getId());
+        updateManager.setCreatedAt(user.getCreatedAt());
+        updateManager.setCreatedBy(user.getCreatedBy());
+        updateManager.setUpdatedAt(user.getUpdatedAt());
+        updateManager.setUpdatedBy(user.getUpdatedBy());
+        return updateManager;
     }
 }

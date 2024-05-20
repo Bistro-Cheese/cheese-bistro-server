@@ -28,12 +28,12 @@ public class ManagerServiceImpl implements ManagerService {
     // UserService implementation Start
     @Override
     public void saveUser(UserCreateRequest userCreateRequest) {
-        userRepository.save(managerFactory.create(userCreateRequest));
+        userRepository.save((Manager) managerFactory.create(userCreateRequest));
     }
 
     @Override
     public void updateUserById(User user, UserCreateRequest userCreateRequest) {
-        userRepository.save(managerFactory.update(user, userCreateRequest));
+        userRepository.save((Manager) managerFactory.update(user, userCreateRequest));
     }
 
     @Override
@@ -46,8 +46,8 @@ public class ManagerServiceImpl implements ManagerService {
     }
 
     @Override
-    public User getUserById(UUID id) {
-        return userRepository.findById(id).orElseThrow(
+    public Manager getUserById(UUID id) {
+        return (Manager) userRepository.findById(id).orElseThrow(
                 () -> new CustomException(APIStatus.USER_NOT_FOUND)
         );
     }
