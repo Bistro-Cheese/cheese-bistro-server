@@ -9,15 +9,16 @@ import com.ooadprojectserver.restaurantmanagement.dto.response.APIResponse;
 import com.ooadprojectserver.restaurantmanagement.dto.response.MessageResponse;
 import com.ooadprojectserver.restaurantmanagement.dto.response.PagingResponse;
 import com.ooadprojectserver.restaurantmanagement.dto.response.UserResponse;
+import com.ooadprojectserver.restaurantmanagement.model.user.baseUser.User;
 import com.ooadprojectserver.restaurantmanagement.service.user.*;
 import jakarta.annotation.PostConstruct;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -31,10 +32,11 @@ public class UserController {
     private final StaffService staffService;
     private final UserDetailService userDetailService;
 
-    private final Map<Integer, UserService> roleToServiceMap;
+    private Map<Integer, UserService> roleToServiceMap;
 
     @PostConstruct
     private void initRoleToServiceMap() {
+        roleToServiceMap = new HashMap<>();
         roleToServiceMap.put(0, ownerService);
         roleToServiceMap.put(1, managerService);
         roleToServiceMap.put(2, staffService);
@@ -63,7 +65,7 @@ public class UserController {
     }
 
     @GetMapping(APIConstant.USER_ID)
-    public ResponseEntity<APIResponse<UserResponse>> getUserDetail(@PathVariable UUID userId) {
+    public ResponseEntity<APIResponse<User>> getUserDetail(@PathVariable UUID userId) {
         return ResponseEntity.ok().body(
                 new APIResponse<>(
                         MessageConstant.GET_USER_DETAIL_SUCCESS,

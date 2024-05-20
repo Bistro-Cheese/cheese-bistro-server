@@ -15,7 +15,7 @@ public class OwnerFactory extends UserFactory {
     }
 
     @Override
-    protected User createUser(User user, UserCreateRequest userRequest) {
+    protected Owner createUser(User user, UserCreateRequest userRequest) {
         return new Owner(
                 user,
                 userRequest.getBranch(),
@@ -24,7 +24,7 @@ public class OwnerFactory extends UserFactory {
     }
 
     @Override
-    protected User updateUser(User user, UserCreateRequest userRequest) {
+    protected Owner updateUser(User user, UserCreateRequest userRequest) {
         return new Owner(
                 user,
                 userRequest.getBranch(),

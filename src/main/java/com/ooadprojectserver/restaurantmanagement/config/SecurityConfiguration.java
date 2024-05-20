@@ -61,7 +61,6 @@ public class SecurityConfiguration {
 
                         .anyRequest().authenticated()
                 )
-//                .oauth2Login(oauth -> oauth.defaultSuccessUrl("/user"))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)

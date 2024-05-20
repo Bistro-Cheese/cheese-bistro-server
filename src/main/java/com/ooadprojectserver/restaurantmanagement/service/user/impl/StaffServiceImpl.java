@@ -25,12 +25,13 @@ public class StaffServiceImpl implements StaffService {
     // UserService implementation Start
     @Override
     public void saveUser(UserCreateRequest userCreateRequest) {
-        userRepository.save(staffFactory.create(userCreateRequest));
+        userRepository.save((Staff) staffFactory.create(userCreateRequest));
     }
 
     @Override
     public void updateUserById(User user, UserCreateRequest userCreateRequest) {
-        userRepository.save(staffFactory.update(user, userCreateRequest));
+        Staff updateStaff = (Staff) staffFactory.update(user, userCreateRequest);
+        userRepository.save(updateStaff);
     }
 
     @Override
@@ -43,8 +44,8 @@ public class StaffServiceImpl implements StaffService {
     }
 
     @Override
-    public User getUserById(UUID id) {
-        return userRepository.findById(id).orElseThrow(
+    public Staff getUserById(UUID id) {
+        return (Staff) userRepository.findById(id).orElseThrow(
                 () -> new CustomException(APIStatus.USER_NOT_FOUND)
         );
     }

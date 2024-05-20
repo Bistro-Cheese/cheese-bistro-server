@@ -12,8 +12,6 @@ import com.ooadprojectserver.restaurantmanagement.model.user.baseUser.User;
 import com.ooadprojectserver.restaurantmanagement.repository.specification.UserSpecification;
 import com.ooadprojectserver.restaurantmanagement.repository.user.UserRepository;
 import com.ooadprojectserver.restaurantmanagement.service.email.EmailService;
-import com.ooadprojectserver.restaurantmanagement.service.email.command.EmailCommand;
-import com.ooadprojectserver.restaurantmanagement.service.email.command.SendMailWithInlineCommand;
 import com.ooadprojectserver.restaurantmanagement.service.user.*;
 import com.ooadprojectserver.restaurantmanagement.service.user.factory.OwnerFactory;
 import jakarta.annotation.PostConstruct;
@@ -33,41 +31,41 @@ public class OwnerServiceImpl implements OwnerService {
     private final UserDetailService userDetailService;
     private final EmailService emailService;
 
-    private final Map<Integer, UserService> roleToServiceMap;
+    private Map<Integer, UserService> roleToServiceMap;
 
     public OwnerServiceImpl(
             OwnerFactory ownerFactory,
             UserRepository userRepository,
             ManagerService managerService,
             StaffService staffService,
-            UserDetailService userDetailService,
             EmailService emailService,
-            Map<Integer, UserService> roleToServiceMap
+            UserDetailService userDetailService
     ) {
         this.ownerFactory = ownerFactory;
         this.userRepository = userRepository;
         this.managerService = managerService;
         this.staffService = staffService;
-        this.userDetailService = userDetailService;
         this.emailService = emailService;
-        this.roleToServiceMap = roleToServiceMap;
+        this.userDetailService = userDetailService;
     }
 
     @PostConstruct
     private void initRoleToServiceMap() {
+        roleToServiceMap = new HashMap<>();
         roleToServiceMap.put(0, this);
         roleToServiceMap.put(1, managerService);
         roleToServiceMap.put(2, staffService);
     }
 
+    // Implement User Service Start
     @Override
     public void saveUser(UserCreateRequest userRegisterRequest) {
-        userRepository.save(ownerFactory.create(userRegisterRequest));
+        userRepository.save((Owner) ownerFactory.create(userRegisterRequest));
     }
 
     @Override
     public void updateUserById(User user, UserCreateRequest userRegisterRequest) {
-        userRepository.save(ownerFactory.update(user, userRegisterRequest));
+        userRepository.save((Owner) ownerFactory.update(user, userRegisterRequest));
     }
 
     @Override
@@ -80,8 +78,8 @@ public class OwnerServiceImpl implements OwnerService {
     }
 
     @Override
-    public User getUserById(UUID id) {
-        return userRepository.findById(id).orElseThrow(
+    public Owner getUserById(UUID id) {
+        return (Owner) userRepository.findById(id).orElseThrow(
                 () -> new CustomException(APIStatus.USER_NOT_FOUND)
         );
     }
@@ -105,16 +103,14 @@ public class OwnerServiceImpl implements OwnerService {
             throw new CustomException(APIStatus.PHONE_NUMBER_ALREADY_EXISTED);
         });
 
-        //         Send confirmation email
+//         Send confirmation email
         ConfirmationRequest confirm = ConfirmationRequest.builder()
                 .fullName(userRegisterRequest.getFirstName() + " " + userRegisterRequest.getLastName())
                 .username(userRegisterRequest.getUsername())
                 .password(userRegisterRequest.getPassword())
                 .emailTo(userRegisterRequest.getEmail())
                 .build();
-
-        EmailCommand emailCommand = new SendMailWithInlineCommand(emailService, confirm, Locale.ENGLISH);
-        emailCommand.execute();
+        emailService.sendMailWithInline(confirm, Locale.ENGLISH);
 
         // Save user
         UserService userService = roleToServiceMap.get(userRegisterRequest.getRole());
@@ -136,11 +132,16 @@ public class OwnerServiceImpl implements OwnerService {
     }
 
     @Override
-    public UserResponse getUserDetail(UUID userId) {
+    public User getUserDetail(UUID userId) {
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new CustomException(APIStatus.USER_NOT_FOUND)
         );
-        return UserResponse.covertUserToUserResponse(user);
+        return switch (user.getRole().ordinal()) {
+            case 0 -> getUserById(userId);
+            case 1 -> managerService.getUserById(userId);
+            case 2 -> staffService.getUserById(userId);
+            default -> throw new CustomException(APIStatus.INVALID_ROLE_ID);
+        };
     }
 
     @Override
@@ -158,6 +159,7 @@ public class OwnerServiceImpl implements OwnerService {
                 () -> new CustomException(APIStatus.USER_NOT_FOUND)
         );
 
+
         // Check if email already existed
         if (!Objects.equals(userRegisterRequest.getEmail(), user.getEmail())) {
             userRepository.findByEmail(userRegisterRequest.getEmail()).ifPresent(userRepo -> {
@@ -170,7 +172,6 @@ public class OwnerServiceImpl implements OwnerService {
             throw new CustomException(APIStatus.INVALID_ROLE_ID);
         }
 
-        // Update User
         userService.updateUserById(user, userRegisterRequest);
     }
 

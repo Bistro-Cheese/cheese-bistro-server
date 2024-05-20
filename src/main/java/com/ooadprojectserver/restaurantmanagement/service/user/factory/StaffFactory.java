@@ -16,19 +16,30 @@ public class StaffFactory extends UserFactory {
 
     @Override
     protected User createUser(User user, UserCreateRequest userRequest) {
-        return new Staff(
+        Staff newStaff = new Staff(
                 user,
                 userRequest.getForeignLanguage(),
                 userRequest.getAcademicLevel()
         );
+        newStaff.setCreatedAt(user.getCreatedAt());
+        newStaff.setCreatedBy(user.getCreatedBy());
+        newStaff.setUpdatedAt(user.getUpdatedAt());
+        newStaff.setUpdatedBy(user.getUpdatedBy());
+        return newStaff;
     }
 
     @Override
-    protected User updateUser(User user, UserCreateRequest userRequest) {
-        return new Staff(
+    protected Staff updateUser(User user, UserCreateRequest userRequest) {
+        Staff updateStaff = new Staff(
                 user,
                 userRequest.getForeignLanguage(),
                 userRequest.getAcademicLevel()
         );
+        updateStaff.setId(user.getId());
+        updateStaff.setCreatedAt(user.getCreatedAt());
+        updateStaff.setCreatedBy(user.getCreatedBy());
+        updateStaff.setUpdatedAt(user.getUpdatedAt());
+        updateStaff.setUpdatedBy(user.getUpdatedBy());
+        return updateStaff;
     }
 }
