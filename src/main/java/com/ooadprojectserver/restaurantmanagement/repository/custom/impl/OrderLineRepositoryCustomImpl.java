@@ -32,7 +32,7 @@ public class OrderLineRepositoryCustomImpl implements OrderLineRepositoryCustom 
 
         Map<String, Object> queryParams = new HashMap<>();
 
-        String sqlGetData = "select ol.id as id, f.name as name, f.image as image, f.price as price, ol.quantity as quantity ";
+        String sqlGetData = "select ol.id as id, f.name as name, f.image as image, f.price as price, ol.quantity as quantity, ol.food_id as food_id";
 
         StringBuilder sqlConditional = new StringBuilder();
         sqlConditional.append(" from order_line ol join food f on ol.food_id = f.id  ");

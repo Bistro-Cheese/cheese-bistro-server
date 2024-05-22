@@ -150,9 +150,8 @@ public class OrderServiceImpl implements OrderService {
         List<OrderLineRequest> orderLineRequestList = request.getOrderLines();
 
         Order updatingOrder = getOrderByTableIdAndStatus(request.getTableId(), OrderStatus.PENDING);
-        List<OrderLine> orderLineList = orderLineRepository.findByOrder_Id(updatingOrder.getId());
 
-        orderLineRequestList.forEach(orderLineRequest -> {
+        for (OrderLineRequest orderLineRequest : orderLineRequestList) {
             orderLineRepository.findByOrder_IdAndFood_Id(updatingOrder.getId(),
                     orderLineRequest.getFoodId()).ifPresentOrElse(
                     orderLine1 -> {
@@ -162,7 +161,8 @@ public class OrderServiceImpl implements OrderService {
                         orderLineService.create(updatingOrder.getId(), orderLineRequest);
                     }
             );
-        });
+        }
+
     }
 
     @Override
