@@ -3,11 +3,15 @@ package com.ooadprojectserver.restaurantmanagement.service.bill;
 import com.ooadprojectserver.restaurantmanagement.constant.APIStatus;
 import com.ooadprojectserver.restaurantmanagement.dto.request.bill.BillRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.request.PaymentRequest;
+import com.ooadprojectserver.restaurantmanagement.dto.request.order.OrderLineSearchRequest;
+import com.ooadprojectserver.restaurantmanagement.dto.response.bill.BillResponse;
+import com.ooadprojectserver.restaurantmanagement.dto.response.order.OrderLineResponse;
 import com.ooadprojectserver.restaurantmanagement.exception.CustomException;
 import com.ooadprojectserver.restaurantmanagement.model.bill.Bill;
 import com.ooadprojectserver.restaurantmanagement.model.order.*;
 import com.ooadprojectserver.restaurantmanagement.model.payment.Payment;
 import com.ooadprojectserver.restaurantmanagement.repository.bill.BillRepository;
+import com.ooadprojectserver.restaurantmanagement.repository.order.OrderLineRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.order.OrderRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.order.OrderTableRepository;
 import com.ooadprojectserver.restaurantmanagement.service.payment.PaymentService;
@@ -16,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import static com.ooadprojectserver.restaurantmanagement.util.DataUtil.copyProperties;
@@ -25,9 +30,9 @@ import static com.ooadprojectserver.restaurantmanagement.util.DataUtil.copyPrope
 public class BillServiceImpl implements BillService {
     private final BillRepository billRepository;
     private final OrderRepository orderRepository;
+    private final OrderLineRepository orderLineRepository;
     private final PaymentService paymentService;
     private final OrderTableRepository orderTableRepository;
-
 
     @Override
     @Transactional
@@ -87,6 +92,19 @@ public class BillServiceImpl implements BillService {
         bill.setCusOut(new Date());
 
         return billRepository.save(bill);
+    }
+
+    @Override
+    public List<BillResponse> getBillByOrderId(UUID orderId) {
+         List<BillResponse> bills = billRepository.getBillByOrderId(orderId);
+
+         List<OrderLineResponse> orderLines = orderLineRepository.search(
+                 OrderLineSearchRequest.builder()
+                         .orderId(orderId).build()
+         );
+         bills.get(0).setOrderLines(orderLines);
+
+        return bills;
     }
 
     private Order getOrderById(UUID orderId) {

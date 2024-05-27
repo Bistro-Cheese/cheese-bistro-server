@@ -137,8 +137,6 @@ public class OrderServiceImpl implements OrderService {
         orderRepository.save(newOrder);
     }
 
-
-
     @Override
     public void update(OrderRequest request) {
 
@@ -158,10 +156,14 @@ public class OrderServiceImpl implements OrderService {
                         }
                 );
             }
+            updatingOrder.setSubTotal(calculateSubTotal(updatingOrder.getId()));
         }
+
 
         if (request.getDiscountId() != null) {
             applyDiscount(updatingOrder, request.getDiscountId());
+        } {
+            updatingOrder.setTotal(updatingOrder.getSubTotal());
         }
 
         orderRepository.save(updatingOrder);
