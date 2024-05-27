@@ -5,5 +5,5 @@ import com.ooadprojectserver.restaurantmanagement.model.bill.Bill;
 
 public interface BillService {
     Bill create(BillRequest billRequest);
-    void update(BillRequest billRequest);
+//    Bill getBillByOrderId(Long orderId);
 }

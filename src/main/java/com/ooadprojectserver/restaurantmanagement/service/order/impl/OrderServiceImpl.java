@@ -50,7 +50,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public DetailOrderResponse getByTableId(Integer tableId) {
 
-        Order order = getOrderByTableIdAndStatus(tableId, OrderStatus.PENDING);
+        Order order = getOrderByTableIdAndStatus(tableId);
 
         List<OrderLineResponse> orderLineList = orderLineRepository.search(OrderLineSearchRequest.builder()
                 .orderId(order.getId())
@@ -116,13 +116,7 @@ public class OrderServiceImpl implements OrderService {
 
         //Calculate price after apply discount
         if (request.getDiscountId() != null) {
-            Discount discount = discountService.getById(request.getDiscountId());
-            if (!discount.canUseDiscount()){
-                throw new CustomException(APIStatus.DISCOUNT_CANNOT_USE);
-            }
-            newOrder.setDiscount(discount);
-            BigDecimal total = newOrder.getSubTotal().subtract(newOrder.getDiscount().calculateDiscount(newOrder.getSubTotal()));
-            newOrder.setTotal(total);
+            applyDiscount(newOrder, request.getDiscountId());
         } else {
             newOrder.setTotal(newOrder.getSubTotal());
         }
@@ -147,22 +141,30 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void update(OrderRequest request) {
+
+        Order updatingOrder = getOrderByTableIdAndStatus(request.getTableId());
+
         List<OrderLineRequest> orderLineRequestList = request.getOrderLines();
 
-        Order updatingOrder = getOrderByTableIdAndStatus(request.getTableId(), OrderStatus.PENDING);
-
-        for (OrderLineRequest orderLineRequest : orderLineRequestList) {
-            orderLineRepository.findByOrder_IdAndFood_Id(updatingOrder.getId(),
-                    orderLineRequest.getFoodId()).ifPresentOrElse(
-                    orderLine1 -> {
-                        orderLineService.update(orderLine1.getId(), orderLineRequest);
-                    },
-                    () -> {
-                        orderLineService.create(updatingOrder.getId(), orderLineRequest);
-                    }
-            );
+        if (request.getOrderLines() != null && !request.getOrderLines().isEmpty()) {
+            for (OrderLineRequest orderLineRequest : orderLineRequestList) {
+                orderLineRepository.findByOrder_IdAndFood_Id(updatingOrder.getId(),
+                        orderLineRequest.getFoodId()).ifPresentOrElse(
+                        orderLine1 -> {
+                            orderLineService.update(orderLine1.getId(), orderLineRequest);
+                        },
+                        () -> {
+                            orderLineService.create(updatingOrder.getId(), orderLineRequest);
+                        }
+                );
+            }
         }
 
+        if (request.getDiscountId() != null) {
+            applyDiscount(updatingOrder, request.getDiscountId());
+        }
+
+        orderRepository.save(updatingOrder);
     }
 
     @Override
@@ -187,6 +189,16 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.search(status);
     }
 
+    private void applyDiscount(Order order, Integer discountId) {
+        Discount discount = discountService.getById(discountId);
+        if (!discount.canUseDiscount()){
+            throw new CustomException(APIStatus.DISCOUNT_CANNOT_USE);
+        }
+        order.setDiscount(discount);
+        BigDecimal total = order.getSubTotal().subtract(discount.calculateDiscount(order.getSubTotal()));
+        order.setTotal(total);
+    }
+
     private BigDecimal calculateSubTotal(UUID orderId) {
         List<OrderLine> orderLineList = orderLineRepository.findByOrder_Id(orderId);
 
@@ -203,8 +215,8 @@ public class OrderServiceImpl implements OrderService {
         return (Staff) staffService.getUserById(staffId);
     }
 
-    private Order getOrderByTableIdAndStatus(Integer tableId, OrderStatus status) {
-        return orderRepository.findByOrderTable_IdAndStatus(tableId, status).orElseThrow(
+    private Order getOrderByTableIdAndStatus(Integer tableId) {
+        return orderRepository.findByOrderTable_IdAndStatus(tableId, OrderStatus.PENDING).orElseThrow(
                 () -> new CustomException(APIStatus.ORDER_NOT_FOUND)
         );
     }

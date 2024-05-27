@@ -3,7 +3,6 @@ package com.ooadprojectserver.restaurantmanagement.controller;
 import com.ooadprojectserver.restaurantmanagement.constant.APIConstant;
 import com.ooadprojectserver.restaurantmanagement.dto.request.bill.BillRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.response.APIResponse;
-import com.ooadprojectserver.restaurantmanagement.dto.response.MessageResponse;
 import com.ooadprojectserver.restaurantmanagement.model.bill.Bill;
 import com.ooadprojectserver.restaurantmanagement.service.bill.BillService;
 import lombok.RequiredArgsConstructor;
@@ -20,4 +19,12 @@ public class BillController {
         var rs = billService.create(billRequest);
         return ResponseEntity.status(201).body(new APIResponse("Create bill successfully", rs));
     }
+
+//    @GetMapping("/{orderId}")
+//    public ResponseEntity<APIResponse<Bill>> getBillByOrderId(@PathVariable Long orderId) {
+//        var rs = billService.getBillByOrderId(orderId);
+//        return ResponseEntity.ok(
+//                new APIResponse("Get bill successfully", rs)
+//        );
+//    }
 }

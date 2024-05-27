@@ -29,9 +29,24 @@ public class OrderRepositoryCustomImpl implements OrderRepositoryCustom {
 
         Map<String, Object> queryParams = new HashMap<>();
 
-        String sqlGetData = "select ro.id as id, rt.tab_num as tableNumber, ro.number_of_customer as numberOfCustomer, ro.deposit as deposit, ro.sub_total as subTotal, ro.total as total, ro.status as status, ro.cus_in as cusIn ";
+        String sqlGetData = "select ro.id as id, " +
+                "rt.tab_num as tableNumber, " +
+                "rt.id as tableId, " +
+                "ro.number_of_customer as numberOfCustomer, " +
+                "ro.deposit as deposit, " +
+                "ro.sub_total as subTotal, " +
+                "ro.total as total, " +
+                "ro.status as status, " +
+                "ro.cus_in as cusIn, " +
+                "ro.discount_id as discount, " +
+                "d.type as discountType, " +
+                "d.value as discountValue ";
+
+
         StringBuilder sqlConditional = new StringBuilder();
-        sqlConditional.append(" from res_order ro join restaurant_management.res_table rt on ro.table_id = rt.id  ");
+        sqlConditional.append(" from res_order ro join restaurant_management.res_table rt on ro.table_id = rt.id" +
+                " left join restaurant_management.discount d on ro.discount_id = d.id");
+
 
         if(!isNullObject(status)){
             sqlConditional.append("where ro.status = :status ");

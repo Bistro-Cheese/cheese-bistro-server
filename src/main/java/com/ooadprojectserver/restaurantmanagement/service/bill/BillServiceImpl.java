@@ -89,15 +89,9 @@ public class BillServiceImpl implements BillService {
         return billRepository.save(bill);
     }
 
-    @Override
-    public void update(BillRequest billRequest) {
-
-    }
-
     private Order getOrderById(UUID orderId) {
         return orderRepository.findById(orderId).orElseThrow(
                 () -> new CustomException(APIStatus.ORDER_NOT_FOUND)
         );
     }
-
 }

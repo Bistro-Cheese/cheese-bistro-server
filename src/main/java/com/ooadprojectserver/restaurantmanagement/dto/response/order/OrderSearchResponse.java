@@ -15,11 +15,19 @@ import static com.ooadprojectserver.restaurantmanagement.util.DateTimeUtils.DATE
 public class OrderSearchResponse {
     private UUID id;
 
+    private Integer tableId;
+
     private Integer tableNumber;
 
     private Integer numberOfCustomer;
 
     private BigDecimal subTotal;
+
+    private BigDecimal discount;
+
+    private Integer discountType;
+
+    private BigDecimal discountValue;
 
     private BigDecimal total;
 
