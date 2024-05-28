@@ -162,7 +162,7 @@ public class OrderServiceImpl implements OrderService {
 
         if (request.getDiscountId() != null) {
             applyDiscount(updatingOrder, request.getDiscountId());
-        } {
+        } else {
             updatingOrder.setTotal(updatingOrder.getSubTotal());
         }
 

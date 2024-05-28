@@ -41,11 +41,11 @@ public class BillRepositoryCustomImpl implements BillRepositoryCustom {
                 "b.cus_out as cusOut";
 
         StringBuilder sqlConditional = new StringBuilder();
-        sqlConditional.append(" from bill b join restaurant_management.res_order ro on b.order_id = ro.id" +
-                " join restaurant_management.res_table rt on ro.table_id = rt.id" +
-                " join restaurant_management.customer c on ro.cus_id = c.id" +
-                " left join restaurant_management.discount d on ro.discount_id = d.id" +
-                " join restaurant_management.payment p on b.pay_id = p.id" +
+        sqlConditional.append(" from bill b join res_order ro on b.order_id = ro.id" +
+                " join res_table rt on ro.table_id = rt.id" +
+                " join customer c on ro.cus_id = c.id" +
+                " left join discount d on ro.discount_id = d.id" +
+                " join payment p on b.pay_id = p.id" +
                 " where ro.id = :orderId");
 
         return queryRepo.queryList(sqlGetData + sqlConditional.toString(), queryParams, BillResponse.class);
