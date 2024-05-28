@@ -44,8 +44,8 @@ public class OrderRepositoryCustomImpl implements OrderRepositoryCustom {
 
 
         StringBuilder sqlConditional = new StringBuilder();
-        sqlConditional.append(" from res_order ro join restaurant_management.res_table rt on ro.table_id = rt.id" +
-                " left join restaurant_management.discount d on ro.discount_id = d.id");
+        sqlConditional.append(" from res_order ro join res_table rt on ro.table_id = rt.id" +
+                " left join discount d on ro.discount_id = d.id");
 
 
         if(!isNullObject(status)){
