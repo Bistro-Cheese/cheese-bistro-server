@@ -25,15 +25,10 @@ spring:
       ddl-auto: ${MYSQL_DDL_AUTO}
     show-sql: true
     defer-datasource-initialization: ${DATASOURCE_INIT}
-  aws:
-    access-key: ${AWS_ACCESS_KEY}
-    secret-key: ${AWS_SECRET_KEY}
-  #    properties:
-  #      hibernate:
-  #        dialect: org.hibernate.dialect.MySQLDialect
-  #    defer-datasource-initialization: true
-  #    generate-ddl: true
-  #    database-platform: org.hibernate.dialect.MySQLDialect
+  cloud:
+    aws:
+      access-key: ${AWS_ACCESS_KEY}
+      secret-key: ${AWS_SECRET_KEY}
   sql:
     init:
       data-locations: classpath:data.sql
@@ -60,7 +55,7 @@ bistro:
   master:
     database:
       mysql:
-        url: jdbc:mysql://${MYSQL_HOST:mysqldb_master}:${MYSQL_PORT:3306}/${MYSQL_DATABASE:restaurant_management}
+        url: jdbc:mysql://${MYSQL_HOST}:${MYSQL_PORT}/${MYSQL_DATABASE}
         username: ${MYSQL_USERNAME}
         password: ${MYSQL_PASSWORD}
         driverClassName: com.mysql.cj.jdbc.Driver
