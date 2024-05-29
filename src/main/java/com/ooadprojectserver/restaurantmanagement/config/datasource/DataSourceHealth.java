@@ -49,7 +49,6 @@ public class DataSourceHealth implements HealthIndicator {
         try(Connection connection = dataSourceMap.get(MASTER_DATASOURCE).getConnection()){
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT 1");
-            logger.info("every thing is ok: {} and the statement: {}",  connection, statement);
             return true;
         }catch (SQLException e){
             logger.error("Master database crashed", e);

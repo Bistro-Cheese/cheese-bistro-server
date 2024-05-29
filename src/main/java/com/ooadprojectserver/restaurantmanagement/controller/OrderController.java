@@ -38,7 +38,7 @@ public class OrderController {
     }
 
     @GetMapping(APIConstant.SEARCH)
-    public ResponseEntity<List<OrderSearchResponse>> search(OrderSearchRequest req) {
+    public ResponseEntity<List<OrderSearchResponse>> searchOrders(OrderSearchRequest req) {
         var rs = orderService.search(req);
         return ResponseEntity.status(OK).body(rs);
     }

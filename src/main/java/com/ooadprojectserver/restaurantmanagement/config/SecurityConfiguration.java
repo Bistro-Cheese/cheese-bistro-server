@@ -45,7 +45,7 @@ public class SecurityConfiguration {
                 .csrf(cors -> cors.disable())
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/api/v1/auth/**").permitAll()
-
+                        .requestMatchers("/actuator/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/users/**").hasAuthority(Permission.OWNER_WRITE.getPermission())
                         .requestMatchers(HttpMethod.PUT, "/api/v1/users/**").hasAuthority(Permission.OWNER_UPDATE.getPermission())
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/users/**").hasAuthority(Permission.OWNER_DELETE.getPermission())
