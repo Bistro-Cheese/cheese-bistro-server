@@ -25,10 +25,10 @@ spring:
       ddl-auto: ${MYSQL_DDL_AUTO}
     show-sql: true
     defer-datasource-initialization: ${DATASOURCE_INIT}
-  cloud:
-    aws:
-      access-key: ${AWS_ACCESS_KEY}
-      secret-key: ${AWS_SECRET_KEY}
+  aws:
+    accessKey: ${AWS_ACCESS_KEY}
+    secretKey: ${AWS_SECRET_KEY}
+    region: ap-southeast-1
   sql:
     init:
       data-locations: classpath:data.sql
