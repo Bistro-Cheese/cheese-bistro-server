@@ -67,6 +67,19 @@ public class OrderController {
         );
     }
 
+    @PutMapping(APIConstant.ORDER_ID)
+    public ResponseEntity<MessageResponse> updateOrderStatus(
+            @PathVariable("order_id") UUID orderId,
+            @RequestParam(value = "status") String status
+    ) {
+        orderService.updateStatus(orderId, Integer.parseInt(status));
+        return ResponseEntity.status(HttpStatus.OK).body(
+                new MessageResponse(
+                        MessageConstant.UPDATE_ORDER_SUCCESS
+                )
+        );
+    }
+
     @DeleteMapping(APIConstant.ORDER_ID)
     public ResponseEntity<MessageResponse> deleteOrder(
             @PathVariable("order_id") UUID orderId

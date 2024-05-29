@@ -35,6 +35,7 @@ public class BillRepositoryCustomImpl implements BillRepositoryCustom {
                 "d.value as discountValue, " +
                 "d.type as discountType, " +
                 "ro.total as total, " +
+                "ro.deposit as deposit, " +
                 "b.paid as paid, " +
                 "b.change_paid as changePaid, " +
                 "b.cus_in as cusIn, " +

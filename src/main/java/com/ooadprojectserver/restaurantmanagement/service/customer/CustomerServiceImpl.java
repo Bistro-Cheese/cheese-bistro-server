@@ -8,6 +8,7 @@ import com.ooadprojectserver.restaurantmanagement.service.user.UserDetailService
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -22,28 +23,20 @@ public class CustomerServiceImpl implements CustomerService{
     public Customer create(CustomerCreateRequest customerCreateRequest) {
         UUID staffId = userDetailService.getIdLogin();
 
-        Optional<Customer> customer = customerRepository.findByCustomerNameAndPhoneNumber(
-                customerCreateRequest.getCustomerName(),
+        Optional<Customer> customer = customerRepository.findByPhoneNumber(
                 customerCreateRequest.getPhoneNumber());
 
         if (customer.isPresent()) {
-            customer.get().addTotalSpent(customerCreateRequest.getSpend());
-            customer.get().addVisitCount();
-            customer.get().setCustomerType();
-
-            customer.get().setCommonUpdate(staffId);
-
-            return customerRepository.save(customer.get());
+            return customer.get();
         } else {
             Customer newCustomer = Customer.builder()
                     .customerName(customerCreateRequest.getCustomerName())
                     .phoneNumber(customerCreateRequest.getPhoneNumber())
-                    .visitCount(1)
-                    .totalSpent(customerCreateRequest.getSpend())
+                    .totalSpent(BigDecimal.ZERO)
+                    .visitCount(0)
                     .customerType(CustomerType.STANDARD)
                     .build();
             newCustomer.setCommonCreate(staffId);
-
             return customerRepository.save(newCustomer);
         }
     }
@@ -68,10 +61,10 @@ public class CustomerServiceImpl implements CustomerService{
     }
 
     @Override
-    public void updateAfterOrder(UUID customerId, CustomerCreateRequest customerCreateRequest) {
+    public void updateAfterOrder(UUID customerId, BigDecimal totalSpent) {
         Customer customer = this.getById(customerId);
 
-        customer.addTotalSpent(customerCreateRequest.getSpend());
+        customer.addTotalSpent(totalSpent);
         customer.addVisitCount();
         customer.setCustomerType();
 

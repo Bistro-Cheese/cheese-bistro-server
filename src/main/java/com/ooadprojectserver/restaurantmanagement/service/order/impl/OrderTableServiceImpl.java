@@ -34,7 +34,12 @@ public class OrderTableServiceImpl implements OrderTableService {
     @Override
     public void update(Integer tableId, OrderTableRequest request) {
         OrderTable table = this.getTable(tableId);
-        table.setSeatNumber(request.getSeats());
+        if (request.getSeats() != null) {
+            table.setSeatNumber(request.getSeats());
+        }
+        if (request.getStatus() != null) {
+            table.setTableStatus(request.getStatus());
+        }
         repository.save(table);
     }
 

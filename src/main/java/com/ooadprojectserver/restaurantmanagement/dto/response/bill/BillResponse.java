@@ -25,6 +25,7 @@ public class BillResponse {
     private BigDecimal discountValue;
     private Integer discountType;
     private BigDecimal total;
+    private BigDecimal deposit;
     private BigDecimal paid;
     private BigDecimal changePaid;
 
