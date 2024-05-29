@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.UUID;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 @RequestMapping(APIConstant.INVENTORY)
 public class InventoryController {
@@ -32,13 +32,13 @@ public class InventoryController {
     private final OperationService operationService;
 
     @GetMapping()
-    public ResponseEntity<Page<InventoryResponse>> search(InventorySearchRequest req, PageInfo pageInfo) {
+    public ResponseEntity<Page<InventoryResponse>> searchInventory(InventorySearchRequest req, PageInfo pageInfo) {
         var rs = inventoryService.search(req, pageInfo);
         return ResponseEntity.status(HttpStatus.OK).body(rs);
     }
 
     @GetMapping(APIConstant.INVENTORY_ID)
-    public ResponseEntity<APIResponse<Inventory>> self(
+    public ResponseEntity<APIResponse<Inventory>> getInventoryById(
             @PathVariable("inventory_id") UUID inventoryId
     ) {
         return ResponseEntity.status(HttpStatus.OK).body(
@@ -50,7 +50,7 @@ public class InventoryController {
     }
 
     @PutMapping(APIConstant.INVENTORY_ID)
-    public ResponseEntity<MessageResponse> update(
+    public ResponseEntity<MessageResponse> updateInventoryById(
             @PathVariable("inventory_id") UUID inventoryId,
             @RequestBody InventoryUpdateRequest request
             ) {
@@ -61,7 +61,7 @@ public class InventoryController {
     }
 
     @DeleteMapping(APIConstant.INVENTORY_ID)
-    public ResponseEntity<MessageResponse> delete(
+    public ResponseEntity<MessageResponse> deleteInventoryById(
             @PathVariable("inventory_id") UUID inventoryId
     ) {
         inventoryService.delete(inventoryId);
@@ -72,7 +72,7 @@ public class InventoryController {
 
     @PostMapping(APIConstant.STOCK)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<MessageResponse> stock(
+    public ResponseEntity<MessageResponse> stockInventory(
             @RequestBody OperationRequest request
     ) {
         return ResponseEntity.ok(

@@ -4,9 +4,7 @@ import com.ooadprojectserver.restaurantmanagement.model.aws.UserAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import software.amazon.awssdk.enhanced.dynamodb.DynamoDbEnhancedClient;
-import software.amazon.awssdk.enhanced.dynamodb.DynamoDbTable;
-import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
+import software.amazon.awssdk.enhanced.dynamodb.*;
 
 /**
  * @author : Nguyen Van Quoc Tuan
@@ -17,14 +15,14 @@ import software.amazon.awssdk.enhanced.dynamodb.TableSchema;
 @Service
 public class AWSDynamoDbServiceImpl implements AWSDynamoDbService{
 
-    private final DynamoDbEnhancedClient dynamoDbEnhancedClient;
-    private final DynamoDbTable<UserAction> userActionTable;
+    private final DynamoDbEnhancedAsyncClient dynamoDbEnhancedAsyncClient;
+    private final DynamoDbAsyncTable<UserAction> userActionTable;
 
     Logger logger = LoggerFactory.getLogger(AWSDynamoDbServiceImpl.class);
 
-    public AWSDynamoDbServiceImpl(DynamoDbEnhancedClient dynamoDbEnhancedClient){
-        this.dynamoDbEnhancedClient = dynamoDbEnhancedClient;
-        userActionTable = dynamoDbEnhancedClient.table("test-bistro-user_action", TableSchema.fromBean(UserAction.class));
+    public AWSDynamoDbServiceImpl(DynamoDbEnhancedAsyncClient dynamoDbEnhancedAsyncClient){
+        this.dynamoDbEnhancedAsyncClient = dynamoDbEnhancedAsyncClient;
+        userActionTable = dynamoDbEnhancedAsyncClient.table("test-bistro-user_action", TableSchema.fromBean(UserAction.class));
     }
 
     @Override
