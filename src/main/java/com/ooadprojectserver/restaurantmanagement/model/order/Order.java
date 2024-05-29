@@ -89,8 +89,4 @@ public class Order extends CommonEntity implements Serializable {
         }
         this.cusIn =DateTimeUtils.resultTimestamp();
     }
-
-    public BigDecimal calculateSubTotal() {
-        return this.subTotal.subtract(this.discount.calculateDiscount(this.subTotal));
-    }
 }

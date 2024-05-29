@@ -2,6 +2,7 @@ package com.ooadprojectserver.restaurantmanagement.dto.response.order;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ooadprojectserver.restaurantmanagement.constant.DateTimeConstant;
+import com.ooadprojectserver.restaurantmanagement.model.order.OrderStatus;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -18,6 +19,8 @@ public class OrderSearchResponse {
     private Integer tableId;
 
     private Integer tableNumber;
+
+    private Integer tableStatus;
 
     private Integer numberOfCustomer;
 

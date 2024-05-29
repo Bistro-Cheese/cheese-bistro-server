@@ -112,11 +112,6 @@ public class DiscountServiceImpl implements DiscountService {
     private void checkValidDate(Date startDate, Date endDate) {
         Date currentDate = new Date();
 
-        // Start date must be after current date
-        if (startDate.before(currentDate)) {
-            throw new CustomException(APIStatus.START_DATE_BEFORE_CURRENT_DATE);
-        }
-
         // End date must be after start date
         if (startDate.after(endDate)) {
             throw new CustomException(APIStatus.START_DATE_AFTER_END_DATE);

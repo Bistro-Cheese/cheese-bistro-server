@@ -5,6 +5,7 @@ import com.ooadprojectserver.restaurantmanagement.dto.request.order.OrderSearchR
 import com.ooadprojectserver.restaurantmanagement.dto.response.order.DetailOrderResponse;
 import com.ooadprojectserver.restaurantmanagement.dto.response.order.OrderSearchResponse;
 import com.ooadprojectserver.restaurantmanagement.model.order.Order;
+import com.ooadprojectserver.restaurantmanagement.model.order.OrderStatus;
 
 import java.util.List;
 import java.util.UUID;
@@ -14,6 +15,7 @@ public interface OrderService {
     Order getById(UUID orderId);
     void create(OrderRequest request);
     void update(OrderRequest request);
+    void updateStatus(UUID orderId, int status);
     void delete(UUID orderId);
     List<OrderSearchResponse> search(OrderSearchRequest status);
 }

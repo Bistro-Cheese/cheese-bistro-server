@@ -32,6 +32,7 @@ public class OrderRepositoryCustomImpl implements OrderRepositoryCustom {
         String sqlGetData = "select ro.id as id, " +
                 "rt.tab_num as tableNumber, " +
                 "rt.id as tableId, " +
+                "rt.status as tableStatus, " +
                 "ro.number_of_customer as numberOfCustomer, " +
                 "ro.deposit as deposit, " +
                 "ro.sub_total as subTotal, " +

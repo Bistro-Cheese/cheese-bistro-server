@@ -8,5 +8,5 @@ import lombok.RequiredArgsConstructor;
 public enum TableStatus {
     EMPTY,
     OCCUPIED,
-    REVERSED
+    RESERVED
 }

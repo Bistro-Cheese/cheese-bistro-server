@@ -12,7 +12,4 @@ public class CustomerCreateRequest {
 
     @JsonProperty("phone_number")
     private String phoneNumber;
-
-    @JsonProperty("spend")
-    private BigDecimal spend;
 }
