@@ -13,6 +13,9 @@ import software.amazon.awssdk.profiles.ProfileFileSupplier;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
+import software.amazon.awssdk.services.sqs.SqsAsyncClient;
+import software.amazon.awssdk.services.sqs.SqsClient;
+import software.amazon.awssdk.services.sqs.SqsClientBuilder;
 
 import java.util.logging.Logger;
 
@@ -40,6 +43,13 @@ public class AWSCredentialConfiguration {
 
         return DynamoDbEnhancedAsyncClient.builder()
                 .dynamoDbClient(dynamoDbAsyncClient)
+                .build();
+    }
+
+    @Bean
+    public SqsAsyncClient sqsClient(){
+        return SqsAsyncClient.builder()
+                .credentialsProvider(ProfileCredentialsProvider.create("bistroadmin"))
                 .build();
     }
 }

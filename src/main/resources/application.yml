@@ -29,6 +29,8 @@ spring:
     accessKey: ${AWS_ACCESS_KEY}
     secretKey: ${AWS_SECRET_KEY}
     region: ap-southeast-1
+    queueUrl: ${AWS_EMAIL_QUEUE_URL}
+
   sql:
     init:
       data-locations: classpath:data.sql

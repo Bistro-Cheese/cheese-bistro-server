@@ -19,4 +19,13 @@ public class EmailRequest {
     private String content;
     @JsonProperty("file_path")
     private String filePath;
+
+    @Override
+    public String toString() {
+        return "EmailRequest{" +
+                "emailTo='" + emailTo + '\'' +
+                ", subject='" + subject + '\'' +
+                ", content='" + content + '\'' +
+                '}';
+    }
 }

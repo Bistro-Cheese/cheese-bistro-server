@@ -11,6 +11,7 @@ import com.ooadprojectserver.restaurantmanagement.model.user.Owner;
 import com.ooadprojectserver.restaurantmanagement.model.user.baseUser.User;
 import com.ooadprojectserver.restaurantmanagement.repository.specification.UserSpecification;
 import com.ooadprojectserver.restaurantmanagement.repository.user.UserRepository;
+import com.ooadprojectserver.restaurantmanagement.service.aws.publish.SendEmailSqs;
 import com.ooadprojectserver.restaurantmanagement.service.email.EmailService;
 import com.ooadprojectserver.restaurantmanagement.service.user.*;
 import com.ooadprojectserver.restaurantmanagement.service.user.factory.OwnerFactory;
@@ -30,6 +31,7 @@ public class OwnerServiceImpl implements OwnerService {
     private final StaffService staffService;
     private final UserDetailService userDetailService;
     private final EmailService emailService;
+    private final SendEmailSqs sendEmailSqs;
 
     private Map<Integer, UserService> roleToServiceMap;
 
@@ -39,7 +41,8 @@ public class OwnerServiceImpl implements OwnerService {
             ManagerService managerService,
             StaffService staffService,
             EmailService emailService,
-            UserDetailService userDetailService
+            UserDetailService userDetailService,
+            SendEmailSqs sendEmailSqs
     ) {
         this.ownerFactory = ownerFactory;
         this.userRepository = userRepository;
@@ -47,6 +50,7 @@ public class OwnerServiceImpl implements OwnerService {
         this.staffService = staffService;
         this.emailService = emailService;
         this.userDetailService = userDetailService;
+        this.sendEmailSqs = sendEmailSqs;
     }
 
     @PostConstruct
@@ -110,7 +114,8 @@ public class OwnerServiceImpl implements OwnerService {
                 .password(userRegisterRequest.getPassword())
                 .emailTo(userRegisterRequest.getEmail())
                 .build();
-        emailService.sendMailWithInline(confirm, Locale.ENGLISH);
+        sendEmailSqs.publishMessage(confirm);
+//        emailService.sendMailWithInline(confirm, Locale.ENGLISH);
 
         // Save user
         UserService userService = roleToServiceMap.get(userRegisterRequest.getRole());

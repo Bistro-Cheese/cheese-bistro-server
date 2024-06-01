@@ -46,7 +46,6 @@ public class TracingControllerAspect {
                     .id(UUID.randomUUID().toString())
                     .userId(userDetailService.getIdLogin().toString())
                     .userName(userDetailService.getUsernameLogin())
-                    .ipAddress(remoteAddress)
                     .methodName(methodName)
                     .build();
 
