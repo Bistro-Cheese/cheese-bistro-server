@@ -14,6 +14,8 @@ import com.ooadprojectserver.restaurantmanagement.service.user.*;
 import jakarta.annotation.PostConstruct;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +27,7 @@ import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
+@EnableCaching
 @RequestMapping(APIConstant.USERS)
 public class UserController {
     private final OwnerService ownerService;
@@ -50,6 +53,7 @@ public class UserController {
     }
 
     @GetMapping()
+    @Cacheable(value = "users")
     public ResponseEntity<APIResponse<List<UserResponse>>> getUsers() {
         Integer role = userDetailService.getRoleLogin();
         return ResponseEntity.ok().body(
@@ -65,6 +69,7 @@ public class UserController {
     }
 
     @GetMapping(APIConstant.USER_ID)
+    @Cacheable(value = "user", key = "#userId")
     public ResponseEntity<APIResponse<User>> getUserDetail(@PathVariable UUID userId) {
         return ResponseEntity.ok().body(
                 new APIResponse<>(

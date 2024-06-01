@@ -8,6 +8,8 @@ import com.ooadprojectserver.restaurantmanagement.dto.response.MessageResponse;
 import com.ooadprojectserver.restaurantmanagement.model.discount.Discount;
 import com.ooadprojectserver.restaurantmanagement.service.discount.DiscountService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +18,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@EnableCaching
 @RequestMapping(APIConstant.DISCOUNTS)
 public class DiscountController {
     private final DiscountService discountService;
@@ -33,6 +36,7 @@ public class DiscountController {
     }
 
     @GetMapping()
+    @Cacheable(value = "discounts")
     public ResponseEntity<APIResponse<List<Discount>>> getAllDiscounts() {
         return ResponseEntity.ok(
                 new APIResponse<>(
@@ -43,6 +47,7 @@ public class DiscountController {
     }
 
     @GetMapping(APIConstant.ID)
+    @Cacheable(value = "discounts", key = "#discountId")
     public ResponseEntity<APIResponse<Discount>> getDetailDiscount(
             @PathVariable("id") Integer discountId
     ) {
