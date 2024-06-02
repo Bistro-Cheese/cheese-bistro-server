@@ -11,12 +11,11 @@ import com.ooadprojectserver.restaurantmanagement.model.user.Owner;
 import com.ooadprojectserver.restaurantmanagement.model.user.baseUser.User;
 import com.ooadprojectserver.restaurantmanagement.repository.specification.UserSpecification;
 import com.ooadprojectserver.restaurantmanagement.repository.user.UserRepository;
-import com.ooadprojectserver.restaurantmanagement.service.aws.publish.SendEmailSqs;
+import com.ooadprojectserver.restaurantmanagement.service.aws.SQSSenderService;
 import com.ooadprojectserver.restaurantmanagement.service.email.EmailService;
 import com.ooadprojectserver.restaurantmanagement.service.user.*;
 import com.ooadprojectserver.restaurantmanagement.service.user.factory.OwnerFactory;
 import jakarta.annotation.PostConstruct;
-import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
@@ -31,7 +30,7 @@ public class OwnerServiceImpl implements OwnerService {
     private final StaffService staffService;
     private final UserDetailService userDetailService;
     private final EmailService emailService;
-    private final SendEmailSqs sendEmailSqs;
+    private final SQSSenderService sendEmailSqs;
 
     private Map<Integer, UserService> roleToServiceMap;
 
@@ -42,7 +41,7 @@ public class OwnerServiceImpl implements OwnerService {
             StaffService staffService,
             EmailService emailService,
             UserDetailService userDetailService,
-            SendEmailSqs sendEmailSqs
+            SQSSenderService sendEmailSqs
     ) {
         this.ownerFactory = ownerFactory;
         this.userRepository = userRepository;
