@@ -1,6 +1,7 @@
 package com.ooadprojectserver.restaurantmanagement.service.email;
 
 import com.ooadprojectserver.restaurantmanagement.constant.APIStatus;
+import com.ooadprojectserver.restaurantmanagement.controller.LoggerController;
 import com.ooadprojectserver.restaurantmanagement.dto.request.ConfirmationRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.request.EmailRequest;
 import com.ooadprojectserver.restaurantmanagement.exception.CustomException;
@@ -22,6 +23,10 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import static com.ooadprojectserver.restaurantmanagement.constant.EmailConstant.*;
 
@@ -31,8 +36,8 @@ public class EmailServiceImpl implements EmailService {
 
     @Value("${spring.mail.username}")
     private String fromEmail;
-
     Logger logger = LoggerFactory.getLogger(EmailServiceImpl.class);
+
     private final JavaMailSender emailSender;
     private final TemplateEngine templateEngine;
 
@@ -90,9 +95,10 @@ public class EmailServiceImpl implements EmailService {
         ctx.setVariable("username", request.getUsername());
         ctx.setVariable("password", request.getPassword());
 
+        MimeMessage mimeMessage;
         // Prepare message using a Spring helper
         try {
-            MimeMessage mimeMessage = getMimeMessage();
+            mimeMessage = getMimeMessage();
             MimeMessageHelper message = new MimeMessageHelper(mimeMessage, true, UTF_8_ENCODING); // true = multipart
             message.setSubject("Example HTML email with inline image");
             message.setFrom(fromEmail);
@@ -100,14 +106,24 @@ public class EmailServiceImpl implements EmailService {
             // Create the HTML body using Thymeleaf
             final String htmlContent = this.templateEngine.process("html/email-confirmation.html", ctx);
             message.setText(htmlContent, true); // true = isHtml
-
-            // Send mail
-            emailSender.send(mimeMessage);
         } catch (Exception e) {
+            logger.error("Send email fail");
             logger.error(e.getMessage());
             throw new CustomException(APIStatus.EMAIL_SEND_FAILED);
         }
 
+        try{
+            ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(1, 1, 1, TimeUnit.MINUTES,
+                    new ArrayBlockingQueue<>(2));
+
+            CompletableFuture<Void> emailTask = CompletableFuture.runAsync(() -> {
+                logger.info("Send email successfully");
+                emailSender.send(mimeMessage);
+
+            });
+        } catch (Exception e){
+            logger.error(e.getMessage());
+        }
     }
 
 

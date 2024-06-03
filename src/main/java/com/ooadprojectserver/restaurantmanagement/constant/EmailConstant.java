@@ -12,5 +12,4 @@ public class EmailConstant {
     public static final String USERNAME = "spring.mail.username";
     public static final String PASSWORD = "spring.mail.password";
     public static final String UTF_8_ENCODING = "UTF-8";
-
 }

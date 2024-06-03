@@ -29,7 +29,6 @@ public class OwnerServiceImpl implements OwnerService {
     private final ManagerService managerService;
     private final StaffService staffService;
     private final UserDetailService userDetailService;
-    private final EmailService emailService;
     private final SQSSenderService sendEmailSqs;
 
     private Map<Integer, UserService> roleToServiceMap;
@@ -39,7 +38,6 @@ public class OwnerServiceImpl implements OwnerService {
             UserRepository userRepository,
             ManagerService managerService,
             StaffService staffService,
-            EmailService emailService,
             UserDetailService userDetailService,
             SQSSenderService sendEmailSqs
     ) {
@@ -47,7 +45,6 @@ public class OwnerServiceImpl implements OwnerService {
         this.userRepository = userRepository;
         this.managerService = managerService;
         this.staffService = staffService;
-        this.emailService = emailService;
         this.userDetailService = userDetailService;
         this.sendEmailSqs = sendEmailSqs;
     }
@@ -114,7 +111,6 @@ public class OwnerServiceImpl implements OwnerService {
                 .emailTo(userRegisterRequest.getEmail())
                 .build();
         sendEmailSqs.publishMessage(confirm);
-//        emailService.sendMailWithInline(confirm, Locale.ENGLISH);
 
         // Save user
         UserService userService = roleToServiceMap.get(userRegisterRequest.getRole());

@@ -24,6 +24,8 @@ import java.util.Properties;
 public class EmailConfiguration implements EnvironmentAware {
     private Environment environment;
 
+
+
     @Bean
     public JavaMailSender getJavaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
@@ -37,7 +39,6 @@ public class EmailConfiguration implements EnvironmentAware {
         props.put("mail.transport.protocol", "smtp");
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.debug", "true");
 
         return mailSender;
     }

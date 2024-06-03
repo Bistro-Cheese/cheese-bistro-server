@@ -9,6 +9,7 @@ import reactor.util.retry.Retry;
 import software.amazon.awssdk.services.sqs.SqsAsyncClient;
 import software.amazon.awssdk.services.sqs.model.*;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -47,10 +48,32 @@ public class SQSSenderService {
                     sendMsgRequest
             ))
                     .retryWhen(Retry.max(3))
-                    .repeat(1)
                     .subscribe();
         } catch (SqsException | ExecutionException | InterruptedException e) {
             logger.error(e.getMessage());
         }
     }
+
+    public void listenToEmailQueue(){
+        logger.info("get queue");
+        try {
+            CompletableFuture<GetQueueUrlResponse> queueUrl = sqsAsyncClient.getQueueUrl(GetQueueUrlRequest.builder()
+                    .queueName(queueName)
+                    .build());
+
+            ReceiveMessageRequest receiveMessageRequest = ReceiveMessageRequest.builder()
+                    .queueUrl(queueUrl.get().queueUrl())
+                    .waitTimeSeconds(5)
+                    .maxNumberOfMessages(1)
+                    .build();
+
+            List<Message> sqsMessages = sqsAsyncClient.receiveMessage(receiveMessageRequest)
+                    .get().messages();
+            logger.info(sqsMessages.get(0).toString());
+        }catch (ExecutionException | InterruptedException e) {
+            logger.error(e.getMessage());
+        }
+    }
 }
+
+
