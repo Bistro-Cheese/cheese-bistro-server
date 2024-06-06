@@ -4,7 +4,7 @@
     <property name="LOG_FILE" value="logs/app.log"/>
     <property name="LOGIN_FILE" value="logs/server-login.log"/>
 
-        <springProfile name="prod">
+        <springProfile name="dev">
             <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
                 <layout class="ch.qos.logback.classic.PatternLayout">
                     <Pattern>%d{HH:mm:ss.SSS} [%thread] %highlight(%-5level) %cyan(%logger{15}) - %msg%n</Pattern>
@@ -15,7 +15,7 @@
             </root>
         </springProfile>
 
-    <springProfile name="dev">
+    <springProfile name="prod">
         <appender name="jsonConsoleAppender" class="ch.qos.logback.core.ConsoleAppender">
             <encoder class="net.logstash.logback.encoder.LogstashEncoder">
                 <includeCallerData>true</includeCallerData>
