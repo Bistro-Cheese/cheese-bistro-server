@@ -7,6 +7,7 @@ import com.ooadprojectserver.restaurantmanagement.dto.request.EmailRequest;
 import com.ooadprojectserver.restaurantmanagement.exception.CustomException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,12 +32,12 @@ import java.util.concurrent.TimeUnit;
 import static com.ooadprojectserver.restaurantmanagement.constant.EmailConstant.*;
 
 @Component
+@Slf4j
 @RequiredArgsConstructor
 public class EmailServiceImpl implements EmailService {
 
     @Value("${spring.mail.username}")
     private String fromEmail;
-    Logger logger = LoggerFactory.getLogger(EmailServiceImpl.class);
 
     private final JavaMailSender emailSender;
     private final TemplateEngine templateEngine;
@@ -45,7 +46,6 @@ public class EmailServiceImpl implements EmailService {
     @Async
     public void sendSimpleMailMessage(EmailRequest request) {
         try {
-            logger.info("SENDING MAIL");
             SimpleMailMessage message = new SimpleMailMessage();
             message.setFrom(fromEmail);
             message.setSubject(request.getSubject());
@@ -53,7 +53,7 @@ public class EmailServiceImpl implements EmailService {
             message.setText(request.getContent());
             emailSender.send(message);
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
             throw new CustomException(APIStatus.EMAIL_SEND_FAILED);
         }
     }
@@ -81,7 +81,7 @@ public class EmailServiceImpl implements EmailService {
             }
 
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
             throw new CustomException(APIStatus.EMAIL_SEND_FAILED);
         }
     }
@@ -107,8 +107,8 @@ public class EmailServiceImpl implements EmailService {
             final String htmlContent = this.templateEngine.process("html/email-confirmation.html", ctx);
             message.setText(htmlContent, true); // true = isHtml
         } catch (Exception e) {
-            logger.error("Send email fail");
-            logger.error(e.getMessage());
+            log.error("Send email fail");
+            log.error(e.getMessage());
             throw new CustomException(APIStatus.EMAIL_SEND_FAILED);
         }
 
@@ -117,12 +117,12 @@ public class EmailServiceImpl implements EmailService {
                     new ArrayBlockingQueue<>(2));
 
             CompletableFuture<Void> emailTask = CompletableFuture.runAsync(() -> {
-                logger.info("Send email successfully");
+                log.info("Send email successfully");
                 emailSender.send(mimeMessage);
 
             });
         } catch (Exception e){
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
         }
     }
 
@@ -139,7 +139,7 @@ public class EmailServiceImpl implements EmailService {
 //        String fileName = file.getName();
 //        try {
 //            helper.addAttachment(fileName, file);
-//            logger.info("Added a file attachment: {}", fileName);
+//            log.info("Added a file attachment: {}", fileName);
 //        } catch (Exception e) {
 //            logger.error(e.getMessage());
 //            throw new CustomException(APIStatus.EMAIL_SEND_FAILED);

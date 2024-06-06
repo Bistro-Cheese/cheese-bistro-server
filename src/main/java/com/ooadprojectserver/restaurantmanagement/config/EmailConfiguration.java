@@ -24,8 +24,6 @@ import java.util.Properties;
 public class EmailConfiguration implements EnvironmentAware {
     private Environment environment;
 
-
-
     @Bean
     public JavaMailSender getJavaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();

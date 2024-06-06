@@ -15,8 +15,6 @@ import com.ooadprojectserver.restaurantmanagement.service.ingredient.IngredientS
 import com.ooadprojectserver.restaurantmanagement.service.user.UserDetailService;
 
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +26,6 @@ public class InventoryServiceImpl implements InventoryService {
 
     private final InventoryRepository inventoryRepository;
     private final IngredientRepository ingredientRepository;
-    private static final Logger logger = LoggerFactory.getLogger(IngredientServiceImpl.class);
     private final UserDetailService userDetailService;
 
     @Override
@@ -77,7 +74,6 @@ public class InventoryServiceImpl implements InventoryService {
     }
 
     private Inventory getInventory(UUID id) {
-        logger.info("Finding Inventory By ID: {}", id);
         return inventoryRepository.findById(id).orElseThrow(
                 () -> new CustomException(APIStatus.INVENTORY_NOT_FOUND)
         );

@@ -5,8 +5,6 @@ import com.ooadprojectserver.restaurantmanagement.dto.response.order.OrderLineRe
 import com.ooadprojectserver.restaurantmanagement.repository.common.QueryRepo;
 import com.ooadprojectserver.restaurantmanagement.repository.custom.OrderLineRepositoryCustom;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.List;
@@ -14,21 +12,15 @@ import java.util.Map;
 import java.util.UUID;
 
 import static com.ooadprojectserver.restaurantmanagement.util.DataUtil.isNullObject;
-import static com.ooadprojectserver.restaurantmanagement.util.DataUtil.toLikeConditional;
 
 @RequiredArgsConstructor
 public class OrderLineRepositoryCustomImpl implements OrderLineRepositoryCustom {
 
     private final QueryRepo queryRepo;
 
-    Logger logger = LoggerFactory.getLogger(OrderLineRepositoryCustomImpl.class);
-
     @Override
     public List<OrderLineResponse> search(OrderLineSearchRequest request) {
         UUID orderId = request.getOrderId();
-
-        logger.info("orderId: " + orderId);
-
 
         Map<String, Object> queryParams = new HashMap<>();
 

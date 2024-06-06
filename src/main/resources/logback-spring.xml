@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <property name="LOG_FILE" value="logs/app.log"/>
+    <property name="LOGIN_FILE" value="logs/server-login.log"/>
+
+        <springProfile name="prod">
+            <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
+                <layout class="ch.qos.logback.classic.PatternLayout">
+                    <Pattern>%d{HH:mm:ss.SSS} [%thread] %highlight(%-5level) %cyan(%logger{15}) - %msg%n</Pattern>
+                </layout>
+            </appender>
+            <root level="info">
+                <appender-ref ref="Console" />
+            </root>
+        </springProfile>
+
+    <springProfile name="dev">
+        <appender name="jsonConsoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+                <includeCallerData>true</includeCallerData>
+                <jsonGeneratorDecorator class="net.logstash.logback.decorate.CompositeJsonGeneratorDecorator">
+                    <decorator class="net.logstash.logback.decorate.PrettyPrintingJsonGeneratorDecorator"/>
+                    <decorator class="net.logstash.logback.mask.MaskingJsonGeneratorDecorator">
+                        <defaultMask>XXXX</defaultMask>
+                        <path>password</path>
+                    </decorator>
+                </jsonGeneratorDecorator>
+            </encoder>
+        </appender>
+
+        <appender name="FILE-ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${LOG_FILE}</file>
+
+            <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+                <Pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</Pattern>
+            </encoder>
+
+            <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+                <fileNamePattern>logs/archived/app.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+                <!-- each archived file, size max 5KB -->
+                <maxFileSize>5KB</maxFileSize>
+                <!-- total size of all archive files, if total size > 20KB,
+                    it will delete old archived file -->
+                <totalSizeCap>20KB</totalSizeCap>
+                <!-- 60 days to keep -->
+                <maxHistory>60</maxHistory>
+            </rollingPolicy>
+        </appender>
+
+        <root level="info">
+            <appender-ref ref="jsonConsoleAppender"/>
+            <appender-ref ref="FILE-ROLLING"/>
+        </root>
+    </springProfile>
+</configuration>

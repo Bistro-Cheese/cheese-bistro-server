@@ -16,6 +16,8 @@ server:
   url: http://${SERVER_HOST}
 ---
 spring:
+  application:
+    name: BistroRestaurant
   main:
     allow-bean-definition-overriding: true
   profiles:

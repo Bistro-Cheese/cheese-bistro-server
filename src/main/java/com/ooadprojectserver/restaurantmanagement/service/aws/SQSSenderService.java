@@ -1,5 +1,6 @@
 package com.ooadprojectserver.restaurantmanagement.service.aws;
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,12 +21,11 @@ import java.util.concurrent.ExecutionException;
  **/
 
 @Service
+@Slf4j
 public class SQSSenderService {
 
     @Value("${spring.aws.queueName}")
     private String queueName;
-    Logger logger = LoggerFactory.getLogger(SQSSenderService.class);
-
 
     private final SqsAsyncClient sqsAsyncClient;
 
@@ -50,12 +50,12 @@ public class SQSSenderService {
                     .retryWhen(Retry.max(3))
                     .subscribe();
         } catch (SqsException | ExecutionException | InterruptedException e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
         }
     }
 
     public void listenToEmailQueue(){
-        logger.info("get queue");
+        log.info("get queue");
         try {
             CompletableFuture<GetQueueUrlResponse> queueUrl = sqsAsyncClient.getQueueUrl(GetQueueUrlRequest.builder()
                     .queueName(queueName)
@@ -69,9 +69,9 @@ public class SQSSenderService {
 
             List<Message> sqsMessages = sqsAsyncClient.receiveMessage(receiveMessageRequest)
                     .get().messages();
-            logger.info(sqsMessages.get(0).toString());
+            log.info(sqsMessages.get(0).toString());
         }catch (ExecutionException | InterruptedException e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
         }
     }
 }

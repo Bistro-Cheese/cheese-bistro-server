@@ -2,6 +2,7 @@ package com.ooadprojectserver.restaurantmanagement.exception.handler;
 
 import com.ooadprojectserver.restaurantmanagement.dto.response.ErrorResponse;
 import com.ooadprojectserver.restaurantmanagement.exception.CustomException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -26,6 +27,11 @@ public class GlobalExceptionHandler {
                 LocalDateTime.now().toString()
         );
         return ResponseEntity.status(exception.getApiStatus().getStatus()).body(errorResponse);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Object> handleException(Exception ex) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
     @ResponseStatus(BAD_REQUEST)

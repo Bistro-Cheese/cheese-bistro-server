@@ -10,8 +10,6 @@ import com.ooadprojectserver.restaurantmanagement.repository.inventory.Inventory
 import com.ooadprojectserver.restaurantmanagement.service.user.UserDetailService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 
@@ -23,7 +21,6 @@ import static com.ooadprojectserver.restaurantmanagement.util.DataUtil.copyPrope
 @RequiredArgsConstructor
 public class IngredientServiceImpl implements IngredientService {
 
-    private static final Logger logger = LoggerFactory.getLogger(IngredientServiceImpl.class);
     private final IngredientRepository ingredientRepository;
     private final InventoryRepository  inventoryRepository;
     private final UserDetailService userDetailService;
@@ -85,14 +82,12 @@ public class IngredientServiceImpl implements IngredientService {
     @Override
     public Ingredient getByName(String name) {
         return ingredientRepository.findByName(name).orElseThrow(() -> {
-            logger.error("Ingredient not found with name: {}", name);
             return new CustomException(APIStatus.INGREDIENT_NOT_FOUND);
         });
     }
 
     public Ingredient getIngredient(Long id) {
         return ingredientRepository.findById(id).orElseThrow(() -> {
-            logger.error("Ingredient not found with id: {}", id);
             return new CustomException(APIStatus.INGREDIENT_NOT_FOUND);
         });
     }

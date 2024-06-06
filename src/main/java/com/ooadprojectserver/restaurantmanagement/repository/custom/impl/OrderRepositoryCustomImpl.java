@@ -18,14 +18,10 @@ import static com.ooadprojectserver.restaurantmanagement.util.DataUtil.isNullObj
 public class OrderRepositoryCustomImpl implements OrderRepositoryCustom {
 
     private final QueryRepo queryRepo;
-    Logger logger = LoggerFactory.getLogger(OrderRepositoryCustomImpl.class);
-
     @Override
     public List<OrderSearchResponse> search(OrderSearchRequest request) {
 
         Integer status = request.getStatus();
-
-        logger.info("Order Search Status: " + status);
 
         Map<String, Object> queryParams = new HashMap<>();
 

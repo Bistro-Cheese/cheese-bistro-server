@@ -1,8 +1,6 @@
 package com.ooadprojectserver.restaurantmanagement.config;
 
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
@@ -19,7 +17,6 @@ import java.sql.DriverManager;
 @RequiredArgsConstructor
 public class DriverConfiguration {
 
-    private final Logger logger = LoggerFactory.getLogger(DriverConfiguration.class);
 
     /*
     * This is a simple ApplicationRunner bean that logs all the drivers
@@ -33,7 +30,6 @@ public class DriverConfiguration {
 
                 DriverManager.getDrivers().asIterator().forEachRemaining(
                         driver -> {
-                            logger.info(driver.toString());
                         }
                 );
 

@@ -6,8 +6,6 @@ import com.ooadprojectserver.restaurantmanagement.dto.response.food.FoodResponse
 import com.ooadprojectserver.restaurantmanagement.repository.common.QueryRepo;
 import com.ooadprojectserver.restaurantmanagement.repository.custom.FoodRepositoryCustom;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Repository;
 
@@ -22,8 +20,6 @@ import static com.ooadprojectserver.restaurantmanagement.util.DataUtil.toLikeCon
 public class FoodRepositoryCustomImpl implements FoodRepositoryCustom {
 
     private final QueryRepo queryRepo;
-
-    Logger logger = LoggerFactory.getLogger(FoodRepositoryCustomImpl.class);
 
     @Override
     public Page<FoodResponse> search(FoodSearchRequest request, PageInfo pageInfo) {
@@ -71,8 +67,6 @@ public class FoodRepositoryCustomImpl implements FoodRepositoryCustom {
                 sqlSort = "order by " + sortCase  + " asc ";
             } else sqlSort = "order by " + sortCase  + " desc ";
         } else sqlSort = "order by f.name asc ";
-
-        logger.info("sql Sort: {}", sqlSort);
 
         return queryRepo.queryPage(
                 sqlCountAll, sqlGetData, sqlConditional.toString(), sqlSort,

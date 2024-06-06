@@ -1,9 +1,6 @@
 package com.ooadprojectserver.restaurantmanagement.config.datasource;
 
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
@@ -11,8 +8,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.jdbc.datasource.init.DataSourceInitializer;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 
@@ -29,8 +24,6 @@ import java.util.Map;
 @Configuration
 @RequiredArgsConstructor
 public class DataSourceRoutingConfiguration {
-
-    private final Logger logger = LoggerFactory.getLogger(DataSourceRoutingConfiguration.class);
 
     public final static String MASTER = "master datasource";
     public final static String SLAVE = "slave datasource";
@@ -109,7 +102,6 @@ public class DataSourceRoutingConfiguration {
             @Override
             public void run(ApplicationArguments args) throws Exception {
                 dataSource.forEach((key, db) -> {
-                    logger.info(key + '=' + db);
                 });
             }
         };

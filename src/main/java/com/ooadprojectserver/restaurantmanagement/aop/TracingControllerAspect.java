@@ -3,6 +3,7 @@ package com.ooadprojectserver.restaurantmanagement.aop;
 import com.ooadprojectserver.restaurantmanagement.model.aws.UserAction;
 import com.ooadprojectserver.restaurantmanagement.service.aws.AWSDynamoDbService;
 import com.ooadprojectserver.restaurantmanagement.service.user.UserDetailService;
+import com.ooadprojectserver.restaurantmanagement.util.DateTimeUtils;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -46,6 +47,7 @@ public class TracingControllerAspect {
                     .id(UUID.randomUUID().toString())
                     .userId(userDetailService.getIdLogin().toString())
                     .userName(userDetailService.getUsernameLogin())
+                    .timestamp(DateTimeUtils.resultTimestamp().toString())
                     .methodName(methodName)
                     .build();
 

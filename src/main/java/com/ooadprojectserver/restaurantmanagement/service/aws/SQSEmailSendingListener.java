@@ -5,6 +5,7 @@ import com.ooadprojectserver.restaurantmanagement.dto.request.ConfirmationReques
 import com.ooadprojectserver.restaurantmanagement.exception.CustomException;
 import com.ooadprojectserver.restaurantmanagement.service.email.EmailService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
@@ -30,6 +31,7 @@ import java.util.regex.Pattern;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class SQSEmailSendingListener implements DisposableBean {
     private volatile boolean doPolling;
 
@@ -38,11 +40,6 @@ public class SQSEmailSendingListener implements DisposableBean {
 
     private final SqsAsyncClient sqsAsyncClient;
     private final EmailService emailService;
-
-
-    Logger logger = LoggerFactory.getLogger(SQSEmailSendingListener.class);
-
-
 
     ArrayBlockingQueue<Message> messageHoldingQueue = new ArrayBlockingQueue<Message>(
             1);
@@ -80,11 +77,11 @@ public class SQSEmailSendingListener implements DisposableBean {
                         //Your specific processing code
                         emailService.sendMailWithInline(extractEmailInfo(emailEvent.body()), Locale.ENGLISH);
                     } catch (Exception e) {
-                        logger.error("Exception while processing message from SQS Queue ", e);
+                        log.error("Exception while processing message from SQS Queue ", e);
                     }
                 }
             }catch (ExecutionException | InterruptedException e) {
-                logger.error(e.getMessage());
+                log.error(e.getMessage());
             }
         }
     }

@@ -4,8 +4,6 @@ import com.ooadprojectserver.restaurantmanagement.dto.response.bill.BillResponse
 import com.ooadprojectserver.restaurantmanagement.repository.common.QueryRepo;
 import com.ooadprojectserver.restaurantmanagement.repository.custom.BillRepositoryCustom;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.List;
@@ -15,12 +13,9 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class BillRepositoryCustomImpl implements BillRepositoryCustom {
     private final QueryRepo queryRepo;
-    Logger logger = LoggerFactory.getLogger(BillRepositoryCustomImpl.class);
 
     @Override
     public List<BillResponse> getBillByOrderId(UUID orderId) {
-        logger.info("Get Bill By Order Id: " + orderId);
-
         Map<String, Object> queryParams = new HashMap<>();
         queryParams.put("orderId", orderId);
 

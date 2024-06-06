@@ -1,8 +1,6 @@
 package com.ooadprojectserver.restaurantmanagement.config.datasource;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.boot.actuate.health.Status;
@@ -26,7 +24,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class DataSourceHealth implements HealthIndicator {
 
-    private static final Logger logger = LogManager.getLogger(DataSourceHealth.class);
 
     private final Map<String, DataSource> dataSourceMap;
     private static final String MASTER_DATASOURCE = "bistroMySqlMasterDataSource";
@@ -51,7 +48,6 @@ public class DataSourceHealth implements HealthIndicator {
             ResultSet resultSet = statement.executeQuery("SELECT 1");
             return true;
         }catch (SQLException e){
-            logger.error("Master database crashed", e);
             return false;
         }
     }
@@ -62,7 +58,6 @@ public class DataSourceHealth implements HealthIndicator {
         if (health.getStatus() == Status.DOWN) {
             // Switch to slave database
             DataSourceRoutingConfiguration.ACTIVE_DATASOURCE.set(DataSourceRoutingConfiguration.SLAVE);
-            logger.info("Switched to slave database due to master database being down.");
         }
     }
 }

@@ -22,7 +22,7 @@ public class AWSDynamoDbServiceImpl implements AWSDynamoDbService{
 
     public AWSDynamoDbServiceImpl(DynamoDbEnhancedAsyncClient dynamoDbEnhancedAsyncClient){
         this.dynamoDbEnhancedAsyncClient = dynamoDbEnhancedAsyncClient;
-        userActionTable = dynamoDbEnhancedAsyncClient.table("test-bistro-user_action", TableSchema.fromBean(UserAction.class));
+        userActionTable = dynamoDbEnhancedAsyncClient.table("prod-bistro-user_action", TableSchema.fromBean(UserAction.class));
     }
 
     @Override

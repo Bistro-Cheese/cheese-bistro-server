@@ -350,11 +350,17 @@ public class DateTimeUtils {
         return getDate(lastDay);
     }
 
-
     public static Timestamp resultTimestamp() {
         Instant instant = Instant.now();
         return Timestamp.from(instant);
     }
+
+    public static Date resultDateTime() {
+        Instant instant = Instant.now();
+        return Date.from(instant);
+    }
+
+
 
     public static Timestamp getTimestampAfter(int amount, ChronoUnit chronoUnit) {
         Instant instant = Instant.now();
