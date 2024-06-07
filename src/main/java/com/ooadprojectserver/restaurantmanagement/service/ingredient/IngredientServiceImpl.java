@@ -10,6 +10,7 @@ import com.ooadprojectserver.restaurantmanagement.repository.inventory.Inventory
 import com.ooadprojectserver.restaurantmanagement.service.user.UserDetailService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 
@@ -18,6 +19,7 @@ import java.util.List;
 import static com.ooadprojectserver.restaurantmanagement.util.DataUtil.copyProperties;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class IngredientServiceImpl implements IngredientService {
 
@@ -31,6 +33,7 @@ public class IngredientServiceImpl implements IngredientService {
     @Transactional
     public void create(IngredientRequest req) {
         ingredientRepository.findBySupplierAndName(req.getSupplier(), req.getName()).ifPresent(ingredient -> {
+            log.error("This ingredient already created");
             throw new CustomException(APIStatus.INGREDIENT_ALREADY_EXISTED);
         });
 
@@ -88,6 +91,7 @@ public class IngredientServiceImpl implements IngredientService {
 
     public Ingredient getIngredient(Long id) {
         return ingredientRepository.findById(id).orElseThrow(() -> {
+            log.error(APIStatus.INGREDIENT_NOT_FOUND.getMessage());
             return new CustomException(APIStatus.INGREDIENT_NOT_FOUND);
         });
     }

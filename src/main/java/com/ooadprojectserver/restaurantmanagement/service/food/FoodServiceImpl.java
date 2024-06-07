@@ -12,6 +12,9 @@ import com.ooadprojectserver.restaurantmanagement.repository.food.CategoryReposi
 import com.ooadprojectserver.restaurantmanagement.repository.food.FoodRepository;
 import com.ooadprojectserver.restaurantmanagement.service.user.UserDetailService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
@@ -40,6 +43,7 @@ public class FoodServiceImpl implements FoodService {
 
     //create food
     @Override
+    @CacheEvict(value = "food", allEntries = true)
     public void createFood(FoodCreateRequest request) {
         //TODO: refactor create food
         Category category = categoryRepository.findById(request.getCategory()).orElseThrow(
@@ -58,6 +62,7 @@ public class FoodServiceImpl implements FoodService {
 
     //delete food
     @Override
+    @CacheEvict(value = "food", allEntries = true)
     public void deleteFood(UUID foodId) {
         Food food = foodRepository.findById(foodId).orElseThrow(
                 () -> new CustomException(APIStatus.FOOD_NOT_FOUND)
@@ -66,6 +71,7 @@ public class FoodServiceImpl implements FoodService {
     }
 
     @Override
+    @CacheEvict(value = "food", allEntries = true)
     public void updateFood(UUID foodId, FoodCreateRequest updatingFood) {
 
         Food existedFood = foodRepository.findById(foodId).orElseThrow(
@@ -87,6 +93,7 @@ public class FoodServiceImpl implements FoodService {
         foodRepository.save(existedFood);
     }
 
+    @Cacheable(value = "food", key = "#foodId")
     public Food getDetailFood(UUID foodId) {
         return foodRepository.findById(foodId).orElseThrow(
                 () -> new CustomException(APIStatus.FOOD_NOT_FOUND)
@@ -94,6 +101,7 @@ public class FoodServiceImpl implements FoodService {
     }
 
     @Override
+    @Cacheable(value = "food")
     public Page<FoodResponse> search(FoodSearchRequest searchRequest, PageInfo pageInfo) {
       return foodRepository.search(searchRequest, pageInfo);
     }

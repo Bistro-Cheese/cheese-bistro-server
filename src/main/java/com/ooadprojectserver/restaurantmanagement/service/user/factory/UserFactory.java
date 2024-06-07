@@ -11,6 +11,7 @@ import com.ooadprojectserver.restaurantmanagement.model.user.baseUser.User;
 import com.ooadprojectserver.restaurantmanagement.repository.user.AddressRepository;
 import com.ooadprojectserver.restaurantmanagement.service.user.UserDetailService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.text.DateFormat;
@@ -18,6 +19,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @RequiredArgsConstructor
+@Slf4j
 public abstract class UserFactory {
     private final PasswordEncoder passwordEncoder;
     private final AddressRepository addressRepository;
@@ -84,6 +86,7 @@ public abstract class UserFactory {
         try {
             return dateFormat.parse(dateOfBirth);
         } catch (Exception e) {
+            log.error(e.getMessage());
             throw new CustomException(APIStatus.WRONG_FORMAT_DATE);
         }
     }

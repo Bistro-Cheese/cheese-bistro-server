@@ -12,6 +12,7 @@ import com.ooadprojectserver.restaurantmanagement.service.user.ManagerService;
 import com.ooadprojectserver.restaurantmanagement.service.user.UserDetailService;
 import com.ooadprojectserver.restaurantmanagement.service.user.factory.ManagerFactory;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class ManagerServiceImpl implements ManagerService {
     private final ManagerFactory managerFactory;
@@ -40,7 +42,10 @@ public class ManagerServiceImpl implements ManagerService {
     public UserResponse getProfile() {
         String username = userDetailService.getUsernameLogin();
         Manager manager = (Manager) userRepository.findByUsername(username).orElseThrow(
-                () -> new CustomException(APIStatus.USER_NOT_FOUND)
+                () -> {
+                    log.error(APIStatus.USER_NOT_FOUND.getMessage());
+                    return new CustomException(APIStatus.USER_NOT_FOUND);
+                }
         );
         return UserResponse.covertUserToUserResponse(manager);
     }
@@ -48,7 +53,10 @@ public class ManagerServiceImpl implements ManagerService {
     @Override
     public Manager getUserById(UUID id) {
         return (Manager) userRepository.findById(id).orElseThrow(
-                () -> new CustomException(APIStatus.USER_NOT_FOUND)
+                () -> {
+                    log.error(APIStatus.USER_NOT_FOUND.getMessage());
+                    return new CustomException(APIStatus.USER_NOT_FOUND);
+                }
         );
     }
     // UserService implementation End

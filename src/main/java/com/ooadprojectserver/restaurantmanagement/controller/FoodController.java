@@ -11,8 +11,6 @@ import com.ooadprojectserver.restaurantmanagement.model.food.Food;
 import com.ooadprojectserver.restaurantmanagement.service.food.FoodService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +30,6 @@ public class FoodController {
 
     //create food
     @PostMapping()
-    @CachePut(value = "food", key = "#request")
     public ResponseEntity<MessageResponse> createFood(
             @RequestBody @Valid FoodCreateRequest request
     ) {
@@ -57,7 +54,6 @@ public class FoodController {
 
     //update food
     @PutMapping(APIConstant.FOOD_ID)
-    @CachePut(value = "food", key = "#foodId")
     public ResponseEntity<MessageResponse> updateFood(
             @PathVariable("food_id") UUID foodId,
             @RequestBody FoodCreateRequest request
@@ -70,14 +66,12 @@ public class FoodController {
 
     //search food
     @GetMapping(APIConstant.SEARCH)
-    @Cacheable(value = "food", key = "#req")
     public ResponseEntity<Page<FoodResponse>> searchFood(FoodSearchRequest req, PageInfo pageInfo) {
         var rs = foodService.search(req, pageInfo);
         return ResponseEntity.status(OK).body(rs);
     }
 
     @GetMapping(APIConstant.FOOD_ID)
-    @Cacheable(value = "food", key = "#foodId")
     public ResponseEntity<Food> getFoodById(
             @PathVariable("food_id") UUID foodId
     ) {

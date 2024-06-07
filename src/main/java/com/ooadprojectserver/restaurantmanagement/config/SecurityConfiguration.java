@@ -45,6 +45,7 @@ public class SecurityConfiguration {
                 .csrf(cors -> cors.disable())
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/api/v1/auth/**").permitAll()
+                        .requestMatchers("/api/v1/foods/search").permitAll()
                         .requestMatchers("/actuator/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/users/**").hasAuthority(
                                 Permission.OWNER_WRITE.getPermission())

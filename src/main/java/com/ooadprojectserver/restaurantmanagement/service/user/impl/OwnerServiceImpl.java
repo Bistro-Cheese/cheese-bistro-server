@@ -16,6 +16,7 @@ import com.ooadprojectserver.restaurantmanagement.service.email.EmailService;
 import com.ooadprojectserver.restaurantmanagement.service.user.*;
 import com.ooadprojectserver.restaurantmanagement.service.user.factory.OwnerFactory;
 import jakarta.annotation.PostConstruct;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
+@Slf4j
 public class OwnerServiceImpl implements OwnerService {
     private final OwnerFactory ownerFactory;
     private final UserRepository userRepository;
@@ -33,14 +35,7 @@ public class OwnerServiceImpl implements OwnerService {
 
     private Map<Integer, UserService> roleToServiceMap;
 
-    public OwnerServiceImpl(
-            OwnerFactory ownerFactory,
-            UserRepository userRepository,
-            ManagerService managerService,
-            StaffService staffService,
-            UserDetailService userDetailService,
-            SQSSenderService sendEmailSqs
-    ) {
+    public OwnerServiceImpl(OwnerFactory ownerFactory, UserRepository userRepository, ManagerService managerService, StaffService staffService, UserDetailService userDetailService, SQSSenderService sendEmailSqs) {
         this.ownerFactory = ownerFactory;
         this.userRepository = userRepository;
         this.managerService = managerService;
@@ -71,17 +66,13 @@ public class OwnerServiceImpl implements OwnerService {
     @Override
     public UserResponse getProfile() {
         String username = userDetailService.getUsernameLogin();
-        Owner owner = (Owner) userRepository.findByUsername(username).orElseThrow(
-                () -> new CustomException(APIStatus.USER_NOT_FOUND)
-        );
+        Owner owner = (Owner) userRepository.findByUsername(username).orElseThrow(() -> new CustomException(APIStatus.USER_NOT_FOUND));
         return UserResponse.covertUserToUserResponse(owner);
     }
 
     @Override
     public Owner getUserById(UUID id) {
-        return (Owner) userRepository.findById(id).orElseThrow(
-                () -> new CustomException(APIStatus.USER_NOT_FOUND)
-        );
+        return (Owner) userRepository.findById(id).orElseThrow(() -> new CustomException(APIStatus.USER_NOT_FOUND));
     }
     // Implement User Service End
 
@@ -90,6 +81,7 @@ public class OwnerServiceImpl implements OwnerService {
     public void createUser(UserCreateRequest userRegisterRequest) {
         // Check if email already existed
         userRepository.findByEmail(userRegisterRequest.getEmail()).ifPresent(user -> {
+            log.error(APIStatus.EMAIL_ALREADY_EXISTED.getMessage());
             throw new CustomException(APIStatus.EMAIL_ALREADY_EXISTED);
         });
 
@@ -104,13 +96,7 @@ public class OwnerServiceImpl implements OwnerService {
         });
 
 //         Send confirmation email
-        ConfirmationRequest confirm = ConfirmationRequest.builder()
-                .fullName(userRegisterRequest.getFirstName() + " " + userRegisterRequest.getLastName())
-                .username(userRegisterRequest.getUsername())
-                .password(userRegisterRequest.getPassword())
-                .emailTo(userRegisterRequest.getEmail())
-                .build();
-        sendEmailSqs.publishMessage(confirm);
+        ConfirmationRequest confirm = ConfirmationRequest.builder().fullName(userRegisterRequest.getFirstName() + " " + userRegisterRequest.getLastName()).username(userRegisterRequest.getUsername()).password(userRegisterRequest.getPassword()).emailTo(userRegisterRequest.getEmail()).build();
 
         // Save user
         UserService userService = roleToServiceMap.get(userRegisterRequest.getRole());
@@ -118,6 +104,7 @@ public class OwnerServiceImpl implements OwnerService {
             throw new CustomException(APIStatus.INVALID_ROLE_ID);
         } else {
             userService.saveUser(userRegisterRequest);
+            sendEmailSqs.publishMessage(confirm);
         }
     }
 
@@ -133,9 +120,7 @@ public class OwnerServiceImpl implements OwnerService {
 
     @Override
     public User getUserDetail(UUID userId) {
-        User user = userRepository.findById(userId).orElseThrow(
-                () -> new CustomException(APIStatus.USER_NOT_FOUND)
-        );
+        User user = userRepository.findById(userId).orElseThrow(() -> new CustomException(APIStatus.USER_NOT_FOUND));
         return switch (user.getRole().ordinal()) {
             case 0 -> getUserById(userId);
             case 1 -> managerService.getUserById(userId);
@@ -146,29 +131,33 @@ public class OwnerServiceImpl implements OwnerService {
 
     @Override
     public void deleteUser(UUID userId) {
-        userRepository.findById(userId).orElseThrow(
-                () -> new CustomException(APIStatus.USER_NOT_FOUND)
-        );
+        userRepository.findById(userId).orElseThrow(() -> {
+            log.error(APIStatus.USER_NOT_FOUND.getMessage());
+            return new CustomException(APIStatus.USER_NOT_FOUND);
+        });
         userRepository.deleteById(userId);
     }
 
     @Override
     public void updateUser(UUID userId, UserCreateRequest userRegisterRequest) {
         // Check User Id
-        User user = userRepository.findById(userId).orElseThrow(
-                () -> new CustomException(APIStatus.USER_NOT_FOUND)
-        );
+        User user = userRepository.findById(userId).orElseThrow(() -> {
+            log.error(APIStatus.USER_NOT_FOUND.getMessage());
+            return new CustomException(APIStatus.USER_NOT_FOUND);
+        });
 
 
         // Check if email already existed
         if (!Objects.equals(userRegisterRequest.getEmail(), user.getEmail())) {
             userRepository.findByEmail(userRegisterRequest.getEmail()).ifPresent(userRepo -> {
+                log.error(APIStatus.EMAIL_ALREADY_EXISTED.getMessage());
                 throw new CustomException(APIStatus.EMAIL_ALREADY_EXISTED);
             });
         }
 
         UserService userService = roleToServiceMap.get(userRegisterRequest.getRole());
         if (userService == null) {
+            log.error(APIStatus.INVALID_ROLE_ID.getMessage());
             throw new CustomException(APIStatus.INVALID_ROLE_ID);
         }
 
@@ -177,10 +166,7 @@ public class OwnerServiceImpl implements OwnerService {
 
     public PagingResponse searchUser(SearchRequest searchRequest) {
         searchRequest.getPagingRequest().checkValidPaging();
-        Page<User> userPage = userRepository.findAll(
-                new UserSpecification(searchRequest.getParams()),
-                searchRequest.getPagingRequest().toPageRequest()
-        );
+        Page<User> userPage = userRepository.findAll(new UserSpecification(searchRequest.getParams()), searchRequest.getPagingRequest().toPageRequest());
         List<UserResponse> userResponseList = new ArrayList<>();
         if (!userPage.isEmpty()) {
             for (User user : userPage) {
@@ -188,12 +174,7 @@ public class OwnerServiceImpl implements OwnerService {
             }
         }
         Page<UserResponse> userResponsePage = new PageImpl<>(userResponseList);
-        return new PagingResponse(
-                userResponsePage.getContent(),
-                userPage.getTotalElements(),
-                userPage.getTotalPages(),
-                userPage.getNumber() + 1
-        );
+        return new PagingResponse(userResponsePage.getContent(), userPage.getTotalElements(), userPage.getTotalPages(), userPage.getNumber() + 1);
     }
     // Implement Owner Service End
 }
