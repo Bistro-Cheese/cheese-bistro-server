@@ -79,18 +79,18 @@ public class OwnerServiceImpl implements OwnerService {
     // Implement Owner Service Start
     @Override
     public void createUser(UserCreateRequest userRegisterRequest) {
-        // Check if email already existed
+//         Check if email already existed
         userRepository.findByEmail(userRegisterRequest.getEmail()).ifPresent(user -> {
             log.error(APIStatus.EMAIL_ALREADY_EXISTED.getMessage());
             throw new CustomException(APIStatus.EMAIL_ALREADY_EXISTED);
         });
 
-        // Check if username already existed
+//         Check if username already existed
         userRepository.findByUsername(userRegisterRequest.getUsername()).ifPresent(user -> {
             throw new CustomException(APIStatus.USERNAME_ALREADY_EXISTED);
         });
 
-        // Check if phone number already existed
+//         Check if phone number already existed
         userRepository.findByPhoneNumber(userRegisterRequest.getPhoneNumber()).ifPresent(user -> {
             throw new CustomException(APIStatus.PHONE_NUMBER_ALREADY_EXISTED);
         });
@@ -104,7 +104,7 @@ public class OwnerServiceImpl implements OwnerService {
             throw new CustomException(APIStatus.INVALID_ROLE_ID);
         } else {
             userService.saveUser(userRegisterRequest);
-            sendEmailSqs.publishMessage(confirm);
+//            sendEmailSqs.publishMessage(confirm);
         }
     }
 
@@ -140,12 +140,12 @@ public class OwnerServiceImpl implements OwnerService {
 
     @Override
     public void updateUser(UUID userId, UserCreateRequest userRegisterRequest) {
+        log.error("Hello");
         // Check User Id
         User user = userRepository.findById(userId).orElseThrow(() -> {
             log.error(APIStatus.USER_NOT_FOUND.getMessage());
             return new CustomException(APIStatus.USER_NOT_FOUND);
         });
-
 
         // Check if email already existed
         if (!Objects.equals(userRegisterRequest.getEmail(), user.getEmail())) {

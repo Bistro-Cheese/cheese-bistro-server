@@ -33,4 +33,12 @@ public class Staff extends User {
         this.foreignLanguage = foreignLanguage;
         this.academicLevel = academicLevel;
     }
+
+    @Override
+    public String toString() {
+        return "Staff{" +
+                "foreignLanguage='" + foreignLanguage + '\'' +
+                ", academicLevel='" + academicLevel + '\'' +
+                '}';
+    }
 }

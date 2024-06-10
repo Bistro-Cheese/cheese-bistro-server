@@ -6,32 +6,43 @@ import com.ooadprojectserver.restaurantmanagement.dto.response.UserResponse;
 import com.ooadprojectserver.restaurantmanagement.exception.CustomException;
 import com.ooadprojectserver.restaurantmanagement.model.user.Staff;
 import com.ooadprojectserver.restaurantmanagement.model.user.baseUser.User;
+import com.ooadprojectserver.restaurantmanagement.repository.user.AddressRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.user.UserRepository;
 import com.ooadprojectserver.restaurantmanagement.service.user.StaffService;
 import com.ooadprojectserver.restaurantmanagement.service.user.UserDetailService;
 import com.ooadprojectserver.restaurantmanagement.service.user.factory.StaffFactory;
+import com.ooadprojectserver.restaurantmanagement.service.user.factory.UserFactory;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class StaffServiceImpl implements StaffService {
     private final StaffFactory staffFactory;
     private final UserRepository userRepository;
     private final UserDetailService userDetailService;
+    private final PasswordEncoder passwordEncoder;
+    private final AddressRepository addressRepository;
 
     // UserService implementation Start
     @Override
     public void saveUser(UserCreateRequest userCreateRequest) {
-        userRepository.save((Staff) staffFactory.create(userCreateRequest));
+        UserFactory factory = new StaffFactory(passwordEncoder, addressRepository,userDetailService);
+        User staff = factory.create(userCreateRequest);
+        log.info(staff.toString());
+        userRepository.save(staff);
     }
 
     @Override
     public void updateUserById(User user, UserCreateRequest userCreateRequest) {
-        Staff updateStaff = (Staff) staffFactory.update(user, userCreateRequest);
-        userRepository.save(updateStaff);
+        UserFactory factory = new StaffFactory(passwordEncoder, addressRepository,userDetailService);
+        User staff = factory.update(user, userCreateRequest);
+        userRepository.save(staff);
     }
 
     @Override
@@ -49,6 +60,7 @@ public class StaffServiceImpl implements StaffService {
                 () -> new CustomException(APIStatus.USER_NOT_FOUND)
         );
     }
+
     // UserService implementation End
 }
 

@@ -29,8 +29,8 @@ public class StaffFactory extends UserFactory {
     }
 
     @Override
-    protected Staff updateUser(User user, UserCreateRequest userRequest) {
-        Staff updateStaff = new Staff(
+    protected User updateUser(User user, UserCreateRequest userRequest) {
+        User updateStaff = new Staff(
                 user,
                 userRequest.getForeignLanguage(),
                 userRequest.getAcademicLevel()

@@ -49,42 +49,42 @@ public class SQSEmailSendingListener implements DisposableBean {
         this.doPolling = false;
     }
 
-    @EventListener(ApplicationStartedEvent.class)
-    public void run() {
-        this.doPolling = true;
-        while (doPolling) {
-            CompletableFuture<GetQueueUrlResponse> queueUrl = sqsAsyncClient.getQueueUrl(GetQueueUrlRequest.builder()
-                    .queueName(queueName)
-                    .build());
-            try{
-                ReceiveMessageRequest receiveMessageRequest = ReceiveMessageRequest.builder()
-                        .queueUrl(queueUrl.get().queueUrl())
-                        .maxNumberOfMessages(1)
-                        .visibilityTimeout(15)
-                        .waitTimeSeconds(10).build();
-
-                ReceiveMessageResponse receiveMessageResponse = sqsAsyncClient.receiveMessage(receiveMessageRequest).get();
-
-                if (receiveMessageResponse.messages() == null || receiveMessageResponse.messages().isEmpty())
-                    continue;
-                else {
-                    for (Message message : receiveMessageResponse.messages()) {
-                        messageHoldingQueue.put(message);
-                    }
-
-                    try {
-                        Message emailEvent = messageHoldingQueue.poll();
-                        //Your specific processing code
-                        emailService.sendMailWithInline(extractEmailInfo(emailEvent.body()), Locale.ENGLISH);
-                    } catch (Exception e) {
-                        log.error("Exception while processing message from SQS Queue ", e);
-                    }
-                }
-            }catch (ExecutionException | InterruptedException e) {
-                log.error(e.getMessage());
-            }
-        }
-    }
+//    @EventListener(ApplicationStartedEvent.class)
+//    public void run() {
+//        this.doPolling = true;
+//        while (doPolling) {
+//            CompletableFuture<GetQueueUrlResponse> queueUrl = sqsAsyncClient.getQueueUrl(GetQueueUrlRequest.builder()
+//                    .queueName(queueName)
+//                    .build());
+//            try{
+//                ReceiveMessageRequest receiveMessageRequest = ReceiveMessageRequest.builder()
+//                        .queueUrl(queueUrl.get().queueUrl())
+//                        .maxNumberOfMessages(1)
+//                        .visibilityTimeout(15)
+//                        .waitTimeSeconds(10).build();
+//
+//                ReceiveMessageResponse receiveMessageResponse = sqsAsyncClient.receiveMessage(receiveMessageRequest).get();
+//
+//                if (receiveMessageResponse.messages() == null || receiveMessageResponse.messages().isEmpty())
+//                    continue;
+//                else {
+//                    for (Message message : receiveMessageResponse.messages()) {
+//                        messageHoldingQueue.put(message);
+//                    }
+//
+//                    try {
+//                        Message emailEvent = messageHoldingQueue.poll();
+//                        //Your specific processing code
+//                        emailService.sendMailWithInline(extractEmailInfo(emailEvent.body()), Locale.ENGLISH);
+//                    } catch (Exception e) {
+//                        log.error("Exception while processing message from SQS Queue ", e);
+//                    }
+//                }
+//            }catch (ExecutionException | InterruptedException e) {
+//                log.error(e.getMessage());
+//            }
+//        }
+//    }
 
     private ConfirmationRequest extractEmailInfo(String body){
         Pattern pattern = Pattern.compile("ConfirmationRequest\\((.*?)\\)");

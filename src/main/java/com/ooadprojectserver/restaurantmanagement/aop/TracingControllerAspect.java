@@ -30,7 +30,7 @@ public class TracingControllerAspect {
 
     private final Logger logger = Logger.getLogger(TracingControllerAspect.class.getName());
     private final UserDetailService userDetailService;
-    private final AWSDynamoDbService awsDynamoDbService;
+//    private final AWSDynamoDbService awsDynamoDbService;
 
     @Pointcut("within(@org.springframework.web.bind.annotation.RestController *)")
     public void controllerMethods() {
@@ -51,7 +51,7 @@ public class TracingControllerAspect {
                     .methodName(methodName)
                     .build();
 
-            awsDynamoDbService.putUserAction(userAction);
+//            awsDynamoDbService.putUserAction(userAction);
         }
 
         return joinPoint.proceed();

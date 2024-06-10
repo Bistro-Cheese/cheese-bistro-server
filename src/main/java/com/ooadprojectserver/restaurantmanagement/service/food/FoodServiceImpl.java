@@ -103,6 +103,11 @@ public class FoodServiceImpl implements FoodService {
     @Override
     @Cacheable(value = "food")
     public Page<FoodResponse> search(FoodSearchRequest searchRequest, PageInfo pageInfo) {
+        try{
+            Thread.sleep(3000);
+        }catch (Exception ignored){
+
+        }
       return foodRepository.search(searchRequest, pageInfo);
     }
 }
