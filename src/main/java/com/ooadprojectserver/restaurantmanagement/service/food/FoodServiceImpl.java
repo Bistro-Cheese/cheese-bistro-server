@@ -10,6 +10,9 @@ import com.ooadprojectserver.restaurantmanagement.model.food.Category;
 import com.ooadprojectserver.restaurantmanagement.model.food.Food;
 import com.ooadprojectserver.restaurantmanagement.repository.food.CategoryRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.food.FoodRepository;
+import com.ooadprojectserver.restaurantmanagement.service.food.builder.ConcreteFoodBuilder;
+import com.ooadprojectserver.restaurantmanagement.service.food.builder.FoodBuilder;
+import com.ooadprojectserver.restaurantmanagement.service.food.builder.FoodDirector;
 import com.ooadprojectserver.restaurantmanagement.service.user.UserDetailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
@@ -45,19 +48,18 @@ public class FoodServiceImpl implements FoodService {
     @Override
     @CacheEvict(value = "food", allEntries = true)
     public void createFood(FoodCreateRequest request) {
-        //TODO: refactor create food
-        Category category = categoryRepository.findById(request.getCategory()).orElseThrow(
-                () -> new CustomException(APIStatus.CATEGORY_NOT_FOUND)
-        );
         Optional<Food> optionalFood = foodRepository.findByName(request.getName());
         if (optionalFood.isPresent()) {
             throw new CustomException(APIStatus.FOOD_ALREADY_EXISTED);
-        } else {
-            Food newFood = copyProperties(request, Food.class);
-            newFood.setCategory(category);
-            newFood.setCommonCreate(userDetailService.getIdLogin());
-            foodRepository.save(newFood);
         }
+
+        FoodBuilder foodBuilder = new ConcreteFoodBuilder();
+        FoodDirector foodDirector = new FoodDirector(foodBuilder);
+        foodDirector.construct(request);
+        Food newFood = foodDirector.getFood();
+
+        newFood.setCommonCreate(userDetailService.getIdLogin());
+        foodRepository.save(newFood);
     }
 
     //delete food

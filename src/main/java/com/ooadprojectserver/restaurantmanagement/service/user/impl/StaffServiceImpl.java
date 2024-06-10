@@ -23,7 +23,6 @@ import java.util.UUID;
 @Slf4j
 @RequiredArgsConstructor
 public class StaffServiceImpl implements StaffService {
-    private final StaffFactory staffFactory;
     private final UserRepository userRepository;
     private final UserDetailService userDetailService;
     private final PasswordEncoder passwordEncoder;
@@ -32,7 +31,11 @@ public class StaffServiceImpl implements StaffService {
     // UserService implementation Start
     @Override
     public void saveUser(UserCreateRequest userCreateRequest) {
-        UserFactory factory = new StaffFactory(passwordEncoder, addressRepository,userDetailService);
+        UserFactory factory = new StaffFactory(
+                passwordEncoder,
+                addressRepository,
+                userDetailService
+        );
         User staff = factory.create(userCreateRequest);
         log.info(staff.toString());
         userRepository.save(staff);
@@ -40,7 +43,11 @@ public class StaffServiceImpl implements StaffService {
 
     @Override
     public void updateUserById(User user, UserCreateRequest userCreateRequest) {
-        UserFactory factory = new StaffFactory(passwordEncoder, addressRepository,userDetailService);
+        UserFactory factory = new StaffFactory(
+                passwordEncoder,
+                addressRepository,
+                userDetailService
+        );
         User staff = factory.update(user, userCreateRequest);
         userRepository.save(staff);
     }
@@ -60,7 +67,6 @@ public class StaffServiceImpl implements StaffService {
                 () -> new CustomException(APIStatus.USER_NOT_FOUND)
         );
     }
-
     // UserService implementation End
 }
 
