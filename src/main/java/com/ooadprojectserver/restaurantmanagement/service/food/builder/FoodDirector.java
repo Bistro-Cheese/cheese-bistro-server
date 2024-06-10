@@ -9,9 +9,10 @@ import com.ooadprojectserver.restaurantmanagement.repository.food.CategoryReposi
 
 public class FoodDirector {
     private final FoodBuilder foodBuilder;
-    private CategoryRepository categoryRepository;
+    private final CategoryRepository categoryRepository;
 
-    public FoodDirector(FoodBuilder foodBuilder) {
+    public FoodDirector(FoodBuilder foodBuilder, CategoryRepository categoryRepository) {
+        this.categoryRepository = categoryRepository;
         this.foodBuilder = foodBuilder;
     }
 

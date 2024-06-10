@@ -54,7 +54,7 @@ public class FoodServiceImpl implements FoodService {
         }
 
         FoodBuilder foodBuilder = new ConcreteFoodBuilder();
-        FoodDirector foodDirector = new FoodDirector(foodBuilder);
+        FoodDirector foodDirector = new FoodDirector(foodBuilder, categoryRepository);
         foodDirector.construct(request);
         Food newFood = foodDirector.getFood();
 

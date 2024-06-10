@@ -41,7 +41,7 @@ public class OrderLineCollection<T> {
     @SuppressWarnings("unchecked")
     public void addItem(OrderLineRequest request){
         if (request.getQuantity() <= 0){
-            throw new CustomException(APIStatus.ORDER_LINE_NOT_FOUND);
+            throw new CustomException(APIStatus.ORDER_LINE_INVALID_QUANTITY);
         } else {
             this.orderLines.add((T) request);
         }
