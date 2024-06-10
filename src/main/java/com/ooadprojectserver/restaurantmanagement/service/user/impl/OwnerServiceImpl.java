@@ -10,15 +10,17 @@ import com.ooadprojectserver.restaurantmanagement.exception.CustomException;
 import com.ooadprojectserver.restaurantmanagement.model.user.Owner;
 import com.ooadprojectserver.restaurantmanagement.model.user.baseUser.User;
 import com.ooadprojectserver.restaurantmanagement.repository.specification.UserSpecification;
+import com.ooadprojectserver.restaurantmanagement.repository.user.AddressRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.user.UserRepository;
 import com.ooadprojectserver.restaurantmanagement.service.aws.SQSSenderService;
-import com.ooadprojectserver.restaurantmanagement.service.email.EmailService;
 import com.ooadprojectserver.restaurantmanagement.service.user.*;
 import com.ooadprojectserver.restaurantmanagement.service.user.factory.OwnerFactory;
+import com.ooadprojectserver.restaurantmanagement.service.user.factory.UserFactory;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -26,22 +28,24 @@ import java.util.*;
 @Service
 @Slf4j
 public class OwnerServiceImpl implements OwnerService {
-    private final OwnerFactory ownerFactory;
     private final UserRepository userRepository;
     private final ManagerService managerService;
     private final StaffService staffService;
     private final UserDetailService userDetailService;
     private final SQSSenderService sendEmailSqs;
+    private final PasswordEncoder passwordEncoder;
+    private final AddressRepository addressRepository;
 
     private Map<Integer, UserService> roleToServiceMap;
 
-    public OwnerServiceImpl(OwnerFactory ownerFactory, UserRepository userRepository, ManagerService managerService, StaffService staffService, UserDetailService userDetailService, SQSSenderService sendEmailSqs) {
-        this.ownerFactory = ownerFactory;
+    public OwnerServiceImpl(UserRepository userRepository, ManagerService managerService, StaffService staffService, UserDetailService userDetailService, SQSSenderService sendEmailSqs, PasswordEncoder passwordEncoder, AddressRepository addressRepository) {
         this.userRepository = userRepository;
         this.managerService = managerService;
         this.staffService = staffService;
         this.userDetailService = userDetailService;
         this.sendEmailSqs = sendEmailSqs;
+        this.passwordEncoder = passwordEncoder;
+        this.addressRepository = addressRepository;
     }
 
     @PostConstruct
@@ -55,12 +59,24 @@ public class OwnerServiceImpl implements OwnerService {
     // Implement User Service Start
     @Override
     public void saveUser(UserCreateRequest userRegisterRequest) {
-        userRepository.save((Owner) ownerFactory.create(userRegisterRequest));
+        UserFactory factory = new OwnerFactory(
+                passwordEncoder,
+                addressRepository,
+                userDetailService
+        );
+        User owner = factory.create(userRegisterRequest);
+        userRepository.save(owner);
     }
 
     @Override
     public void updateUserById(User user, UserCreateRequest userRegisterRequest) {
-        userRepository.save((Owner) ownerFactory.update(user, userRegisterRequest));
+        UserFactory factory = new OwnerFactory(
+                passwordEncoder,
+                addressRepository,
+                userDetailService
+        );
+        User owner = factory.update(user, userRegisterRequest);
+        userRepository.save(owner);
     }
 
     @Override
