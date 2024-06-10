@@ -41,7 +41,7 @@ import static com.ooadprojectserver.restaurantmanagement.util.DataUtil.copyPrope
 
 @Service
 @RequiredArgsConstructor
-public class OrderServiceImpl implements OrderService, BillListener {
+public class OrderServiceImpl implements OrderService {
 
     private final UserDetailService userDetailService;
     private final StaffService staffService;
@@ -240,18 +240,5 @@ public class OrderServiceImpl implements OrderService, BillListener {
         return orderRepository.findByOrderTable_IdAndStatus(tableId, status).orElseThrow(
                 () -> new CustomException(APIStatus.ORDER_NOT_FOUND)
         );
-    }
-
-    @Override
-    public int listen(BillRequest request) {
-        Order order = orderRepository.findById(request.getOrderId()).orElseThrow(
-                () -> {
-                    throw new CustomException(APIStatus.ORDER_NOT_FOUND);
-                }
-        );
-
-        order.setStatus(OrderStatus.COMPLETED);
-        orderRepository.save(order);
-        return 1;
     }
 }

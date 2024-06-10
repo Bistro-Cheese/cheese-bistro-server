@@ -16,7 +16,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class OrderTableServiceImpl implements OrderTableService, BillListener {
+public class OrderTableServiceImpl implements OrderTableService {
 
     private final OrderTableRepository repository;
 
@@ -70,13 +70,5 @@ public class OrderTableServiceImpl implements OrderTableService, BillListener {
 
     private OrderTable getTable(Integer tableId) {
         return repository.findById(tableId).orElseThrow(() -> new CustomException(APIStatus.ORDER_TABLE_NOT_FOUND));
-    }
-
-    @Override
-    public int listen(BillRequest request) {
-        OrderTable orderTable = getTable(request.getTableId());
-        orderTable.setTableStatus(TableStatus.EMPTY);
-        repository.save(orderTable);
-        return 1;
     }
 }
