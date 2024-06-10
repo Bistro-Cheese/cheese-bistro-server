@@ -1,6 +1,7 @@
 package com.ooadprojectserver.restaurantmanagement.service.order.impl;
 
 import com.ooadprojectserver.restaurantmanagement.constant.APIStatus;
+import com.ooadprojectserver.restaurantmanagement.dto.request.bill.BillRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.request.customer.CustomerCreateRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.request.order.OrderLineRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.request.order.OrderLineSearchRequest;
@@ -14,10 +15,12 @@ import com.ooadprojectserver.restaurantmanagement.exception.CustomException;
 import com.ooadprojectserver.restaurantmanagement.model.customer.Customer;
 import com.ooadprojectserver.restaurantmanagement.model.discount.Discount;
 import com.ooadprojectserver.restaurantmanagement.model.order.*;
+import com.ooadprojectserver.restaurantmanagement.model.order.iterator.OrderLineIterator;
+import com.ooadprojectserver.restaurantmanagement.model.order.iterator.OrderLineRequestIteratorImpl;
 import com.ooadprojectserver.restaurantmanagement.model.user.Staff;
-import com.ooadprojectserver.restaurantmanagement.repository.CustomerRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.order.OrderLineRepository;
 import com.ooadprojectserver.restaurantmanagement.repository.order.OrderRepository;
+import com.ooadprojectserver.restaurantmanagement.service.bill.BillListener;
 import com.ooadprojectserver.restaurantmanagement.service.customer.CustomerService;
 import com.ooadprojectserver.restaurantmanagement.service.discount.DiscountService;
 import com.ooadprojectserver.restaurantmanagement.service.order.OrderLineService;
@@ -30,6 +33,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,7 +41,7 @@ import static com.ooadprojectserver.restaurantmanagement.util.DataUtil.copyPrope
 
 @Service
 @RequiredArgsConstructor
-public class OrderServiceImpl implements OrderService {
+public class OrderServiceImpl implements OrderService, BillListener {
 
     private final UserDetailService userDetailService;
     private final StaffService staffService;
@@ -47,7 +51,6 @@ public class OrderServiceImpl implements OrderService {
     private final OrderLineRepository orderLineRepository;
     private final DiscountService discountService;
     private final CustomerService customerService;
-    private final CustomerRepository customerRepository;
 
     @Override
     public DetailOrderResponse getByTableId(Integer tableId) {
@@ -96,10 +99,9 @@ public class OrderServiceImpl implements OrderService {
         }
 
         // Update table status
-        if (request.getStatus().equals( OrderStatus.PENDING)) {
+        if (request.getStatus().equals(OrderStatus.PENDING)) {
             orderTableService.updateStatus(orderTable.getId(), TableStatus.OCCUPIED);
         }
-
 
         Order newOrder = Order.builder()
                 .staff(staff)
@@ -111,7 +113,11 @@ public class OrderServiceImpl implements OrderService {
 
         UUID orderId = orderRepository.save(newOrder).getId();
 
-        request.getOrderLines().forEach(orderLineRequest -> orderLineService.create(orderId, orderLineRequest));
+        OrderLineCollection<OrderLineRequest> orderLineCollection = new OrderLineCollection<OrderLineRequest>();
+        request.getOrderLines().forEach(orderLineCollection::addItem);
+
+        OrderLineIterator<OrderLineRequest> iterator = orderLineCollection.createOrderLineRequestIterator();
+        iterator.forEachRemaining(orderLineRequest -> orderLineService.create(orderId, orderLineRequest));
 
         // calculate price of order when not use discount and sale for customer
         newOrder.setSubTotal(calculateSubTotal(newOrder.getId()));
@@ -206,7 +212,7 @@ public class OrderServiceImpl implements OrderService {
 
     private void applyDiscount(Order order, Integer discountId) {
         Discount discount = discountService.getById(discountId);
-        if (!discount.canUseDiscount()){
+        if (!discount.canUseDiscount()) {
             throw new CustomException(APIStatus.DISCOUNT_CANNOT_USE);
         }
         order.setDiscount(discount);
@@ -234,5 +240,18 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.findByOrderTable_IdAndStatus(tableId, status).orElseThrow(
                 () -> new CustomException(APIStatus.ORDER_NOT_FOUND)
         );
+    }
+
+    @Override
+    public int listen(BillRequest request) {
+        Order order = orderRepository.findById(request.getOrderId()).orElseThrow(
+                () -> {
+                    throw new CustomException(APIStatus.ORDER_NOT_FOUND);
+                }
+        );
+
+        order.setStatus(OrderStatus.COMPLETED);
+        orderRepository.save(order);
+        return 1;
     }
 }

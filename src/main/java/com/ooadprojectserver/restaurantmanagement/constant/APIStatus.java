@@ -60,6 +60,7 @@ public enum APIStatus {
     ORDER_TABLE_NOT_FOUND(404, "Order table not found"),
     INGREDIENT_NOT_ENOUGH(400, "Ingredient not enough"),
     ORDER_LINE_NOT_FOUND(404, "Order line not found"),
+    ORDER_LINE_INVALID_QUANTITY(404, "invalid quantity"),
     ORDER_TABLE_NOT_EMPTY(400, "Order table not empty"),
     ORDER_TABLE_ALREADY_EXIST(400, "Order table already exist"),
     ORDER_COMPLETED(400, "Order already completed"),
@@ -80,7 +81,8 @@ public enum APIStatus {
     DISCOUNT_CANNOT_USE(400, "Discount cannot use"),
 
     //Bill
-    BILL_NOT_FOUND(404, "Bill not found");
+    BILL_NOT_FOUND(404, "Bill not found"),
+    BILL_SUBCRIBER_EMPTY(404, "Subcriber for this event is empty");
 
     private final int status;
     private final String message;

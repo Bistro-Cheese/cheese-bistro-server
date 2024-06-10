@@ -1,11 +1,13 @@
 package com.ooadprojectserver.restaurantmanagement.service.order.impl;
 
 import com.ooadprojectserver.restaurantmanagement.constant.APIStatus;
+import com.ooadprojectserver.restaurantmanagement.dto.request.bill.BillRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.request.order.OrderTableRequest;
 import com.ooadprojectserver.restaurantmanagement.exception.CustomException;
 import com.ooadprojectserver.restaurantmanagement.model.order.OrderTable;
 import com.ooadprojectserver.restaurantmanagement.model.order.TableStatus;
 import com.ooadprojectserver.restaurantmanagement.repository.order.OrderTableRepository;
+import com.ooadprojectserver.restaurantmanagement.service.bill.BillListener;
 import com.ooadprojectserver.restaurantmanagement.service.order.OrderTableService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,7 +16,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class OrderTableServiceImpl implements OrderTableService {
+public class OrderTableServiceImpl implements OrderTableService, BillListener {
 
     private final OrderTableRepository repository;
 
@@ -68,5 +70,13 @@ public class OrderTableServiceImpl implements OrderTableService {
 
     private OrderTable getTable(Integer tableId) {
         return repository.findById(tableId).orElseThrow(() -> new CustomException(APIStatus.ORDER_TABLE_NOT_FOUND));
+    }
+
+    @Override
+    public int listen(BillRequest request) {
+        OrderTable orderTable = getTable(request.getTableId());
+        orderTable.setTableStatus(TableStatus.EMPTY);
+        repository.save(orderTable);
+        return 1;
     }
 }

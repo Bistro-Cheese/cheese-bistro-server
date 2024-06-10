@@ -5,6 +5,8 @@ import com.ooadprojectserver.restaurantmanagement.constant.MessageConstant;
 import com.ooadprojectserver.restaurantmanagement.dto.request.EmailRequest;
 import com.ooadprojectserver.restaurantmanagement.dto.response.MessageResponse;
 import com.ooadprojectserver.restaurantmanagement.service.email.EmailService;
+import com.ooadprojectserver.restaurantmanagement.service.email.command.EmailCommand;
+import com.ooadprojectserver.restaurantmanagement.service.email.command.SendSimpleMailMessageCommand;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,7 +26,8 @@ public class EmailController {
     public ResponseEntity<MessageResponse> sendEmail(
             @RequestBody EmailRequest request
     ) {
-        emailService.sendSimpleMailMessage(request);
+        EmailCommand emailCommand = new SendSimpleMailMessageCommand(emailService, request);
+        emailCommand.execute();
         return ResponseEntity.status(OK).body(
                 new MessageResponse(MessageConstant.EMAIL_SEND_SUCCESS)
         );

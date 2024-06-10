@@ -1,5 +1,6 @@
 package com.ooadprojectserver.restaurantmanagement.dto.request.bill;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ooadprojectserver.restaurantmanagement.model.bill.BillStatus;
 import com.ooadprojectserver.restaurantmanagement.model.payment.PaymentType;
@@ -32,4 +33,7 @@ public class BillRequest {
 
     @JsonProperty("payment_type")
     private PaymentType paymentType;
+
+    @JsonIgnore
+    private Integer tableId;
 }

@@ -46,6 +46,7 @@ public class BillServiceImpl implements BillService {
         if (order.getStatus() == OrderStatus.COMPLETED) {
             throw new CustomException(APIStatus.ORDER_COMPLETED);
         }
+        billRequest.setTableId(order.getOrderTable().getId());
 
         order.setStatus(OrderStatus.COMPLETED);
         orderRepository.save(order);
